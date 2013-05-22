@@ -25,6 +25,7 @@
 package librarian
 
 import (
+	"database/sql"
 	"fmt"
 )
 
@@ -41,6 +42,7 @@ type (
 		reference   table
 		filters     expressions
 		joins       expressions
+		session     *sql.DB
 	}
 
 	InsertStatement struct {
@@ -117,3 +119,9 @@ func (s *SelectStatement) ToSQL() string {
 	}
 	return q
 }
+
+func (s *SelectStatement) Count() {}
+
+func (s *SelectStatement) All() {}
+
+func (s *SelectStatement) One() {}
