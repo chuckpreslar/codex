@@ -12,20 +12,17 @@ type expression string
 type expressions []expression
 type accessor func(string) column
 
-func (c columns) join(d string) string {
-	s := []string{}
-	for _, cc := range c {
-		s = append(s, string(cc))
+func Table(t string) accessor {
+	return func(c string) column {
+		switch c {
+		case "":
+			return column(fmt.Sprintf("\"%s\"", t))
+		case "*":
+			return column(fmt.Sprintf("\"%s\".%s", t, c))
+		default:
+			return column(fmt.Sprintf("\"%s\".\"%s\"", t, c))
+		}
 	}
-	return strings.Join(s, d)
-}
-
-func (e expressions) join(d string) string {
-	s := []string{}
-	for _, ee := range e {
-		s = append(s, string(ee))
-	}
-	return strings.Join(s, d)
 }
 
 func (c column) Eq(v interface{}) expression {
@@ -62,6 +59,10 @@ func (e expression) Or(ee expression) expression {
 	return expression(fmt.Sprintf("%s OR %s", e, ee))
 }
 
+/**
+ * Helper methods.
+ */
+
 func format_expression_value(v interface{}) string {
 	switch v.(type) {
 	case int:
@@ -69,4 +70,20 @@ func format_expression_value(v interface{}) string {
 	default:
 		return fmt.Sprintf("'%s'", v)
 	}
+}
+
+func (c columns) join(d string) string {
+	s := []string{}
+	for _, cc := range c {
+		s = append(s, string(cc))
+	}
+	return strings.Join(s, d)
+}
+
+func (e expressions) join(d string) string {
+	s := []string{}
+	for _, ee := range e {
+		s = append(s, string(ee))
+	}
+	return strings.Join(s, d)
 }
