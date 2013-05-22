@@ -68,7 +68,7 @@ func format_expression_value(v interface{}) string {
 	case int:
 		return fmt.Sprintf("%d", v)
 	default:
-		return fmt.Sprintf("'%s'", v)
+		return fmt.Sprintf("'%v'", v)
 	}
 }
 
