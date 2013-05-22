@@ -59,6 +59,10 @@ func (c column) Lte(v interface{}) expression {
 	return expression(fmt.Sprintf("%s <= %s", c, format_expression_value(v)))
 }
 
+func (c column) As(s string) column {
+	return column(fmt.Sprintf("%s AS \"%s\"", c, s))
+}
+
 func (e expression) Or(ee expression) expression {
 	return expression(fmt.Sprintf("%s OR %s", e, ee))
 }
