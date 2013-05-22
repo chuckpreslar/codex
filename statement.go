@@ -16,6 +16,7 @@ type (
 		projections columns
 		reference   table
 		filters     expressions
+		joins       expressions
 	}
 
 	InsertStatement struct {
@@ -41,6 +42,11 @@ func (s *SelectStatement) Where(e expression) *SelectStatement {
 	return s
 }
 
+func (s *SelectStatement) Join(e expression) *SelectStatement {
+	s.joins = append(s.joins, expression(fmt.Sprintf("JOIN %s", e)))
+	return s
+}
+
 func (s *SelectStatement) ToSQL() string {
 	q := "SELECT"
 	if len(s.projections) == 0 {
@@ -49,6 +55,9 @@ func (s *SelectStatement) ToSQL() string {
 		q += fmt.Sprintf(" %s ", s.projections.join(", "))
 	}
 	q += fmt.Sprintf("FROM %s ", s.reference)
+	if len(s.joins) > 0 {
+		q += fmt.Sprintf("%s ", s.joins.join(" "))
+	}
 	if len(s.filters) > 0 {
 		q += fmt.Sprintf("WHERE %s ", s.filters.join(" AND "))
 	}

@@ -25,6 +25,10 @@ func Table(t string) accessor {
 	}
 }
 
+func (a accessor) On(s string) column {
+	return column(fmt.Sprintf("%s ON %s", a(""), a(s)))
+}
+
 func (c column) Eq(v interface{}) expression {
 	if v == nil {
 		return expression(fmt.Sprintf("%s IS NULL", c))
@@ -67,6 +71,8 @@ func format_expression_value(v interface{}) string {
 	switch v.(type) {
 	case int:
 		return fmt.Sprintf("%d", v)
+	case column:
+		return fmt.Sprintf("%s", v)
 	default:
 		return fmt.Sprintf("'%v'", v)
 	}
