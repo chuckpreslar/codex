@@ -58,6 +58,10 @@ func (c column) Lte(v interface{}) expression {
 	return expression(fmt.Sprintf("%s <= %s", c, format_expression_value(v)))
 }
 
+func (e expression) Or(ee expression) expression {
+	return expression(fmt.Sprintf("%s OR %s", e, ee))
+}
+
 func format_expression_value(v interface{}) string {
 	switch v.(type) {
 	case int:
