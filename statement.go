@@ -15,6 +15,7 @@ type (
 		a           accessor
 		projections columns
 		reference   table
+		filters     expressions
 	}
 
 	InsertStatement struct {
@@ -35,6 +36,11 @@ func (s *SelectStatement) Select(c ...string) *SelectStatement {
 	return s
 }
 
+func (s *SelectStatement) Where(e expression) *SelectStatement {
+	s.filters = append(s.filters, e)
+	return s
+}
+
 func (s *SelectStatement) ToSQL() string {
 	q := "SELECT"
 	if len(s.projections) == 0 {
@@ -43,5 +49,8 @@ func (s *SelectStatement) ToSQL() string {
 		q += fmt.Sprintf(" %s ", s.projections.join(", "))
 	}
 	q += fmt.Sprintf("FROM %s ", s.reference)
+	if len(s.filters) > 0 {
+		q += fmt.Sprintf("WHERE %s ", s.filters.join(" AND "))
+	}
 	return q
 }
