@@ -52,6 +52,31 @@ func (s *SelectStatement) Join(e expression) *SelectStatement {
 	return s
 }
 
+func (s *SelectStatement) InnerJoin(e expression) *SelectStatement {
+	s.joins = append(s.joins, expression(fmt.Sprintf("INNER JOIN %s", e)))
+	return s
+}
+
+func (s *SelectStatement) OuterJoin(e expression) *SelectStatement {
+	s.joins = append(s.joins, expression(fmt.Sprintf("OUTER JOIN %s", e)))
+	return s
+}
+
+func (s *SelectStatement) LeftJoin(e expression) *SelectStatement {
+	s.joins = append(s.joins, expression(fmt.Sprintf("LEFT JOIN %s", e)))
+	return s
+}
+
+func (s *SelectStatement) RightJoin(e expression) *SelectStatement {
+	s.joins = append(s.joins, expression(fmt.Sprintf("RIGHT JOIN %s", e)))
+	return s
+}
+
+func (s *SelectStatement) FullJoin(e expression) *SelectStatement {
+	s.joins = append(s.joins, expression(fmt.Sprintf("FULL JOIN %s", e)))
+	return s
+}
+
 func (s *SelectStatement) ToSQL() string {
 	q := "SELECT"
 	if len(s.projections) == 0 {
