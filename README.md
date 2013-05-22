@@ -70,7 +70,7 @@ orders := l.Table("orders")
 records, err := l.Search(users).
                 Select("id", "email", "first_name", "last_name").
                 Select(orders("id")).
-                Join(orders.On("user_id").Eq(users("id")))
+                Join(orders.On("user_id").Eq(users("id"))).
                 All(session)
 ```
 
