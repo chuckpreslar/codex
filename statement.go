@@ -1,5 +1,9 @@
 package librarian
 
+import (
+	"fmt"
+)
+
 type (
 	Statement interface {
 		ToSQL() string
@@ -9,7 +13,7 @@ type (
 type (
 	SelectStatement struct {
 		a           accessor
-		projections []column
+		projections columns
 		reference   table
 	}
 
@@ -29,4 +33,15 @@ func (s *SelectStatement) Select(c ...string) *SelectStatement {
 		s.projections = append(s.projections, s.a(cc))
 	}
 	return s
+}
+
+func (s *SelectStatement) ToSQL() string {
+	q := "SELECT"
+	if len(s.projections) == 0 {
+		q += fmt.Sprintf(" %s ", s.a("*"))
+	} else {
+		q += fmt.Sprintf(" %s ", s.projections.join(", "))
+	}
+	q += fmt.Sprintf("FROM %s ", s.reference)
+	return q
 }
