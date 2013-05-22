@@ -34,7 +34,7 @@ Now that wasn't to bad, was it?
 
 #### Projections
 
-You can of course speed up your queries by only selecting the columns you need.
+You can, of course, speed up your queries by only selecting the columns you need:
 
 ```go
 // ...
@@ -60,7 +60,7 @@ records, err := l.Search(users).
 
 #### Joins
 
-Still with me?  Last but not least, an example of a `JOIN` operation.
+Still with me?  Last but not least, an example of a `JOIN` operation:
 
 ```go
 // ...
