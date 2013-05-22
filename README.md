@@ -27,7 +27,7 @@ import (
 // ... lets assume `session` is your database session
 
 users := l.Table("users")
-records, err := l.Search(users).Exec(session)
+records, err := l.Search(users).All(session)
 ```
 
 Now that wasn't to bad, was it?
@@ -42,7 +42,7 @@ You can of course speed up your queries by only selecting the columns you need.
 users := l.Table("users")
 records, err := l.Search(users).
                 Select("id", "email", "first_name", "last_name").
-                Exec(session)
+                All(session)
 ```
 
 #### Filtering
@@ -55,7 +55,7 @@ An example of how to search for records that meet a specified criteria:
 users := l.Table("users")
 records, err := l.Search(users).
                 Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).
-                Exec(session)
+                All(session)
 ```
 
 #### Joins
@@ -71,7 +71,7 @@ records, err := l.Search(users).
                 Select("id", "email", "first_name", "last_name").
                 Select(orders("id")).
                 Join(orders.On("user_id").Eq(users("id")))
-                Exec(session)
+                All(session)
 ```
 
 Notes
@@ -79,4 +79,5 @@ Notes
 
 This project is still under heavy development, a lot of work still needs to be done.  Come back in a week or so ;)
 
+##### MIT licensed
 ##### Release v 0.0.10
