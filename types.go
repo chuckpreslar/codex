@@ -73,17 +73,17 @@ func format_expression_value(v interface{}) string {
 }
 
 func (c columns) join(d string) string {
-	s := []string{}
-	for _, cc := range c {
-		s = append(s, string(cc))
+	s := make([]string, len(c))
+	for i, cc := range c {
+		s[i] = string(cc)
 	}
 	return strings.Join(s, d)
 }
 
 func (e expressions) join(d string) string {
-	s := []string{}
-	for _, ee := range e {
-		s = append(s, string(ee))
+	s := make([]string, len(e))
+	for i, ee := range e {
+		s[i] = string(ee)
 	}
 	return strings.Join(s, d)
 }
