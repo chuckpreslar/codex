@@ -10,7 +10,7 @@ type table string
 type accessor func(string) column
 
 func (c columns) join(d string) string {
-	s := make([]string, len(c))
+	s := []string{}
 	for _, cc := range c {
 		s = append(s, string(cc))
 	}
