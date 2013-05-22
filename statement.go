@@ -30,9 +30,14 @@ type (
 	}
 )
 
-func (s *SelectStatement) Select(c ...string) *SelectStatement {
+func (s *SelectStatement) Select(c ...interface{}) *SelectStatement {
 	for _, cc := range c {
-		s.projections = append(s.projections, s.a(cc))
+		switch cc.(type) {
+		case column:
+			s.projections = append(s.projections, cc.(column))
+		default:
+			s.projections = append(s.projections, s.a(cc.(string)))
+		}
 	}
 	return s
 }
