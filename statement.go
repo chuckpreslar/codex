@@ -130,6 +130,16 @@ func (s *SelectStatement) Count() (int64, error) {
 		return -1, NoSessionError
 	}
 	s.projections = []column{column(fmt.Sprintf("COUNT(%s)", s.a("*")))}
+	var count int64
+	res, err := s.Query(&count)
+	return res.(int64), err
+}
+
+func (s *SelectStatement) All() {}
+
+func (s *SelectStatement) First() {}
+
+func (s *SelectStatement) Query(r interface{}) (interface{}, error) {
 	statment, err := s.session.Prepare(s.ToSQL())
 	defer statment.Close()
 	if err != nil {
@@ -139,13 +149,13 @@ func (s *SelectStatement) Count() (int64, error) {
 	if err != nil {
 		return -1, err
 	}
-	var count int64
 	for rows.Next() {
-		err = rows.Scan(&count)
+		err = rows.Scan(r)
 	}
-	return count, err
+	switch r.(type) {
+	case *int64:
+		return *r.(*int64), err
+	default:
+		return r, err
+	}
 }
-
-func (s *SelectStatement) All() {}
-
-func (s *SelectStatement) First() {}
