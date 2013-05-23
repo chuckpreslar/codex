@@ -120,8 +120,32 @@ func (s *SelectStatement) ToSQL() string {
 	return q
 }
 
-func (s *SelectStatement) Count() {}
+func (s *SelectStatement) Run(session *sql.DB) *SelectStatement {
+	s.session = session
+	return s
+}
+
+func (s *SelectStatement) Count() (int64, error) {
+	if s.session == nil {
+		return -1, NoSessionError
+	}
+	s.projections = []column{column(fmt.Sprintf("COUNT(%s)", s.a("*")))}
+	statment, err := s.session.Prepare(s.ToSQL())
+	defer statment.Close()
+	if err != nil {
+		return -1, err
+	}
+	rows, err := statment.Query()
+	if err != nil {
+		return -1, err
+	}
+	var count int64
+	for rows.Next() {
+		err = rows.Scan(&count)
+	}
+	return count, err
+}
 
 func (s *SelectStatement) All() {}
 
-func (s *SelectStatement) One() {}
+func (s *SelectStatement) First() {}
