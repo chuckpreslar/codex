@@ -58,22 +58,65 @@ type (
 	}
 )
 
+/**
+ * Find will inititilze a Librarian SelectStatement with the assumption of
+ * finding a record by an `id` column, returning a pointer to the
+ * SelectStatement for continued chaning.
+ *
+ * Ex: SELECT "users".* FROM "users" WHERE "users"."id" = 3
+ *	Search(users).Find(3).Run(session).All() // #All or #First can be used here.
+ *
+ * @params int
+ * @receiver *SelectStatement
+ * @returns *SelectStatement
+ */
+
 func (s *SelectStatement) Find(i int) *SelectStatement {
 	s.Where(s.a("id").Eq(i)).Limit(1)
 	return s
 }
+
+/**
+ * Select allows for SQL projections, accepting an interface type to
+ * allow for type switching.  Actual accepted types are strings that
+ * will be used to generate columns with the statements accessor,
+ * or columns generated previously, returning a pointer to the
+ * SelectStatement for continued chaning.
+ *
+ * Ex: SELECT "users"."id", "users"."email" FROM "users"
+ *	Search(users).Select("id", "email").Run(session).All() // #All or #First can be used here.
+ *
+ * @params ...interface{}
+ * @receiver *SelectStatement
+ * @returns *SelectStatement
+ */
 
 func (s *SelectStatement) Select(c ...interface{}) *SelectStatement {
 	for _, cc := range c {
 		switch cc.(type) {
 		case column:
 			s.projections = append(s.projections, cc.(column))
-		default:
+		case string:
 			s.projections = append(s.projections, s.a(cc.(string)))
+		default:
+			panic(BadArgsError)
 		}
 	}
 	return s
 }
+
+/**
+ * Where provides filtering options for Librarian SelectStatements,
+ * taking an `expression` type as a parameter and returning a pointer to the
+ * SelectStatement for continued chaning.
+ *
+ * Ex. SELECT "users".* FROM "users" WHERE "users"."email" = 'test@example.com'
+ *	Search(users).Where(users("email").Eq("test@example.com")).Run(session).All()
+ *
+ * @params expression
+ * @receiver *SelectStatement
+ * @returns *SelectStatement
+ */
 
 func (s *SelectStatement) Where(e expression) *SelectStatement {
 	s.filters = append(s.filters, e)
@@ -145,21 +188,21 @@ func (s *SelectStatement) Count() (int64, error) {
 		return -1, NoSessionError
 	}
 	s.projections = []column{column(fmt.Sprintf("COUNT(%s)", s.a("*")))}
-	sql_query := s.ToSQL()
-	sql_statment, err := s.session.Prepare(sql_query)
-	defer sql_statment.Close()
+	sqlQuery := s.ToSQL()
+	sqlStatment, err := s.session.Prepare(sqlQuery)
+	defer sqlStatment.Close()
 	if err != nil {
 		return -1, err
 	}
-	sql_rows, err := sql_statment.Query()
+	sqlRows, err := sqlStatment.Query()
 	if err != nil {
 		return -1, err
 	}
-	var sql_count int64
-	sql_rows.Next()
-	defer log_query_information(time.Now(), sql_query)
-	err = sql_rows.Scan(&sql_count)
-	return sql_count, err
+	var sqlCount int64
+	sqlRows.Next()
+	defer log_query_information(time.Now(), sqlQuery)
+	err = sqlRows.Scan(&sqlCount)
+	return sqlCount, err
 }
 
 func (s *SelectStatement) First() (result, error) {
@@ -167,26 +210,22 @@ func (s *SelectStatement) First() (result, error) {
 		return nil, NoSessionError
 	}
 	s.Limit(1)
-	sql_query := s.ToSQL()
-	sql_statment, err := s.session.Prepare(sql_query)
-	defer sql_statment.Close()
-	sql_rows, err := sql_statment.Query()
+	sqlQuery := s.ToSQL()
+	sqlStatment, err := s.session.Prepare(sqlQuery)
+	defer sqlStatment.Close()
+	sqlRows, err := sqlStatment.Query()
 	if err != nil {
 		return nil, err
 	}
-	sql_columns, err := sql_rows.Columns()
+	sqlColumns, err := sqlRows.Columns()
 	if err != nil {
 		return nil, err
 	}
-	defer log_query_information(time.Now(), sql_query)
-	var sql_results_ptr = make([]interface{}, len(sql_columns))
-	for i := 0; i < len(sql_results_ptr); i++ {
-		var buf interface{}
-		sql_results_ptr[i] = &buf
-	}
-	sql_rows.Next()
-	err = sql_rows.Scan(sql_results_ptr...)
-	r := generate_result(sql_columns, sql_results_ptr)
+	defer log_query_information(time.Now(), sqlQuery)
+	var sqlResultsBuffer = generateResultsBuffer(len(sqlColumns))
+	sqlRows.Next()
+	err = sqlRows.Scan(sqlResultsBuffer...)
+	r := generateResultMap(sqlColumns, sqlResultsBuffer)
 	return r, err
 }
 
@@ -198,31 +237,27 @@ func (s *SelectStatement) Query() (results, error) {
 		sql_expected_row_count, _ := s.clone().Count()
 		s.limit = int(sql_expected_row_count)
 	}
-	sql_query := s.ToSQL()
-	sql_statment, err := s.session.Prepare(sql_query)
-	defer sql_statment.Close()
-	sql_rows, err := sql_statment.Query()
+	sqlQuery := s.ToSQL()
+	sqlStatment, err := s.session.Prepare(sqlQuery)
+	defer sqlStatment.Close()
+	sqlRows, err := sqlStatment.Query()
 	if err != nil {
 		return nil, err
 	}
-	sql_columns, err := sql_rows.Columns()
+	sqlColumns, err := sqlRows.Columns()
 	if err != nil {
 		return nil, err
 	}
-	sql_results_array := make(results, s.limit)
-	sql_current_result_index := 0
-	defer log_query_information(time.Now(), sql_query)
-	for sql_rows.Next() {
-		var sql_results_ptr = make([]interface{}, len(sql_columns))
-		for i := 0; i < len(sql_results_ptr); i++ {
-			var buf interface{}
-			sql_results_ptr[i] = &buf
-		}
-		err = sql_rows.Scan(sql_results_ptr...)
-		sql_results_array[sql_current_result_index] = generate_result(sql_columns, sql_results_ptr)
-		sql_current_result_index += 1
+	sqlResultsArray := make(results, s.limit)
+	sqlCurrentResultIndex := 0
+	defer log_query_information(time.Now(), sqlQuery)
+	for sqlRows.Next() {
+		var sqlResultsBuffer = generateResultsBuffer(len(sqlColumns))
+		err = sqlRows.Scan(sqlResultsBuffer...)
+		sqlResultsArray[sqlCurrentResultIndex] = generateResultMap(sqlColumns, sqlResultsBuffer)
+		sqlCurrentResultIndex += 1
 	}
-	return sql_results_array, err
+	return sqlResultsArray, err
 }
 
 func (s *SelectStatement) clone() *SelectStatement {
@@ -238,7 +273,7 @@ func (s *SelectStatement) clone() *SelectStatement {
 	return clone
 }
 
-func generate_result(c []string, p []interface{}) result {
+func generateResultMap(c []string, p []interface{}) result {
 	r := make(result)
 	for i, v := range p {
 		switch x := (*v.(*interface{})); x.(type) {
@@ -258,6 +293,15 @@ func generate_result(c []string, p []interface{}) result {
 		r[c[i]] = p[i]
 	}
 	return r
+}
+
+func generateResultsBuffer(l int) []interface{} {
+	p := make([]interface{}, l)
+	for i := 0; i < len(p); i++ {
+		var buf interface{}
+		p[i] = &buf
+	}
+	return p
 }
 
 func log_query_information(t time.Time, q string) {
