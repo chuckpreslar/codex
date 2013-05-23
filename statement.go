@@ -45,6 +45,7 @@ type (
 		joins       expressions
 		session     *sql.DB
 		limit       int
+		count       bool
 	}
 
 	InsertStatement struct {
@@ -183,59 +184,56 @@ func (s *SelectStatement) Run(session *sql.DB) *SelectStatement {
 	return s
 }
 
-func (s *SelectStatement) Count() (int64, error) {
-	if s.session == nil {
-		return -1, NoSessionError
-	}
+func (s *SelectStatement) Count() (int, error) {
+	s.count = true
 	s.projections = []column{column(fmt.Sprintf("COUNT(%s)", s.a("*")))}
-	sqlQuery := s.ToSQL()
-	sqlStatment, err := s.session.Prepare(sqlQuery)
-	defer sqlStatment.Close()
-	if err != nil {
-		return -1, err
+	result, err := s.process()
+	if 1 == len(result) && err == nil {
+		count, ok := result[0]["count"]
+		if ok {
+			return int(count.(int64)), err
+		} else {
+			return -1, BadResultsError
+		}
 	}
-	sqlRows, err := sqlStatment.Query()
-	if err != nil {
-		return -1, err
-	}
-	var sqlCount int64
-	sqlRows.Next()
-	defer log_query_information(time.Now(), sqlQuery)
-	err = sqlRows.Scan(&sqlCount)
-	return sqlCount, err
+	return -1, BadResultsError
 }
 
 func (s *SelectStatement) First() (result, error) {
-	if s.session == nil {
-		return nil, NoSessionError
-	}
-	s.Limit(1)
-	sqlQuery := s.ToSQL()
-	sqlStatment, err := s.session.Prepare(sqlQuery)
-	defer sqlStatment.Close()
-	sqlRows, err := sqlStatment.Query()
-	if err != nil {
+	s.limit = 1
+	result, err := s.process()
+	if 1 > len(result) {
 		return nil, err
 	}
-	sqlColumns, err := sqlRows.Columns()
-	if err != nil {
-		return nil, err
-	}
-	defer log_query_information(time.Now(), sqlQuery)
-	var sqlResultsBuffer = generateResultsBuffer(len(sqlColumns))
-	sqlRows.Next()
-	err = sqlRows.Scan(sqlResultsBuffer...)
-	r := generateResultMap(sqlColumns, sqlResultsBuffer)
-	return r, err
+	return result[0], err
 }
 
 func (s *SelectStatement) Query() (results, error) {
+	return s.process()
+}
+
+func (s *SelectStatement) clone() *SelectStatement {
+	clone := &SelectStatement{
+		a:           s.a,
+		projections: s.projections,
+		reference:   s.reference,
+		filters:     s.filters,
+		joins:       s.joins,
+		session:     s.session,
+		limit:       s.limit,
+	}
+	return clone
+}
+
+func (s *SelectStatement) process() (results, error) {
 	if s.session == nil {
 		return nil, NoSessionError
 	}
-	if s.limit == 0 {
-		sql_expected_row_count, _ := s.clone().Count()
-		s.limit = int(sql_expected_row_count)
+	if s.limit == 0 && !s.count {
+		sqlExpectedRowCount, _ := s.clone().Count()
+		s.limit = int(sqlExpectedRowCount)
+	} else if s.count {
+		s.limit = 1
 	}
 	sqlQuery := s.ToSQL()
 	sqlStatment, err := s.session.Prepare(sqlQuery)
@@ -250,7 +248,7 @@ func (s *SelectStatement) Query() (results, error) {
 	}
 	sqlResultsArray := make(results, s.limit)
 	sqlCurrentResultIndex := 0
-	defer log_query_information(time.Now(), sqlQuery)
+	defer logQueryInformation(time.Now(), sqlQuery)
 	for sqlRows.Next() {
 		var sqlResultsBuffer = generateResultsBuffer(len(sqlColumns))
 		err = sqlRows.Scan(sqlResultsBuffer...)
@@ -258,19 +256,6 @@ func (s *SelectStatement) Query() (results, error) {
 		sqlCurrentResultIndex += 1
 	}
 	return sqlResultsArray, err
-}
-
-func (s *SelectStatement) clone() *SelectStatement {
-	clone := &SelectStatement{
-		a:           s.a,
-		projections: s.projections,
-		reference:   s.reference,
-		filters:     s.filters,
-		joins:       s.joins,
-		session:     s.session,
-		limit:       s.limit,
-	}
-	return clone
 }
 
 func generateResultMap(c []string, p []interface{}) result {
@@ -304,6 +289,6 @@ func generateResultsBuffer(l int) []interface{} {
 	return p
 }
 
-func log_query_information(t time.Time, q string) {
+func logQueryInformation(t time.Time, q string) {
 	fmt.Printf("(%v) - %s\n", time.Now().Sub(t), q)
 }

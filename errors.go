@@ -16,3 +16,4 @@ func (l LibrarianError) Error() string {
 
 var NoSessionError LibrarianError = LibrarianError{"No database session was provided.", time.Now()}
 var BadArgsError LibrarianError = LibrarianError{"Bad arguments supplied.", time.Now()}
+var BadResultsError LibrarianError = LibrarianError{"Unexpected results.", time.Now()}
