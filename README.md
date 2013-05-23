@@ -27,7 +27,7 @@ import (
 // ... lets assume `session` is your database session
 
 users := l.Table("users")
-records, err := l.Search(users).Run(session).All()
+records, err := l.Search(users).Run(session).Query()
 ```
 
 Now that wasn't to bad, was it?
@@ -43,7 +43,7 @@ users := l.Table("users")
 records, err := l.Search(users).
                 Select("id", "email", "first_name", "last_name").
                 Run(session).
-                All()
+                Query()
 ```
 
 #### Filtering
@@ -57,7 +57,7 @@ users := l.Table("users")
 records, err := l.Search(users).
                 Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).
                 Run(Session).
-                All()
+                Query()
 ```
 
 #### Joins
@@ -74,7 +74,7 @@ records, err := l.Search(users).
                 Select(orders("id")).
                 Join(orders.On("user_id").Eq(users("id"))).
                 Run(session).
-                All()
+                Query()
 ```
 
 Notes
