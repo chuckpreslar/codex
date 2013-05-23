@@ -56,14 +56,14 @@ func (a accessor) On(s string) column {
 }
 
 func (c column) Eq(v interface{}) expression {
-	if v == nil {
+	if nil == v {
 		return expression(fmt.Sprintf(`%s IS NULL`, c))
 	}
 	return expression(fmt.Sprintf(`%s = %s`, c, formatExpressionValue(v)))
 }
 
 func (c column) Neq(v interface{}) expression {
-	if v == nil {
+	if nil == v {
 		return expression(fmt.Sprintf(`%s IS NOT NULL`, c))
 	}
 	return expression(fmt.Sprintf(`%s != %s`, c, formatExpressionValue(v)))

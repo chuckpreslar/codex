@@ -161,19 +161,19 @@ func (s *SelectStatement) Limit(l int) *SelectStatement {
 
 func (s *SelectStatement) ToSQL() string {
 	q := "SELECT"
-	if len(s.projections) == 0 {
+	if 0 == len(s.projections) {
 		q += fmt.Sprintf(" %s ", s.a("*"))
 	} else {
 		q += fmt.Sprintf(" %s ", s.projections.join(", "))
 	}
 	q += fmt.Sprintf("FROM %s ", s.reference)
-	if len(s.joins) > 0 {
+	if 0 < len(s.joins) {
 		q += fmt.Sprintf("%s ", s.joins.join(" "))
 	}
-	if len(s.filters) > 0 {
+	if 0 < len(s.filters) {
 		q += fmt.Sprintf("WHERE %s ", s.filters.join(" AND "))
 	}
-	if s.limit != 0 {
+	if 0 != s.limit {
 		q += fmt.Sprintf("LIMIT %d", s.limit)
 	}
 	return q
@@ -188,7 +188,7 @@ func (s *SelectStatement) Count() (int, error) {
 	s.count = true
 	s.projections = []column{column(fmt.Sprintf("COUNT(%s)", s.a("*")))}
 	result, err := s.process()
-	if 1 == len(result) && err == nil {
+	if 1 == len(result) && nil == err {
 		count, ok := result[0]["count"]
 		if ok {
 			return int(count.(int64)), err
@@ -226,10 +226,10 @@ func (s *SelectStatement) clone() *SelectStatement {
 }
 
 func (s *SelectStatement) process() (results, error) {
-	if s.session == nil {
+	if nil == s.session {
 		return nil, NoSessionError
 	}
-	if s.limit == 0 && !s.count {
+	if 0 == s.limit && !s.count {
 		sqlExpectedRowCount, _ := s.clone().Count()
 		s.limit = int(sqlExpectedRowCount)
 	} else if s.count {
@@ -239,7 +239,7 @@ func (s *SelectStatement) process() (results, error) {
 	sqlStatment, err := s.session.Prepare(sqlQuery)
 	defer sqlStatment.Close()
 	sqlRows, err := sqlStatment.Query()
-	if err != nil {
+	if nil != err {
 		return nil, err
 	}
 	sqlColumns, err := sqlRows.Columns()
