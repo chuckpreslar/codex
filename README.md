@@ -42,7 +42,8 @@ You can, of course, speed up your queries by only selecting the columns you need
 users := l.Table("users")
 records, err := l.Search(users).
                 Select("id", "email", "first_name", "last_name").
-                All(session)
+                Run(session).
+                All()
 ```
 
 #### Filtering
