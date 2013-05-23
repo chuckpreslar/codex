@@ -44,6 +44,7 @@ type (
 		filters     expressions
 		joins       expressions
 		session     *sql.DB
+		limit       int
 	}
 
 	InsertStatement struct {
@@ -56,6 +57,11 @@ type (
 		a accessor
 	}
 )
+
+func (s *SelectStatement) Find(i int) *SelectStatement {
+	s.Where(s.a("id").Eq(i)).Limit(1)
+	return s
+}
 
 func (s *SelectStatement) Select(c ...interface{}) *SelectStatement {
 	for _, cc := range c {
@@ -104,6 +110,11 @@ func (s *SelectStatement) FullJoin(e expression) *SelectStatement {
 	return s
 }
 
+func (s *SelectStatement) Limit(l int) *SelectStatement {
+	s.limit = l
+	return s
+}
+
 func (s *SelectStatement) ToSQL() string {
 	q := "SELECT"
 	if len(s.projections) == 0 {
@@ -117,6 +128,9 @@ func (s *SelectStatement) ToSQL() string {
 	}
 	if len(s.filters) > 0 {
 		q += fmt.Sprintf("WHERE %s ", s.filters.join(" AND "))
+	}
+	if s.limit != 0 {
+		q += fmt.Sprintf("LIMIT %d", s.limit)
 	}
 	return q
 }
@@ -152,7 +166,8 @@ func (s *SelectStatement) First() (result, error) {
 	if s.session == nil {
 		return nil, NoSessionError
 	}
-	q := fmt.Sprintf("%s LIMIT 1", s.ToSQL())
+	s.Limit(1)
+	q := s.ToSQL()
 	statment, err := s.session.Prepare(q)
 	defer statment.Close()
 	rows, err := statment.Query()
