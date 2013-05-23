@@ -232,8 +232,6 @@ func (s *SelectStatement) process() (results, error) {
 	if 0 == s.limit && !s.count {
 		sqlExpectedRowCount, _ := s.clone().Count()
 		s.limit = int(sqlExpectedRowCount)
-	} else if s.count {
-		s.limit = 1
 	}
 	sqlQuery := s.ToSQL()
 	sqlStatment, err := s.session.Prepare(sqlQuery)
@@ -246,7 +244,8 @@ func (s *SelectStatement) process() (results, error) {
 	if err != nil {
 		return nil, err
 	}
-	sqlResultsArray := make(results, s.limit)
+	sqlReturnSize := s.limit | 1
+	sqlResultsArray := make(results, sqlReturnSize)
 	sqlCurrentResultIndex := 0
 	defer logQueryInformation(time.Now(), sqlQuery)
 	for sqlRows.Next() {
