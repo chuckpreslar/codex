@@ -289,5 +289,5 @@ func generateResultsBuffer(l int) []interface{} {
 }
 
 func logQueryInformation(t time.Time, q string) {
-	fmt.Printf("(%v) - %s\n", time.Now().Sub(t), q)
+	fmt.Printf("librarian \033[96m::\033[0m (%v) \033[96m::\033[0m %s\n", time.Now().Sub(t), q)
 }
