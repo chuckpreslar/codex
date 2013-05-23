@@ -145,21 +145,21 @@ func (s *SelectStatement) Count() (int64, error) {
 		return -1, NoSessionError
 	}
 	s.projections = []column{column(fmt.Sprintf("COUNT(%s)", s.a("*")))}
-	q := s.ToSQL()
-	statment, err := s.session.Prepare(q)
-	defer statment.Close()
+	sql_query := s.ToSQL()
+	sql_statment, err := s.session.Prepare(sql_query)
+	defer sql_statment.Close()
 	if err != nil {
 		return -1, err
 	}
-	rows, err := statment.Query()
+	sql_rows, err := sql_statment.Query()
 	if err != nil {
 		return -1, err
 	}
-	var count int64
-	rows.Next()
-	defer logQueryInformation(time.Now(), q)
-	err = rows.Scan(&count)
-	return count, err
+	var sql_count int64
+	sql_rows.Next()
+	defer log_query_information(time.Now(), sql_query)
+	err = sql_rows.Scan(&sql_count)
+	return sql_count, err
 }
 
 func (s *SelectStatement) First() (result, error) {
@@ -167,62 +167,79 @@ func (s *SelectStatement) First() (result, error) {
 		return nil, NoSessionError
 	}
 	s.Limit(1)
-	q := s.ToSQL()
-	statment, err := s.session.Prepare(q)
-	defer statment.Close()
-	rows, err := statment.Query()
+	sql_query := s.ToSQL()
+	sql_statment, err := s.session.Prepare(sql_query)
+	defer sql_statment.Close()
+	sql_rows, err := sql_statment.Query()
 	if err != nil {
 		return nil, err
 	}
-	col, err := rows.Columns()
+	sql_columns, err := sql_rows.Columns()
 	if err != nil {
 		return nil, err
 	}
-	defer logQueryInformation(time.Now(), q)
-	var ptr = make([]interface{}, len(col))
-	for i := 0; i < len(ptr); i++ {
+	defer log_query_information(time.Now(), sql_query)
+	var sql_results_ptr = make([]interface{}, len(sql_columns))
+	for i := 0; i < len(sql_results_ptr); i++ {
 		var buf interface{}
-		ptr[i] = &buf
+		sql_results_ptr[i] = &buf
 	}
-	rows.Next()
-	err = rows.Scan(ptr...)
-	r := generateResult(col, ptr)
+	sql_rows.Next()
+	err = sql_rows.Scan(sql_results_ptr...)
+	r := generate_result(sql_columns, sql_results_ptr)
 	return r, err
 }
 
-func (s *SelectStatement) All() (results, error) {
+func (s *SelectStatement) Query() (results, error) {
 	if s.session == nil {
 		return nil, NoSessionError
 	}
-	q := s.ToSQL()
-	statment, err := s.session.Prepare(q)
-	defer statment.Close()
-	rows, err := statment.Query()
+	if s.limit == 0 {
+		statment_clone := s.clone()
+		sql_expected_row_count, _ := statment_clone.Count()
+		s.limit = int(sql_expected_row_count)
+	}
+	sql_query := s.ToSQL()
+	sql_statment, err := s.session.Prepare(sql_query)
+	defer sql_statment.Close()
+	sql_rows, err := sql_statment.Query()
 	if err != nil {
 		return nil, err
 	}
-	col, err := rows.Columns()
+	sql_columns, err := sql_rows.Columns()
 	if err != nil {
 		return nil, err
 	}
-	count, _ := s.Count()
-	r := make(results, count)
-	o := 0
-	defer logQueryInformation(time.Now(), q)
-	for rows.Next() {
-		var ptr = make([]interface{}, len(col))
-		for i := 0; i < len(ptr); i++ {
+	sql_results_array := make(results, s.limit)
+	sql_current_result_index := 0
+	defer log_query_information(time.Now(), sql_query)
+	for sql_rows.Next() {
+		var sql_results_ptr = make([]interface{}, len(sql_columns))
+		for i := 0; i < len(sql_results_ptr); i++ {
 			var buf interface{}
-			ptr[i] = &buf
+			sql_results_ptr[i] = &buf
 		}
-		err = rows.Scan(ptr...)
-		r[o] = generateResult(col, ptr)
-		o += 1
+		err = sql_rows.Scan(sql_results_ptr...)
+		sql_results_array[sql_current_result_index] = generate_result(sql_columns, sql_results_ptr)
+		sql_current_result_index += 1
 	}
-	return r, err
+	return sql_results_array, err
 }
 
-func generateResult(c []string, p []interface{}) result {
+func (s *SelectStatement) clone() *SelectStatement {
+	clone := &SelectStatement{
+		a:           s.a,
+		projections: s.projections,
+		reference:   s.reference,
+		filters:     s.filters,
+		joins:       s.joins,
+		session:     s.session,
+		limit:       s.limit,
+	}
+	return clone
+}
+
+func generate_result(c []string, p []interface{}) result {
 	r := make(result)
 	for i, v := range p {
 		switch x := (*v.(*interface{})); x.(type) {
@@ -244,6 +261,6 @@ func generateResult(c []string, p []interface{}) result {
 	return r
 }
 
-func logQueryInformation(t time.Time, q string) {
+func log_query_information(t time.Time, q string) {
 	fmt.Printf("(%v) - %s\n", time.Now().Sub(t), q)
 }
