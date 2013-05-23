@@ -27,6 +27,7 @@ package librarian
 import (
 	"database/sql"
 	"fmt"
+	"time"
 )
 
 type (
@@ -117,6 +118,7 @@ func (s *SelectStatement) ToSQL() string {
 	if len(s.filters) > 0 {
 		q += fmt.Sprintf("WHERE %s ", s.filters.join(" AND "))
 	}
+	fmt.Println(q)
 	return q
 }
 
@@ -130,16 +132,6 @@ func (s *SelectStatement) Count() (int64, error) {
 		return -1, NoSessionError
 	}
 	s.projections = []column{column(fmt.Sprintf("COUNT(%s)", s.a("*")))}
-	var count int64
-	res, err := s.Query(&count)
-	return res.(int64), err
-}
-
-func (s *SelectStatement) All() {}
-
-func (s *SelectStatement) First() {}
-
-func (s *SelectStatement) Query(r interface{}) (interface{}, error) {
 	statment, err := s.session.Prepare(s.ToSQL())
 	defer statment.Close()
 	if err != nil {
@@ -149,13 +141,88 @@ func (s *SelectStatement) Query(r interface{}) (interface{}, error) {
 	if err != nil {
 		return -1, err
 	}
+	var count int64
+	rows.Next()
+	err = rows.Scan(&count)
+	return count, err
+}
+
+func (s *SelectStatement) First() (result, error) {
+	if s.session == nil {
+		return nil, NoSessionError
+	}
+	statment, err := s.session.Prepare(fmt.Sprintf("%s LIMIT 1", s.ToSQL()))
+	defer statment.Close()
+	rows, err := statment.Query()
+	if err != nil {
+		return nil, err
+	}
+	col, err := rows.Columns()
+	if err != nil {
+		return nil, err
+	}
+	var ptr = make([]interface{}, len(col))
+	for i := 0; i < len(ptr); i++ {
+		var buf interface{}
+		ptr[i] = &buf
+	}
+	rows.Next()
+	err = rows.Scan(ptr...)
+	r := generateResult(col, ptr)
+	return r, err
+}
+
+func (s *SelectStatement) All() (results, error) {
+	if s.session == nil {
+		return nil, NoSessionError
+	}
+	statment, err := s.session.Prepare(s.ToSQL())
+	defer statment.Close()
+	rows, err := statment.Query()
+	if err != nil {
+		return nil, err
+	}
+	col, err := rows.Columns()
+	if err != nil {
+		return nil, err
+	}
+	count, _ := s.Count()
+	r := make(results, count-1)
+	o := 0
+	t1 := time.Now()
 	for rows.Next() {
-		err = rows.Scan(r)
+		var ptr = make([]interface{}, len(col))
+		for i := 0; i < len(ptr); i++ {
+			var buf interface{}
+			ptr[i] = &buf
+		}
+		err = rows.Scan(ptr...)
+		r[o] = generateResult(col, ptr)
+		o += 1
 	}
-	switch r.(type) {
-	case *int64:
-		return *r.(*int64), err
-	default:
-		return r, err
+	t2 := time.Now().Sub(t1)
+	fmt.Println(t2)
+	return r, err
+}
+
+func generateResult(c []string, p []interface{}) result {
+	r := make(result)
+	for i, v := range p {
+		switch x := (*v.(*interface{})); x.(type) {
+		case int64:
+			p[i] = x.(int64)
+		case time.Time:
+			p[i] = x.(time.Time)
+		case float64:
+			p[i] = x.(float64)
+		case bool:
+			p[i] = x.(bool)
+		case []uint8:
+			p[i] = fmt.Sprintf("%s", x)
+		default:
+			p[i] = nil
+		}
+		r[c[i]] = p[i]
 	}
+	return r
 }

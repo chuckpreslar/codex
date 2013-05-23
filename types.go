@@ -35,6 +35,8 @@ type table string
 type expression string
 type expressions []expression
 type accessor func(string) column
+type result map[string]interface{}
+type results []result
 
 func Table(t string) accessor {
 	return func(c string) column {
@@ -57,30 +59,30 @@ func (c column) Eq(v interface{}) expression {
 	if v == nil {
 		return expression(fmt.Sprintf("%s IS NULL", c))
 	}
-	return expression(fmt.Sprintf("%s = %s", c, format_expression_value(v)))
+	return expression(fmt.Sprintf("%s = %s", c, formatExpressionValue(v)))
 }
 
 func (c column) Neq(v interface{}) expression {
 	if v == nil {
 		return expression(fmt.Sprintf("%s IS NOT NULL", c))
 	}
-	return expression(fmt.Sprintf("%s != %s", c, format_expression_value(v)))
+	return expression(fmt.Sprintf("%s != %s", c, formatExpressionValue(v)))
 }
 
 func (c column) Gt(v interface{}) expression {
-	return expression(fmt.Sprintf("%s > %s", c, format_expression_value(v)))
+	return expression(fmt.Sprintf("%s > %s", c, formatExpressionValue(v)))
 }
 
 func (c column) Gte(v interface{}) expression {
-	return expression(fmt.Sprintf("%s >= %s", c, format_expression_value(v)))
+	return expression(fmt.Sprintf("%s >= %s", c, formatExpressionValue(v)))
 }
 
 func (c column) Lt(v interface{}) expression {
-	return expression(fmt.Sprintf("%s < %s", c, format_expression_value(v)))
+	return expression(fmt.Sprintf("%s < %s", c, formatExpressionValue(v)))
 }
 
 func (c column) Lte(v interface{}) expression {
-	return expression(fmt.Sprintf("%s <= %s", c, format_expression_value(v)))
+	return expression(fmt.Sprintf("%s <= %s", c, formatExpressionValue(v)))
 }
 
 func (c column) As(s string) column {
@@ -95,7 +97,7 @@ func (e expression) Or(ee expression) expression {
  * Helper methods.
  */
 
-func format_expression_value(v interface{}) string {
+func formatExpressionValue(v interface{}) string {
 	switch v.(type) {
 	case int:
 		return fmt.Sprintf("%d", v)
