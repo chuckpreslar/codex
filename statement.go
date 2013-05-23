@@ -195,9 +195,8 @@ func (s *SelectStatement) Query() (results, error) {
 		return nil, NoSessionError
 	}
 	if s.limit == 0 {
-		statment_clone := s.clone()
-		sql_expected_row_count, _ := statment_clone.Count()
-		s.limit = int(sql_expected_row_count)
+		sql_expected_row_count, _ := s.clone().Count()
+		s.Limit(int(sql_expected_row_count))
 	}
 	sql_query := s.ToSQL()
 	sql_statment, err := s.session.Prepare(sql_query)
