@@ -27,7 +27,7 @@ import (
 // ... lets assume `session` is your database session
 
 users := l.Table("users")
-records, err := l.Search(users).All(session)
+records, err := l.Search(users).Run(session).All()
 ```
 
 Now that wasn't to bad, was it?
@@ -55,7 +55,8 @@ An example of how to search for records that meet a specified criteria:
 users := l.Table("users")
 records, err := l.Search(users).
                 Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).
-                All(session)
+                Run(Session).
+                All()
 ```
 
 #### Joins
@@ -71,7 +72,8 @@ records, err := l.Search(users).
                 Select("id", "email", "first_name", "last_name").
                 Select(orders("id")).
                 Join(orders.On("user_id").Eq(users("id"))).
-                All(session)
+                Run(session).
+                All()
 ```
 
 Notes
