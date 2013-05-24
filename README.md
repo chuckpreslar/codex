@@ -27,7 +27,7 @@ import (
 // ... lets assume `session` is your database session
 
 users := l.Table("users")
-records, err := l.Search(users).Run(session).Query()
+records, err := l.With(session).Search(users).Query()
 ```
 
 Now that wasn't to bad, was it?
@@ -40,9 +40,8 @@ You can, of course, speed up your queries by only selecting the columns you need
 // ...
 
 users := l.Table("users")
-records, err := l.Search(users).
+records, err := l.With(session).Search(users).
                 Select("id", "email", "first_name", "last_name").
-                Run(session).
                 Query()
 ```
 
@@ -54,9 +53,8 @@ An example of how to search for records that meet a specified criteria:
 // ...
 
 users := l.Table("users")
-records, err := l.Search(users).
+records, err := l.With(session).Search(users).
                 Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).
-                Run(Session).
                 Query()
 ```
 
@@ -69,11 +67,10 @@ Still with me?  Last but not least, an example of a `JOIN` operation:
 
 users := l.Table("users")
 orders := l.Table("orders")
-records, err := l.Search(users).
+records, err := l.With(session).Search(users).
                 Select("id", "email", "first_name", "last_name").
                 Select(orders("id").As("order_id")).
                 Join(orders.On("user_id").Eq(users("id"))).
-                Run(session).
                 Query()
 ```
 

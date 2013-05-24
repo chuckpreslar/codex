@@ -24,18 +24,35 @@
 
 package librarian
 
-func Search(a accessor) *SelectStatement {
-	return &SelectStatement{a: a, projections: []column{}, reference: table(a(""))}
+import (
+	"database/sql"
+)
+
+type StatementInitializer struct {
+	session *sql.DB
 }
 
-func Insert(a accessor) *InsertStatement {
+func With(session *sql.DB) *StatementInitializer {
+	return &StatementInitializer{session}
+}
+
+func (s *StatementInitializer) Search(a accessor) *SelectStatement {
+	return &SelectStatement{
+		a:           a,
+		projections: []column{},
+		reference:   table(a("")),
+		session:     s.session,
+	}
+}
+
+func (s *StatementInitializer) Insert(a accessor) *InsertStatement {
 	return &InsertStatement{a: a}
 }
 
-func Update(a accessor) *UpdateStatement {
+func (s *StatementInitializer) Update(a accessor) *UpdateStatement {
 	return &UpdateStatement{a: a}
 }
 
-func Delete(a accessor) *DeleteStatement {
+func (s *StatementInitializer) Delete(a accessor) *DeleteStatement {
 	return &DeleteStatement{a: a}
 }

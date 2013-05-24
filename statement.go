@@ -65,7 +65,7 @@ type (
  * SelectStatement for continued chaning.
  *
  * Ex: SELECT "users".* FROM "users" WHERE "users"."id" = 3
- *	Search(users).Find(3).Run(session).Query() // #Query or #First can be used here.
+ *	With(session)Search(users).Find(3).Query() // #Query or #First can be used here.
  *
  * @params int
  * @receiver *SelectStatement
@@ -85,7 +85,7 @@ func (s *SelectStatement) Find(i int) *SelectStatement {
  * SelectStatement for continued chaning.
  *
  * Ex: SELECT "users"."id", "users"."email" FROM "users"
- *	Search(users).Select("id", "email").Run(session).Query() // #Query or #First can be used here.
+ *	With(session).Search(users).Select("id", "email").Query() // #Query or #First can be used here.
  *
  * @params ...interface{}
  * @receiver *SelectStatement
@@ -112,7 +112,7 @@ func (s *SelectStatement) Select(c ...interface{}) *SelectStatement {
  * SelectStatement for continued chaning.
  *
  * Ex. SELECT "users".* FROM "users" WHERE "users"."email" = 'test@example.com'
- *	Search(users).Where(users("email").Eq("test@example.com")).Run(session).Query()
+ *	With(session).Search(users).Where(users("email").Eq("test@example.com")).Query()
  *
  * @params expression
  * @receiver *SelectStatement
@@ -177,11 +177,6 @@ func (s *SelectStatement) ToSQL() string {
 		q += fmt.Sprintf("LIMIT %d", s.limit)
 	}
 	return q
-}
-
-func (s *SelectStatement) Run(session *sql.DB) *SelectStatement {
-	s.session = session
-	return s
 }
 
 func (s *SelectStatement) Count() (int, error) {
