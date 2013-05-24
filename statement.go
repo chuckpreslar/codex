@@ -187,9 +187,9 @@ func (s *SelectStatement) Run(session *sql.DB) *SelectStatement {
 func (s *SelectStatement) Count() (int, error) {
 	s.count = true
 	s.projections = []column{column(fmt.Sprintf("COUNT(%s)", s.a("*")))}
-	result, err := s.process()
-	if 1 == len(result) && nil == err {
-		count, ok := result[0]["count"]
+	res, err := s.process()
+	if 1 == len(res) && nil == err {
+		count, ok := res[0]["count"]
 		if ok {
 			return int(count.(int64)), err
 		} else {
@@ -201,11 +201,11 @@ func (s *SelectStatement) Count() (int, error) {
 
 func (s *SelectStatement) First() (result, error) {
 	s.limit = 1
-	result, err := s.process()
-	if 1 > len(result) {
+	res, err := s.process()
+	if 1 > len(res) {
 		return nil, err
 	}
-	return result[0], err
+	return res[0], err
 }
 
 func (s *SelectStatement) Query() (results, error) {
