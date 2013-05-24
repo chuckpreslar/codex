@@ -29,14 +29,14 @@ import (
 	"strings"
 )
 
+type accessor func(string) column
 type column string
 type columns []column
-type table string
 type expression string
 type expressions []expression
-type accessor func(string) column
 type result map[string]interface{}
 type results []result
+type table string
 
 func Table(t string) accessor {
 	return func(c string) column {
