@@ -241,7 +241,7 @@ func (s *SelectStatement) process() (results, error) {
 		return nil, err
 	}
 	sqlColumns, err := sqlRows.Columns()
-	if err != nil {
+	if nil != err {
 		return nil, err
 	}
 	sqlReturnSize := s.limit | 1
