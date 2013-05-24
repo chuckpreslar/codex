@@ -32,11 +32,11 @@ type StatementInitializer struct {
 	session *sql.DB
 }
 
-func With(session *sql.DB) *StatementInitializer {
-	return &StatementInitializer{session}
+func With(session *sql.DB) StatementInitializer {
+	return StatementInitializer{session}
 }
 
-func (s *StatementInitializer) Search(a accessor) *SelectStatement {
+func (s StatementInitializer) Search(a accessor) *SelectStatement {
 	return &SelectStatement{
 		a:           a,
 		projections: []column{},
@@ -45,14 +45,14 @@ func (s *StatementInitializer) Search(a accessor) *SelectStatement {
 	}
 }
 
-func (s *StatementInitializer) Insert(a accessor) *InsertStatement {
+func (s StatementInitializer) Insert(a accessor) *InsertStatement {
 	return &InsertStatement{a: a}
 }
 
-func (s *StatementInitializer) Update(a accessor) *UpdateStatement {
+func (s StatementInitializer) Update(a accessor) *UpdateStatement {
 	return &UpdateStatement{a: a}
 }
 
-func (s *StatementInitializer) Delete(a accessor) *DeleteStatement {
+func (s StatementInitializer) Delete(a accessor) *DeleteStatement {
 	return &DeleteStatement{a: a}
 }
