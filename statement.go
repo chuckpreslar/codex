@@ -65,7 +65,7 @@ type (
  * SelectStatement for continued chaning.
  *
  * Ex: SELECT "users".* FROM "users" WHERE "users"."id" = 3
- *	With(session)Search(users).Find(3).Query() // #Query or #First can be used here.
+ *	With(session).Search(users).Find(3).Query() // #Query or #First can be used here.
  *
  * @params int
  * @receiver *SelectStatement
