@@ -71,7 +71,7 @@ users := l.Table("users")
 orders := l.Table("orders")
 records, err := l.Search(users).
                 Select("id", "email", "first_name", "last_name").
-                Select(orders("id")).
+                Select(orders("id").As("order_id")).
                 Join(orders.On("user_id").Eq(users("id"))).
                 Run(session).
                 Query()
