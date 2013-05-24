@@ -65,7 +65,7 @@ type (
  * SelectStatement for continued chaning.
  *
  * Ex: SELECT "users".* FROM "users" WHERE "users"."id" = 3
- *	Search(users).Find(3).Run(session).Query() // #All or #First can be used here.
+ *	Search(users).Find(3).Run(session).Query() // #Query or #First can be used here.
  *
  * @params int
  * @receiver *SelectStatement
@@ -85,7 +85,7 @@ func (s *SelectStatement) Find(i int) *SelectStatement {
  * SelectStatement for continued chaning.
  *
  * Ex: SELECT "users"."id", "users"."email" FROM "users"
- *	Search(users).Select("id", "email").Run(session).Query() // #All or #First can be used here.
+ *	Search(users).Select("id", "email").Run(session).Query() // #Query or #First can be used here.
  *
  * @params ...interface{}
  * @receiver *SelectStatement
