@@ -249,7 +249,7 @@ func (s *SelectStatement) process() (results, error) {
 	sqlCurrentResultIndex := 0
 	defer logQueryInformation(time.Now(), sqlQuery)
 	for sqlRows.Next() {
-		var sqlResultsBuffer = generateResultsBuffer(len(sqlColumns))
+		sqlResultsBuffer := generateResultsBuffer(len(sqlColumns))
 		err = sqlRows.Scan(sqlResultsBuffer...)
 		sqlResultsArray[sqlCurrentResultIndex] = generateResultMap(sqlColumns, sqlResultsBuffer)
 		sqlCurrentResultIndex += 1
