@@ -193,10 +193,10 @@ func (s *SelectStatement) Count() (int, error) {
 		if ok {
 			return int(count.(int64)), err
 		} else {
-			return -1, BadResultsError
+			return 0, BadResultsError
 		}
 	}
-	return -1, BadResultsError
+	return 0, BadResultsError
 }
 
 func (s *SelectStatement) First() (result, error) {
