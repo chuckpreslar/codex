@@ -30,7 +30,7 @@ users := l.Table("users")
 records, err := l.With(session).Search(users).Query()
 ```
 
-Now that wasn't to bad, was it?
+Now that wasn't too bad, was it?
 
 #### Projections
 
