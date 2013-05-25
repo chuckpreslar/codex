@@ -62,9 +62,9 @@ type (
 )
 
 /**
- * Find will inititilze a Librarian SelectStatement with the assumption of
+ * `Find` will inititilze a Librarian `SelectStatement` with the assumption of
  * finding a record by an `id` column, returning a pointer to the
- * SelectStatement for continued chaning.
+ * `SelectStatement` for continued chaning.
  *
  * Ex: SELECT "users".* FROM "users" WHERE "users"."id" = 3
  *	With(session).Search(users).Find(3).Query() // #Query or #First can be used here.
@@ -80,10 +80,10 @@ func (s *SelectStatement) Find(i int) *SelectStatement {
 }
 
 /**
- * Select allows for SQL projections, accepting an interface type to
+ * `Select` allows for SQL projections, accepting an `interface` type to
  * allow for type switching.  Actual accepted types are strings that
- * will be used to generate columns with the statements accessor,
- * or columns generated previously, returning a pointer to the
+ * will be used to generate `columns` with the statements `accessor`,
+ * or `columns` generated previously, returning a pointer to the
  * SelectStatement for continued chaning.
  *
  * Ex: SELECT "users"."id", "users"."email" FROM "users"
@@ -109,9 +109,9 @@ func (s *SelectStatement) Select(c ...interface{}) *SelectStatement {
 }
 
 /**
- * Where provides filtering options for Librarian SelectStatements,
+ * `Where` provides filtering options for Librarian `SelectStatements`,
  * taking an `expression` type as a parameter and returning a pointer to the
- * SelectStatement for continued chaning.
+ * `SelectStatement` for continued chaning.
  *
  * Ex. SELECT "users".* FROM "users" WHERE "users"."email" = 'test@example.com'
  *	With(session).Search(users).Where(users("email").Eq("test@example.com")).Query()
@@ -126,45 +126,144 @@ func (s *SelectStatement) Where(e expression) *SelectStatement {
 	return s
 }
 
+/**
+ * `Join` takes an `expression` like `Where`, except the expression is generated
+ * trough a chained call to `On` which operates on an `accessor`. A pointer to
+ * the `SelectStatement` is returned for chaining.
+ *
+ * Ex. SELECT "users".* FROM "users" JOIN "orders" ON "orders"."user_id" = "user"."id"
+ *	With(session).Search(users).Join(orders.On("user_id").Eq(users("id"))).Query()
+ *
+ * @params expression
+ * @receiver *SelectStatement
+ * @returns *SelectStatement
+ */
+
 func (s *SelectStatement) Join(e expression) *SelectStatement {
 	s.joins = append(s.joins, expression(fmt.Sprintf("JOIN %s", e)))
 	return s
 }
+
+/**
+ * Refer to `Join`
+ *
+ * Ex. SELECT "users".* FROM "users" INNER JOIN "orders" ON "orders"."user_id" = "user"."id"
+ *	With(session).Search(users).InnerJoin(orders.On("user_id").Eq(users("id"))).Query()
+ *
+ * @params expression
+ * @receiver *SelectStatement
+ * @returns *SelectStatement
+ */
 
 func (s *SelectStatement) InnerJoin(e expression) *SelectStatement {
 	s.joins = append(s.joins, expression(fmt.Sprintf("INNER JOIN %s", e)))
 	return s
 }
 
+/**
+ * Refer to `Join`
+ *
+ * Ex. SELECT "users".* FROM "users" OUTER JOIN "orders" ON "orders"."user_id" = "user"."id"
+ *	With(session).Search(users).InnerJoin(orders.On("user_id").Eq(users("id"))).Query()
+ *
+ * @params expression
+ * @receiver *SelectStatement
+ * @returns *SelectStatement
+ */
+
 func (s *SelectStatement) OuterJoin(e expression) *SelectStatement {
 	s.joins = append(s.joins, expression(fmt.Sprintf("OUTER JOIN %s", e)))
 	return s
 }
+
+/**
+ * Refer to `Join`
+ *
+ * Ex. SELECT "users".* FROM "users" LEFT JOIN "orders" ON "orders"."user_id" = "user"."id"
+ *	With(session).Search(users).InnerJoin(orders.On("user_id").Eq(users("id"))).Query()
+ *
+ * @params expression
+ * @receiver *SelectStatement
+ * @returns *SelectStatement
+ */
 
 func (s *SelectStatement) LeftJoin(e expression) *SelectStatement {
 	s.joins = append(s.joins, expression(fmt.Sprintf("LEFT JOIN %s", e)))
 	return s
 }
 
+/**
+ * Refer to `Join`
+ *
+ * Ex. SELECT "users".* FROM "users" RIGHT JOIN "orders" ON "orders"."user_id" = "user"."id"
+ *	With(session).Search(users).InnerJoin(orders.On("user_id").Eq(users("id"))).Query()
+ *
+ * @params expression
+ * @receiver *SelectStatement
+ * @returns *SelectStatement
+ */
+
 func (s *SelectStatement) RightJoin(e expression) *SelectStatement {
 	s.joins = append(s.joins, expression(fmt.Sprintf("RIGHT JOIN %s", e)))
 	return s
 }
+
+/**
+ * Refer to `Join`
+ *
+ * Ex. SELECT "users".* FROM "users" FULL JOIN "orders" ON "orders"."user_id" = "user"."id"
+ *	With(session).Search(users).InnerJoin(orders.On("user_id").Eq(users("id"))).Query()
+ *
+ * @params expression
+ * @receiver *SelectStatement
+ * @returns *SelectStatement
+ */
 
 func (s *SelectStatement) FullJoin(e expression) *SelectStatement {
 	s.joins = append(s.joins, expression(fmt.Sprintf("FULL JOIN %s", e)))
 	return s
 }
 
+/**
+ * `Limit` restricts the number of results returned from
+ * executing the query.
+ *
+ * Ex. SELECT "users".* FROM "users" LIMIT 1
+ *	With(session).Search(users).Limit(1).Query()
+ *
+ * @params int
+ * @receiver *SelectStatement
+ * @returns *SelectStatement
+ */
+
 func (s *SelectStatement) Limit(l int) *SelectStatement {
 	s.limit = l
 	return s
 }
 
+/**
+ * `Offset` skips a the number of records given by the function parameter.
+ *
+ * Ex. SELECT "users".* FROM "users" OFFSET 1
+ *	With(session).Search(users).Offset(1).Query()
+ *
+ * @params int
+ * @receiver *SelectStatement
+ * @returns *SelectStatement
+ */
+
 func (s *SelectStatement) Offset(o int) *SelectStatement {
 	s.offset = o
 	return s
 }
+
+/**
+ * `ToSQL` parses the current `SelectStatement`, returning it as a string
+ * in SQL syntax.
+ *
+ * @receiver *SelectStatement
+ * @returns string
+ */
 
 func (s *SelectStatement) ToSQL() string {
 	q := "SELECT"
@@ -188,6 +287,14 @@ func (s *SelectStatement) ToSQL() string {
 	}
 	return strings.TrimRight(q, " ")
 }
+
+/**
+ * `Count` removes a `SelectStatement` projections as they're no longer needed,
+ * calling SQLs COUNT instead.
+ *
+ * @receiver *SelectStatement
+ * @returns int
+ */
 
 func (s *SelectStatement) Count() (int, error) {
 	s.count = true
