@@ -164,7 +164,7 @@ func (s *SelectStatement) InnerJoin(e expression) *SelectStatement {
  * Refer to `Join`
  *
  * Ex. SELECT "users".* FROM "users" OUTER JOIN "orders" ON "orders"."user_id" = "user"."id"
- *	With(session).Search(users).InnerJoin(orders.On("user_id").Eq(users("id"))).Query()
+ *	With(session).Search(users).OuterJoin(orders.On("user_id").Eq(users("id"))).Query()
  *
  * @params expression
  * @receiver *SelectStatement
@@ -180,7 +180,7 @@ func (s *SelectStatement) OuterJoin(e expression) *SelectStatement {
  * Refer to `Join`
  *
  * Ex. SELECT "users".* FROM "users" LEFT JOIN "orders" ON "orders"."user_id" = "user"."id"
- *	With(session).Search(users).InnerJoin(orders.On("user_id").Eq(users("id"))).Query()
+ *	With(session).Search(users).LeftJoin(orders.On("user_id").Eq(users("id"))).Query()
  *
  * @params expression
  * @receiver *SelectStatement
@@ -196,7 +196,7 @@ func (s *SelectStatement) LeftJoin(e expression) *SelectStatement {
  * Refer to `Join`
  *
  * Ex. SELECT "users".* FROM "users" RIGHT JOIN "orders" ON "orders"."user_id" = "user"."id"
- *	With(session).Search(users).InnerJoin(orders.On("user_id").Eq(users("id"))).Query()
+ *	With(session).Search(users).Right(orders.On("user_id").Eq(users("id"))).Query()
  *
  * @params expression
  * @receiver *SelectStatement
@@ -212,7 +212,7 @@ func (s *SelectStatement) RightJoin(e expression) *SelectStatement {
  * Refer to `Join`
  *
  * Ex. SELECT "users".* FROM "users" FULL JOIN "orders" ON "orders"."user_id" = "user"."id"
- *	With(session).Search(users).InnerJoin(orders.On("user_id").Eq(users("id"))).Query()
+ *	With(session).Search(users).FullJoin(orders.On("user_id").Eq(users("id"))).Query()
  *
  * @params expression
  * @receiver *SelectStatement
