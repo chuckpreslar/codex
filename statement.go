@@ -46,6 +46,7 @@ type (
 		joins       expressions
 		session     *sql.DB
 		limit       int
+		offset      int
 		count       bool
 	}
 
@@ -160,6 +161,11 @@ func (s *SelectStatement) Limit(l int) *SelectStatement {
 	return s
 }
 
+func (s *SelectStatement) Offset(o int) *SelectStatement {
+	s.offset = o
+	return s
+}
+
 func (s *SelectStatement) ToSQL() string {
 	q := "SELECT"
 	if 0 == len(s.projections) {
@@ -175,7 +181,10 @@ func (s *SelectStatement) ToSQL() string {
 		q += fmt.Sprintf("WHERE %s ", s.filters.join(" AND "))
 	}
 	if 0 != s.limit {
-		q += fmt.Sprintf("LIMIT %d", s.limit)
+		q += fmt.Sprintf("LIMIT %d ", s.limit)
+	}
+	if 0 != s.offset {
+		q += fmt.Sprintf("OFFSET %d ", s.offset)
 	}
 	return strings.TrimRight(q, " ")
 }
