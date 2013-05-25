@@ -27,6 +27,7 @@ package librarian
 import (
 	"database/sql"
 	"fmt"
+	"strings"
 	"time"
 )
 
@@ -176,7 +177,7 @@ func (s *SelectStatement) ToSQL() string {
 	if 0 != s.limit {
 		q += fmt.Sprintf("LIMIT %d", s.limit)
 	}
-	return q
+	return strings.TrimRight(q, " ")
 }
 
 func (s *SelectStatement) Count() (int, error) {
