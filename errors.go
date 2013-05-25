@@ -14,6 +14,6 @@ func (l LibrarianError) Error() string {
 	return fmt.Sprintf("Librarian : %v : %s", l.timestamp, l.details)
 }
 
-var NoSessionError LibrarianError = LibrarianError{"No database session was provided.", time.Now()}
+var BadSessionError LibrarianError = LibrarianError{"Bad or no database session was provided.", time.Now()}
 var BadArgsError LibrarianError = LibrarianError{"Bad arguments supplied.", time.Now()}
 var BadResultsError LibrarianError = LibrarianError{"Unexpected results.", time.Now()}

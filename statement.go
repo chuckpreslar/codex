@@ -221,16 +221,19 @@ func (s *SelectStatement) clone() *SelectStatement {
 }
 
 func (s *SelectStatement) process() (results, error) {
-	if nil == s.session {
-		return nil, NoSessionError
-	}
-	if 0 == s.limit && !s.count {
-		sqlExpectedRowCount, _ := s.clone().Count()
-		s.limit = sqlExpectedRowCount
+	if nil == s.session || nil != s.session.Ping() {
+		return nil, BadSessionError
 	}
 	sqlQuery := s.ToSQL()
 	sqlStatment, err := s.session.Prepare(sqlQuery)
-	defer sqlStatment.Close()
+	if nil != err {
+		return nil, err
+	}
+	if 0 == s.limit && !s.count {
+		sqlPreflightResult, _ := sqlStatment.Exec()
+		sqlPreflightResultCount, _ := sqlPreflightResult.RowsAffected()
+		s.limit = int(sqlPreflightResultCount)
+	}
 	sqlRows, err := sqlStatment.Query()
 	if nil != err {
 		return nil, err
@@ -242,6 +245,8 @@ func (s *SelectStatement) process() (results, error) {
 	sqlReturnSize := s.limit | 1
 	sqlResultsArray := make(results, sqlReturnSize)
 	sqlCurrentResultIndex := 0
+	defer sqlStatment.Close()
+	defer sqlRows.Close()
 	defer logQueryInformation(time.Now(), sqlQuery)
 	for sqlRows.Next() {
 		sqlResultsBuffer := generateResultsBuffer(len(sqlColumns))
