@@ -296,6 +296,14 @@ func (s *SelectStatement) Count() (int, error) {
 	return 0, BadResultsError
 }
 
+/**
+ * `First` returns the first result stored in a database
+ * that meet the `SelectStatements` criteria or an error.
+ *
+ * @receiver *SelectStatement
+ * @returns result, error
+ */
+
 func (s *SelectStatement) First() (result, error) {
 	s.limit = 1
 	res, err := s.process()
@@ -305,11 +313,29 @@ func (s *SelectStatement) First() (result, error) {
 	return res[0], err
 }
 
+/**
+ * `Query` returns a `results` type (array of []result) of records
+ * stored in the databse the meet the `SelectStatements` criteria or an
+ * error.
+ *
+ * @receiver *SelectStatement
+ * @returns results, error
+ */
+
 func (s *SelectStatement) Query() (results, error) {
 	return s.process()
 }
 
-func (s *SelectStatement) clone() *SelectStatement {
+/**
+ * `Clone` creates a new instance or a `SelectStatement` based
+ * on the values currently associated with the receiver, returning
+ * a pointer to the clone.
+ *
+ * @receiver *SelectStatement
+ * @returns *SelectStatement
+ */
+
+func (s *SelectStatement) Clone() *SelectStatement {
 	clone := &SelectStatement{
 		a:           s.a,
 		projections: s.projections,
@@ -321,6 +347,14 @@ func (s *SelectStatement) clone() *SelectStatement {
 	}
 	return clone
 }
+
+/**
+ * `process` is called interally to generate the results to return
+ * when a statement finalizer is executed (ex. #First, #Query, #Count)
+ *
+ * @receiver *SelectStatement
+ * @returns results, error
+ */
 
 func (s *SelectStatement) process() (results, error) {
 	if nil == s.session || nil != s.session.Ping() {
@@ -359,6 +393,15 @@ func (s *SelectStatement) process() (results, error) {
 	return sqlResultsArray, err
 }
 
+/**
+ * `generateResultMap` is used internally to generate a `result` type.
+ * Taking a queries column names, mapping them to values stored in an
+ * array used to buffer a query response.
+ *
+ * @params []string, []interface{}
+ * @returns result
+ */
+
 func generateResultMap(c []string, p []interface{}) result {
 	r := make(result)
 	for i, v := range p {
@@ -380,6 +423,15 @@ func generateResultMap(c []string, p []interface{}) result {
 	}
 	return r
 }
+
+/**
+ * `generateResultsBuffer` is used internally to generate an array
+ * of type `interface{}` to store values returned from Rows #Scan
+ * method.
+ *
+ * @params int
+ * @returns []interface{}
+ */
 
 func generateResultsBuffer(l int) []interface{} {
 	p := make([]interface{}, l)
