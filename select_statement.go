@@ -56,9 +56,12 @@ type SelectStatement struct {
  * @returns *SelectStatement
  */
 
-func (s *SelectStatement) Find(i int) *SelectStatement {
-	s.Where(s.a("id").Eq(i)).Limit(1)
-	return s
+func (s *SelectStatement) Find(i int) (result, error) {
+	res, err := s.Where(s.a("id").Eq(i)).Limit(1).process()
+	if 1 > len(res) {
+		return nil, err
+	}
+	return res[0], err
 }
 
 /**
