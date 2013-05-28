@@ -283,11 +283,7 @@ func (s *SelectStatement) ToSQL() string {
  */
 
 func (s *SelectStatement) Find(i int) (result, error) {
-	res, err := s.Where(s.a("id").Eq(i)).First()
-	if 1 > len(res) {
-		return nil, err
-	}
-	return res, err
+	return s.Where(s.a("id").Eq(i)).First()
 }
 
 /**
