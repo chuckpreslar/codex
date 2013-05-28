@@ -128,7 +128,7 @@ func (e expressions) join(d string) string {
 func (j joinable) join(d string) string {
 	s := make([]string, len(j))
 	for i, jj := range j {
-		s[i] = fmt.Sprintf("%v", jj)
+		s[i] = string(jj)
 	}
 	return strings.Join(s, d)
 }
