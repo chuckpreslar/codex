@@ -77,6 +77,12 @@ records, err := l.With(session).Search(users).
 Notes
 =====
 
+* Querying for records (80%)
+    * Missing HAVING, GROUP BY, and Aggrigate Functions
+* Inserting records (0%)
+* Update records (0%)
+* Delete records (0%)
+
 This project is still under heavy development, a lot of work still needs to be done.  Come back in a week or so ;)
 
 ##### MIT licensed
