@@ -327,6 +327,19 @@ func (s *SelectStatement) First() (result, error) {
 }
 
 /**
+ * `Last` assumes the specified reference table has an `id` column.
+ * It orders the table based on the column in descending order, returning
+ * the first result.
+ *
+ * @receiver *SelectStatement
+ * @returns result, error
+ */
+
+func (s *SelectStatement) Last() (result, error) {
+	return s.Order("id", "desc").First()
+}
+
+/**
  * `Query` returns a `results` type (array of []result) of records
  * stored in the databse the meet the `SelectStatements` criteria or an
  * error.
