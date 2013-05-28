@@ -41,6 +41,7 @@ func (s StatementInitializer) Search(a accessor) *SelectStatement {
 		a:           a,
 		projections: []column{},
 		reference:   table(a("")),
+		ordering:    []string{},
 		session:     s.session,
 	}
 }

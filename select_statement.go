@@ -37,31 +37,11 @@ type SelectStatement struct {
 	reference   table
 	filters     expressions
 	joins       expressions
+	ordering    joinable
 	session     *sql.DB
 	limit       int
 	offset      int
 	count       bool
-}
-
-/**
- * `Find` will inititilze a Librarian `SelectStatement` with the assumption of
- * finding a record by an `id` column, returning a pointer to the
- * `SelectStatement` for continued chaning.
- *
- * Ex: SELECT "users".* FROM "users" WHERE "users"."id" = 3
- *	With(session).Search(users).Find(3).Query() // #Query or #First can be used here.
- *
- * @params int
- * @receiver *SelectStatement
- * @returns *SelectStatement
- */
-
-func (s *SelectStatement) Find(i int) (result, error) {
-	res, err := s.Where(s.a("id").Eq(i)).Limit(1).process()
-	if 1 > len(res) {
-		return nil, err
-	}
-	return res[0], err
 }
 
 /**
@@ -242,6 +222,19 @@ func (s *SelectStatement) Offset(o int) *SelectStatement {
 	return s
 }
 
+func (s *SelectStatement) Order(c interface{}, d string) *SelectStatement {
+	d = strings.ToUpper(d)
+	switch c.(type) {
+	case column:
+		s.ordering = append(s.ordering, fmt.Sprintf("%s %s", c.(column), d))
+	case string:
+		s.ordering = append(s.ordering, fmt.Sprintf("%s %s", s.a(c.(string)), d))
+	default:
+		panic(BadArgsError)
+	}
+	return s
+}
+
 /**
  * `ToSQL` parses the current `SelectStatement`, returning it as a string
  * in SQL syntax.
@@ -264,6 +257,9 @@ func (s *SelectStatement) ToSQL() string {
 	if 0 < len(s.filters) {
 		q += fmt.Sprintf("WHERE %s ", s.filters.join(" AND "))
 	}
+	if 0 < len(s.ordering) {
+		q += fmt.Sprintf("ORDER BY %s ", s.ordering.join(", "))
+	}
 	if 0 != s.limit {
 		q += fmt.Sprintf("LIMIT %d ", s.limit)
 	}
@@ -271,6 +267,27 @@ func (s *SelectStatement) ToSQL() string {
 		q += fmt.Sprintf("OFFSET %d ", s.offset)
 	}
 	return strings.TrimRight(q, " ")
+}
+
+/**
+ * `Find` will inititilze a Librarian `SelectStatement` with the assumption of
+ * finding a record by an `id` column, returning a pointer to the
+ * `SelectStatement` for continued chaning.
+ *
+ * Ex: SELECT "users".* FROM "users" WHERE "users"."id" = 3
+ *	With(session).Search(users).Find(3).Query() // #Query or #First can be used here.
+ *
+ * @params int
+ * @receiver *SelectStatement
+ * @returns *SelectStatement
+ */
+
+func (s *SelectStatement) Find(i int) (result, error) {
+	res, err := s.Where(s.a("id").Eq(i)).First()
+	if 1 > len(res) {
+		return nil, err
+	}
+	return res, err
 }
 
 /**
