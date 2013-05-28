@@ -34,7 +34,7 @@ type column string
 type columns []column
 type expression string
 type expressions []expression
-type joinable []string
+type joinable []interface{}
 type result map[string]interface{}
 type results []result
 type table string
@@ -128,7 +128,7 @@ func (e expressions) join(d string) string {
 func (j joinable) join(d string) string {
 	s := make([]string, len(j))
 	for i, jj := range j {
-		s[i] = string(jj)
+		s[i] = fmt.Sprintf("%v", jj)
 	}
 	return strings.Join(s, d)
 }
