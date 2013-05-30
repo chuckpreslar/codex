@@ -25,8 +25,8 @@
 package librarian
 
 import (
-	"fmt"
-	"strings"
+  "fmt"
+  "strings"
 )
 
 type accessor func(string) column
@@ -40,58 +40,58 @@ type results []result
 type table string
 
 func Table(t string) accessor {
-	return func(c string) column {
-		switch c {
-		case ``:
-			return column(fmt.Sprintf(`"%s"`, t))
-		case `*`:
-			return column(fmt.Sprintf(`"%s".%s`, t, c))
-		default:
-			return column(fmt.Sprintf(`"%s"."%s"`, t, c))
-		}
-	}
+  return func(c string) column {
+    switch c {
+    case ``:
+      return column(fmt.Sprintf(`"%s"`, t))
+    case `*`:
+      return column(fmt.Sprintf(`"%s".%s`, t, c))
+    default:
+      return column(fmt.Sprintf(`"%s"."%s"`, t, c))
+    }
+  }
 }
 
 func (a accessor) On(s string) column {
-	return column(fmt.Sprintf(`%s ON %s`, a(``), a(s)))
+  return column(fmt.Sprintf(`%s ON %s`, a(``), a(s)))
 }
 
 func (c column) Eq(v interface{}) expression {
-	if nil == v {
-		return expression(fmt.Sprintf(`%s IS NULL`, c))
-	}
-	return expression(fmt.Sprintf(`%s = %s`, c, formatExpressionValue(v)))
+  if nil == v {
+    return expression(fmt.Sprintf(`%s IS NULL`, c))
+  }
+  return expression(fmt.Sprintf(`%s = %s`, c, formatExpressionValue(v)))
 }
 
 func (c column) Neq(v interface{}) expression {
-	if nil == v {
-		return expression(fmt.Sprintf(`%s IS NOT NULL`, c))
-	}
-	return expression(fmt.Sprintf(`%s != %s`, c, formatExpressionValue(v)))
+  if nil == v {
+    return expression(fmt.Sprintf(`%s IS NOT NULL`, c))
+  }
+  return expression(fmt.Sprintf(`%s != %s`, c, formatExpressionValue(v)))
 }
 
 func (c column) Gt(v interface{}) expression {
-	return expression(fmt.Sprintf(`%s > %s`, c, formatExpressionValue(v)))
+  return expression(fmt.Sprintf(`%s > %s`, c, formatExpressionValue(v)))
 }
 
 func (c column) Gte(v interface{}) expression {
-	return expression(fmt.Sprintf(`%s >= %s`, c, formatExpressionValue(v)))
+  return expression(fmt.Sprintf(`%s >= %s`, c, formatExpressionValue(v)))
 }
 
 func (c column) Lt(v interface{}) expression {
-	return expression(fmt.Sprintf(`%s < %s`, c, formatExpressionValue(v)))
+  return expression(fmt.Sprintf(`%s < %s`, c, formatExpressionValue(v)))
 }
 
 func (c column) Lte(v interface{}) expression {
-	return expression(fmt.Sprintf(`%s <= %s`, c, formatExpressionValue(v)))
+  return expression(fmt.Sprintf(`%s <= %s`, c, formatExpressionValue(v)))
 }
 
 func (c column) As(s string) column {
-	return column(fmt.Sprintf(`%s AS "%s"`, c, s))
+  return column(fmt.Sprintf(`%s AS "%s"`, c, s))
 }
 
 func (e expression) Or(ee expression) expression {
-	return expression(fmt.Sprintf(`%s OR %s`, e, ee))
+  return expression(fmt.Sprintf(`%s OR %s`, e, ee))
 }
 
 /**
@@ -99,36 +99,36 @@ func (e expression) Or(ee expression) expression {
  */
 
 func formatExpressionValue(v interface{}) string {
-	switch v.(type) {
-	case int:
-		return fmt.Sprintf("%d", v)
-	case column:
-		return fmt.Sprintf("%s", v)
-	default:
-		return fmt.Sprintf("'%v'", v)
-	}
+  switch v.(type) {
+  case int:
+    return fmt.Sprintf("%d", v)
+  case column:
+    return fmt.Sprintf("%s", v)
+  default:
+    return fmt.Sprintf("'%v'", v)
+  }
 }
 
 func (c columns) join(d string) string {
-	s := make([]string, len(c))
-	for i, cc := range c {
-		s[i] = string(cc)
-	}
-	return strings.Join(s, d)
+  s := make([]string, len(c))
+  for i, cc := range c {
+    s[i] = string(cc)
+  }
+  return strings.Join(s, d)
 }
 
 func (e expressions) join(d string) string {
-	s := make([]string, len(e))
-	for i, ee := range e {
-		s[i] = string(ee)
-	}
-	return strings.Join(s, d)
+  s := make([]string, len(e))
+  for i, ee := range e {
+    s[i] = string(ee)
+  }
+  return strings.Join(s, d)
 }
 
 func (j joinable) join(d string) string {
-	s := make([]string, len(j))
-	for i, jj := range j {
-		s[i] = fmt.Sprintf("%v", jj)
-	}
-	return strings.Join(s, d)
+  s := make([]string, len(j))
+  for i, jj := range j {
+    s[i] = fmt.Sprintf("%v", jj)
+  }
+  return strings.Join(s, d)
 }
