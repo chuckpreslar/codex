@@ -77,6 +77,8 @@ records, err := l.With(session).Search(users).
 Notes
 =====
 
+Librarian is intended to be a Relational Algebra mapper for Go, not an ORM.
+
 * Searching records (80%)
     * Missing HAVING, GROUP BY, and Aggrigate Functions
 * Inserting records (0%)
