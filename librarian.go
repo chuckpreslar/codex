@@ -28,32 +28,6 @@ import (
   "database/sql"
 )
 
-type StatementInitializer struct {
-  session *sql.DB
-}
-
-func With(session *sql.DB) StatementInitializer {
-  return StatementInitializer{session}
-}
-
-func (s StatementInitializer) Search(a accessor) *SelectStatement {
-  return &SelectStatement{
-    a:           a,
-    projections: []column{},
-    reference:   table(a("")),
-    ordering:    []interface{}{},
-    session:     s.session,
-  }
-}
-
-func (s StatementInitializer) Insert(a accessor) *InsertStatement {
-  return &InsertStatement{a: a}
-}
-
-func (s StatementInitializer) Update(a accessor) *UpdateStatement {
-  return &UpdateStatement{a: a}
-}
-
-func (s StatementInitializer) Delete(a accessor) *DeleteStatement {
-  return &DeleteStatement{a: a}
+func Search(a accessor) *SelectStatement {
+  return &SelectStatement{}
 }
