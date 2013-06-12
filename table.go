@@ -11,3 +11,7 @@ func Table(name string) table {
     return column(column)
   }
 }
+
+func (t table) On() {
+
+}
