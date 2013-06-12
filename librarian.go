@@ -28,6 +28,6 @@ import (
   "database/sql"
 )
 
-func Search(a accessor) *SelectStatement {
+func Search(t Table) *SelectStatement {
   return &SelectStatement{}
 }

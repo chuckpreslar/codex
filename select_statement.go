@@ -25,27 +25,18 @@ package librarian
 import ()
 
 type SelectStatement struct {
-  table       Table
-  projections []string
-  wheres      []*Node
-  joins       []*Node
-  groups      []*Node
-  having      []*Node
+  reference   table
+  projections []column
+  filters     []EqualityNode
   offset      int
   limit       int
 }
 
 func (stmt *SelectStatement) Select(columns ...interface{}) *SelectStatement {
-  stmt.projections = append(stmt.projections, columns...)
   return stmt
 }
 
 func (stmt *SelectStatement) Where(filter EqualityNode) *SelectStatement {
   stmt.wheres = append(stmt.wheres, filter)
-  return stmt
-}
-
-func (stmt *SelectStatement) Join(join JoinableNode) *SelectStatement {
-  stmt.joins = append(stmt.joins, join)
   return stmt
 }
