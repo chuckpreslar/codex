@@ -1,8 +1,9 @@
 package librarian
 
 type Column struct {
-  association Table
-  name        string
+  table string
+  name  string
+  alias string
 }
 
 func (column Column) Eq(value interface{}) EqNode {
@@ -25,4 +26,9 @@ func (column Column) Lte(value interface{}) LteNode {
 }
 func (column Column) Matches(value interface{}) MatchesNode {
   return MatchesNode{column, value}
+}
+
+func (column Column) As(alias string) Column {
+  column.alias = alias
+  return column
 }
