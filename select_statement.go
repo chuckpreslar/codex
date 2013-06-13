@@ -1,9 +1,5 @@
 package librarian
 
-import (
-  "fmt"
-)
-
 type SelectStatement struct {
   reference   Table
   projections []Column
@@ -24,5 +20,10 @@ func (stmt *SelectStatement) Select(columns ...interface{}) *SelectStatement {
     }
     stmt.projections = append(stmt.projections, column.(Column))
   }
+  return stmt
+}
+
+func (stmt *SelectStatement) Where(comparator Comparable) *SelectStatement {
+  stmt.filters = append(stmt.filters, comparator)
   return stmt
 }
