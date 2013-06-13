@@ -2,8 +2,8 @@ package librarian
 
 type Table func(string) Column
 
-func NewTable(table string) {
+func NewTable(table string) Table {
   return func(column string) Column {
-    return Column{table, column}
+    return Column{table, column, ""}
   }
 }
