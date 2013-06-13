@@ -14,7 +14,7 @@ func TestSelect(t *testing.T) {
 }
 
 func TestWhere(t *testing.T) {
-  stmt := Search(users).Where(users("id").As("user_id").Eq("1"))
+  stmt := Search(users).Where(users("id").As("user_id").Eq("1").Or(users("email").Eq("test@example.com")))
   if 1 != len(stmt.filters) {
     t.Errorf("Expected 1 filter to be added to the Select Statement, found %d.\n", len(stmt.filters))
   }

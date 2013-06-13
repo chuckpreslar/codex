@@ -27,3 +27,13 @@ func (stmt *SelectStatement) Where(comparator Comparable) *SelectStatement {
   stmt.filters = append(stmt.filters, comparator)
   return stmt
 }
+
+func (stmt *SelectStatement) Limit(limit int) *SelectStatement {
+  stmt.limit = limit
+  return stmt
+}
+
+func (stmt *SelectStatement) Offset(offset int) *SelectStatement {
+  stmt.offset = offset
+  return stmt
+}
