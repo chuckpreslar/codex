@@ -6,6 +6,8 @@ type Attribute struct {
   reference *Reference
 }
 
+func (attr Attribute) project() {}
+
 func (attr Attribute) Eq(value interface{}) (eq EqNode) {
   eq = EqNode{ComparatorNode{BaseNode{attr, value}}}
   return

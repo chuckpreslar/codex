@@ -7,6 +7,14 @@ type Node interface {
   SetRight(interface{})
 }
 
+type Comparison interface {
+  compare()
+}
+
+type Projection interface {
+  project()
+}
+
 type BaseNode struct {
   left  interface{}
   right interface{}
