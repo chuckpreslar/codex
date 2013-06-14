@@ -1,9 +1,14 @@
 package librarian
 
-type Table func(string) Column
+import (
+  "librarian/nodes"
+)
 
-func NewTable(table string) Table {
-  return func(column string) Column {
-    return Column{table, column, ""}
+type Table func(string) nodes.Attribute
+
+func NewTable(name string) Table {
+  r := nodes.NewReference(name)
+  return func(name string) nodes.Attribute {
+    return nodes.NewAttribute(name, r)
   }
 }
