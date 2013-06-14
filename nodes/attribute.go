@@ -8,6 +8,10 @@ type Attribute struct {
 
 func (attr Attribute) project() {}
 
+func (attr Attribute) Reference() *Reference {
+  return attr.reference
+}
+
 func (attr Attribute) Eq(value interface{}) (eq EqNode) {
   eq = EqNode{ComparatorNode{BaseNode{attr, value}}}
   return
