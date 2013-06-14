@@ -12,6 +12,10 @@ func (attr Attribute) Reference() *Reference {
   return attr.reference
 }
 
+func (attr Attribute) Name() string {
+  return attr.name
+}
+
 func (attr Attribute) Eq(value interface{}) (eq EqNode) {
   eq = EqNode{ComparatorNode{BaseNode{attr, value}}}
   return

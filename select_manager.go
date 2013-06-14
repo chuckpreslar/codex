@@ -32,6 +32,14 @@ func (mgmt *SelectManager) AST() *nodes.SelectStatement {
   return mgmt.ast
 }
 
+func (mgmt *SelectManager) ToSql() string {
+  visitor, ok := VISITORS["base"]
+  if ok {
+    visitor.Accept(mgmt.ast)
+  }
+  return ""
+}
+
 func NewSelectManager(reference *nodes.Reference) *SelectManager {
   mgmt := new(SelectManager)
   mgmt.reference = reference
