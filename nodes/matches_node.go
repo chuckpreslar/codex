@@ -1,5 +1,5 @@
 package nodes
 
 type MatchesNode struct {
-  BaseNode
+  ComparatorNode
 }

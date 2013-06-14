@@ -6,32 +6,39 @@ type Attribute struct {
   reference *Reference
 }
 
-func (attr Attribute) Eq(value interface{}) ComparatorNode {
-  return ComparatorNode{BaseNode{EqNode{BaseNode{attr, value}}, nil}}
+func (attr Attribute) Eq(value interface{}) (eq EqNode) {
+  eq = EqNode{ComparatorNode{BaseNode{attr, value}}}
+  return
 }
 
-func (attr Attribute) Neq(value interface{}) ComparatorNode {
-  return ComparatorNode{BaseNode{NeqNode{BaseNode{attr, value}}, nil}}
+func (attr Attribute) Neq(value interface{}) (neq NeqNode) {
+  neq = NeqNode{ComparatorNode{BaseNode{attr, value}}}
+  return
 }
 
-func (attr Attribute) Gt(value interface{}) ComparatorNode {
-  return ComparatorNode{BaseNode{GtNode{BaseNode{attr, value}}, nil}}
+func (attr Attribute) Gt(value interface{}) (gt GtNode) {
+  gt = GtNode{ComparatorNode{BaseNode{attr, value}}}
+  return
 }
 
-func (attr Attribute) Gte(value interface{}) ComparatorNode {
-  return ComparatorNode{BaseNode{GteNode{BaseNode{attr, value}}, nil}}
+func (attr Attribute) Gte(value interface{}) (gte GteNode) {
+  gte = GteNode{ComparatorNode{BaseNode{attr, value}}}
+  return
 }
 
-func (attr Attribute) Lt(value interface{}) ComparatorNode {
-  return ComparatorNode{BaseNode{LtNode{BaseNode{attr, value}}, nil}}
+func (attr Attribute) Lt(value interface{}) (lt LtNode) {
+  lt = LtNode{ComparatorNode{BaseNode{attr, value}}}
+  return
 }
 
-func (attr Attribute) Lte(value interface{}) ComparatorNode {
-  return ComparatorNode{BaseNode{LteNode{BaseNode{attr, value}}, nil}}
+func (attr Attribute) Lte(value interface{}) (lte LteNode) {
+  lte = LteNode{ComparatorNode{BaseNode{attr, value}}}
+  return
 }
 
-func (attr Attribute) Matches(value interface{}) ComparatorNode {
-  return ComparatorNode{BaseNode{MatchesNode{BaseNode{attr, value}}, nil}}
+func (attr Attribute) Matches(value interface{}) (matches MatchesNode) {
+  matches = MatchesNode{ComparatorNode{BaseNode{attr, value}}}
+  return
 }
 
 func NewAttribute(name string, reference *Reference) Attribute {

@@ -4,7 +4,7 @@ type ComparatorNode struct {
   BaseNode
 }
 
-func (comparator ComparatorNode) Or(other ComparatorNode) ComparatorNode {
-  comparator.right = other
-  return comparator
+func (comparator ComparatorNode) Or(other Node) (or OrNode) {
+  or = OrNode{BaseNode{comparator, other}}
+  return
 }
