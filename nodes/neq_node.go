@@ -1,3 +1,5 @@
 package nodes
 
-type NeqNode BaseNode
+type NeqNode struct {
+  BaseNode
+}

@@ -1,3 +1,5 @@
 package nodes
 
-type MatchesNode BaseNode
+type MatchesNode struct {
+  BaseNode
+}

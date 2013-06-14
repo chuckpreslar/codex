@@ -1,3 +1,5 @@
 package nodes
 
-type GteNode BaseNode
+type GteNode struct {
+  BaseNode
+}

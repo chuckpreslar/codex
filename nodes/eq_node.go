@@ -1,3 +1,5 @@
 package nodes
 
-type EqNode BaseNode
+type EqNode struct {
+  BaseNode
+}

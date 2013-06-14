@@ -1,6 +1,8 @@
 package nodes
 
-type ComparatorNode BaseNode
+type ComparatorNode struct {
+  BaseNode
+}
 
 func (comparator ComparatorNode) Or(other ComparatorNode) ComparatorNode {
   comparator.right = other

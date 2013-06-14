@@ -1,3 +1,5 @@
 package nodes
 
-type LtNode BaseNode
+type LtNode struct {
+  BaseNode
+}
