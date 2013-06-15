@@ -8,10 +8,12 @@ type Node interface {
 }
 
 type Comparison interface {
+  Node
   compare()
 }
 
 type Projection interface {
+  Node
   project()
 }
 
