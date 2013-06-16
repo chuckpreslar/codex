@@ -19,6 +19,5 @@ func (reference *ReferenceNode) AddAliases(aliases ...string) ReferenceInterface
 }
 
 func Reference(name string, aliases ...string) *ReferenceNode {
-  reference := &ReferenceNode{&Node{name, nil}, aliases}
-  return reference
+  return &ReferenceNode{&Node{name, nil}, aliases}
 }

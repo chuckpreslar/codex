@@ -44,6 +44,5 @@ func (attribute *AttributeNode) Matches(value interface{}) ComparisonInterface {
 }
 
 func Attribute(name string, reference ReferenceInterface) *AttributeNode {
-  attribute := &AttributeNode{&Node{name, reference}}
-  return attribute
+  return &AttributeNode{&Node{name, reference}}
 }
