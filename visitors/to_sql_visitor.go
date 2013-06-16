@@ -53,46 +53,56 @@ func (visitor *ToSqlVisitor) visitEqNode(eq *nodes.EqNode) string {
   if nil == eq.Right() {
     return fmt.Sprintf("%v IS NULL", visitor.visit(eq.Left()))
   }
-  return fmt.Sprintf("%v = %v", visitor.visit(eq.Left()), tag(visitor.visit(eq.Right())))
+  return fmt.Sprintf("%v = %v", visitor.visit(eq.Left()),
+    tag(visitor.visit(eq.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitNeqNode(neq *nodes.NeqNode) string {
   if nil == neq.Right() {
     return fmt.Sprintf("%v IS NOT NULL", visitor.visit(neq.Left()))
   }
-  return fmt.Sprintf("%v != %v", visitor.visit(neq.Left()), tag(visitor.visit(neq.Right())))
+  return fmt.Sprintf("%v != %v", visitor.visit(neq.Left()),
+    tag(visitor.visit(neq.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitGtNode(gt *nodes.GtNode) string {
-  return fmt.Sprintf("%v > %v", visitor.visit(gt.Left()), tag(visitor.visit(gt.Right())))
+  return fmt.Sprintf("%v > %v", visitor.visit(gt.Left()),
+    tag(visitor.visit(gt.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitGteNode(gte *nodes.GteNode) string {
-  return fmt.Sprintf("%v >= %v", visitor.visit(gte.Left()), tag(visitor.visit(gte.Right())))
+  return fmt.Sprintf("%v >= %v", visitor.visit(gte.Left()),
+    tag(visitor.visit(gte.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitLtNode(lt *nodes.LtNode) string {
-  return fmt.Sprintf("%v < %v", visitor.visit(lt.Left()), tag(visitor.visit(lt.Right())))
+  return fmt.Sprintf("%v < %v", visitor.visit(lt.Left()),
+    tag(visitor.visit(lt.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitLteNode(lte *nodes.LteNode) string {
-  return fmt.Sprintf("%v <= %v", visitor.visit(lte.Left()), tag(visitor.visit(lte.Right())))
+  return fmt.Sprintf("%v <= %v", visitor.visit(lte.Left()),
+    tag(visitor.visit(lte.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitMatchesNode(matches *nodes.MatchesNode) string {
-  return fmt.Sprintf("%v LIKE %v", visitor.visit(matches.Left()), tag(visitor.visit(matches.Right())))
+  return fmt.Sprintf("%v LIKE %v", visitor.visit(matches.Left()),
+    tag(visitor.visit(matches.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitOrNode(or *nodes.OrNode) string {
-  return fmt.Sprintf("%v OR %v", visitor.visit(or.Left()), visitor.visit(or.Right()))
+  return fmt.Sprintf("%v OR %v", visitor.visit(or.Left()),
+    visitor.visit(or.Right()))
 }
 
 func (visitor *ToSqlVisitor) visitSqlFunctionNode(function *nodes.SqlFunctionNode) string {
-  return fmt.Sprintf("%v(%v)", visitor.functionName(function.FunctionName()), visitor.visit(function.Left()))
+  return fmt.Sprintf("%v(%v)", visitor.functionName(function.FunctionName()),
+    visitor.visit(function.Left()))
 }
 
 func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) string {
-  return fmt.Sprintf("%s.%s", quote(visitor.visit(attribute.Left())), quote(visitor.visit(attribute.Right())))
+  return fmt.Sprintf("%s.%s", quote(visitor.visit(attribute.Left())),
+    quote(visitor.visit(attribute.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitString(str string) string {
