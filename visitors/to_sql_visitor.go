@@ -18,6 +18,8 @@ func (visitor *ToSqlVisitor) visit(item interface{}) string {
   switch item.(type) {
   case *nodes.EqNode:
     return visitor.visitEqNode(item.(*nodes.EqNode))
+  case *nodes.NeqNode:
+    return visitor.visitNeqNode(item.(*nodes.NeqNode))
   case *nodes.AttributeNode:
     return visitor.visitAttributeNode(item.(*nodes.AttributeNode))
   case string:
@@ -27,7 +29,17 @@ func (visitor *ToSqlVisitor) visit(item interface{}) string {
 }
 
 func (visitor *ToSqlVisitor) visitEqNode(eq *nodes.EqNode) string {
+  if nil == eq.Right() {
+    return fmt.Sprintf("%v IS NULL", visitor.visit(eq.Left()))
+  }
   return fmt.Sprintf("%v = %v", visitor.visit(eq.Left()), tag(visitor.visit(eq.Right())))
+}
+
+func (visitor *ToSqlVisitor) visitNeqNode(eq *nodes.NeqNode) string {
+  if nil == eq.Right() {
+    return fmt.Sprintf("%v IS NOT NULL", visitor.visit(eq.Left()))
+  }
+  return fmt.Sprintf("%v != %v", visitor.visit(eq.Left()), tag(visitor.visit(eq.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) string {
