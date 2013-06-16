@@ -6,7 +6,7 @@ type ReferenceNode struct {
 }
 
 func (reference *ReferenceNode) GetName() string {
-  return reference.GetLeft().(string)
+  return reference.Left().(string)
 }
 
 func (reference *ReferenceNode) GetAliases() []string {
