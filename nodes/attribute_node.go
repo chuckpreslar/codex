@@ -4,16 +4,16 @@ type AttributeNode struct {
   *Node
 }
 
-func (attribute *AttributeNode) GetName() string {
+func (attribute *AttributeNode) Name() string {
   return attribute.Left().(string)
 }
 
-func (attribute *AttributeNode) GetReference() ReferenceInterface {
+func (attribute *AttributeNode) Reference() ReferenceInterface {
   return attribute.Right().(ReferenceInterface)
 }
 
-func (attribute *AttributeNode) GetTableName() string {
-  return attribute.GetReference().GetName()
+func (attribute *AttributeNode) TableName() string {
+  return attribute.Reference().Name()
 }
 
 func (attribute *AttributeNode) Eq(value interface{}) ComparisonInterface {

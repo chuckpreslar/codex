@@ -29,13 +29,14 @@ type OrInterface interface {
 
 type ReferenceInterface interface {
   NodeInterface
-  GetName() string
-  GetAliases() []string
+  Name() string
+  Aliases() []string
+  AddAliases(...string) ReferenceInterface
 }
 
 type AttributeInterface interface {
   ComparableInterface
-  GetName() string
-  GetReference() ReferenceInterface
-  GetTableName() string
+  Name() string
+  Reference() ReferenceInterface
+  TableName() string
 }
