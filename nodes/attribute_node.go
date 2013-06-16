@@ -2,6 +2,7 @@ package nodes
 
 type AttributeNode struct {
   *Node
+  reference ReferenceInterface
 }
 
 func (attribute *AttributeNode) Name() string {
@@ -44,5 +45,5 @@ func (attribute *AttributeNode) Matches(value interface{}) ComparisonInterface {
 }
 
 func Attribute(name string, reference ReferenceInterface) *AttributeNode {
-  return &AttributeNode{&Node{name, reference}}
+  return &AttributeNode{&Node{name, reference.Name()}, reference}
 }
