@@ -20,10 +20,20 @@ func (visitor *ToSqlVisitor) visit(item interface{}) string {
     return visitor.visitEqNode(item.(*nodes.EqNode))
   case *nodes.NeqNode:
     return visitor.visitNeqNode(item.(*nodes.NeqNode))
+  case *nodes.GtNode:
+    return visitor.visitGtNode(item.(*nodes.GtNode))
+  case *nodes.GteNode:
+    return visitor.visitGteNode(item.(*nodes.GteNode))
+  case *nodes.LtNode:
+    return visitor.visitLtNode(item.(*nodes.LtNode))
+  case *nodes.LteNode:
+    return visitor.visitLteNode(item.(*nodes.LteNode))
   case *nodes.AttributeNode:
     return visitor.visitAttributeNode(item.(*nodes.AttributeNode))
   case string:
     return visitor.visitString(item.(string))
+  case int:
+    return visitor.visitInt(item.(int))
   }
   panic("Unimplemented.")
 }
@@ -35,11 +45,27 @@ func (visitor *ToSqlVisitor) visitEqNode(eq *nodes.EqNode) string {
   return fmt.Sprintf("%v = %v", visitor.visit(eq.Left()), tag(visitor.visit(eq.Right())))
 }
 
-func (visitor *ToSqlVisitor) visitNeqNode(eq *nodes.NeqNode) string {
-  if nil == eq.Right() {
-    return fmt.Sprintf("%v IS NOT NULL", visitor.visit(eq.Left()))
+func (visitor *ToSqlVisitor) visitNeqNode(neq *nodes.NeqNode) string {
+  if nil == neq.Right() {
+    return fmt.Sprintf("%v IS NOT NULL", visitor.visit(neq.Left()))
   }
-  return fmt.Sprintf("%v != %v", visitor.visit(eq.Left()), tag(visitor.visit(eq.Right())))
+  return fmt.Sprintf("%v != %v", visitor.visit(neq.Left()), tag(visitor.visit(neq.Right())))
+}
+
+func (visitor *ToSqlVisitor) visitGtNode(gt *nodes.GtNode) string {
+  return fmt.Sprintf("%v > %v", visitor.visit(gt.Left()), visitor.visit(gt.Right()))
+}
+
+func (visitor *ToSqlVisitor) visitGteNode(gte *nodes.GteNode) string {
+  return fmt.Sprintf("%v >= %v", visitor.visit(gte.Left()), visitor.visit(gte.Right()))
+}
+
+func (visitor *ToSqlVisitor) visitLtNode(lt *nodes.LtNode) string {
+  return fmt.Sprintf("%v < %v", visitor.visit(lt.Left()), visitor.visit(lt.Right()))
+}
+
+func (visitor *ToSqlVisitor) visitLteNode(lte *nodes.LteNode) string {
+  return fmt.Sprintf("%v <= %v", visitor.visit(lte.Left()), visitor.visit(lte.Right()))
 }
 
 func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) string {
@@ -48,6 +74,10 @@ func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) 
 
 func (visitor *ToSqlVisitor) visitString(str string) string {
   return str
+}
+
+func (visitor *ToSqlVisitor) visitInt(i int) string {
+  return fmt.Sprintf("%d", i)
 }
 
 func ToSql() *ToSqlVisitor {
