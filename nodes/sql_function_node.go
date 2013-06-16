@@ -35,6 +35,50 @@ func (function *SqlFunctionNode) Matches(value interface{}) ComparisonInterface 
   return Matches(function, value)
 }
 
-func Maximum(attribute AttributeInterface) SqlFunctionInterface {
-  return &SqlFunctionNode{&Node{attribute, "maximum"}}
+func Maximum(node NodeInterface) SqlFunctionInterface {
+  return &SqlFunctionNode{&Node{node, "maximum"}}
+}
+
+func Minimum(node NodeInterface) SqlFunctionInterface {
+  return &SqlFunctionNode{&Node{node, "minimum"}}
+}
+
+func Count(node NodeInterface) SqlFunctionInterface {
+  return &SqlFunctionNode{&Node{node, "count"}}
+}
+
+func Average(node NodeInterface) SqlFunctionInterface {
+  return &SqlFunctionNode{&Node{node, "average"}}
+}
+
+func First(node NodeInterface) SqlFunctionInterface {
+  return &SqlFunctionNode{&Node{node, "first"}}
+}
+
+func Last(node NodeInterface) SqlFunctionInterface {
+  return &SqlFunctionNode{&Node{node, "last"}}
+}
+
+func Sum(node NodeInterface) SqlFunctionInterface {
+  return &SqlFunctionNode{&Node{node, "sum"}}
+}
+
+func UpperCase(node NodeInterface) SqlFunctionInterface {
+  return &SqlFunctionNode{&Node{node, "upper"}}
+}
+
+func LowerCase(node NodeInterface) SqlFunctionInterface {
+  return &SqlFunctionNode{&Node{node, "lower"}}
+}
+
+func Mid(node NodeInterface) SqlFunctionInterface {
+  return &SqlFunctionNode{&Node{node, "mid"}}
+}
+
+func Length(node NodeInterface) SqlFunctionInterface {
+  return &SqlFunctionNode{&Node{node, "length"}}
+}
+
+func Round(node NodeInterface) SqlFunctionInterface {
+  return &SqlFunctionNode{&Node{node, "round"}}
 }

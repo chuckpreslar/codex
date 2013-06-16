@@ -32,6 +32,8 @@ func (visitor *ToSqlVisitor) visit(item interface{}) string {
     return visitor.visitLteNode(item.(*nodes.LteNode))
   case *nodes.OrNode:
     return visitor.visitOrNode(item.(*nodes.OrNode))
+  case *nodes.SqlFunctionNode:
+    return visitor.visitSqlFunctionNode(item.(*nodes.SqlFunctionNode))
   case *nodes.AttributeNode:
     return visitor.visitAttributeNode(item.(*nodes.AttributeNode))
   case string:
@@ -78,6 +80,10 @@ func (visitor *ToSqlVisitor) visitOrNode(or *nodes.OrNode) string {
   return fmt.Sprintf("%v OR %v", visitor.visit(or.Left()), tag(visitor.visit(or.Right())))
 }
 
+func (visitor *ToSqlVisitor) visitSqlFunctionNode(function *nodes.SqlFunctionNode) string {
+  return fmt.Sprintf("%v(%v)", function.FunctionName(), visitor.visit(function.Left()))
+}
+
 func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) string {
   return fmt.Sprintf("%s.%s", quote(visitor.visit(attribute.Left())), quote(visitor.visit(attribute.Right())))
 }
@@ -103,10 +109,15 @@ func quote(value interface{}) string {
 }
 
 func tag(value interface{}) string {
-  if isNumber(value) {
+  if isNumber(value) || isSqlFunction(value) {
     return strings.TrimRight(fmt.Sprintf(`%v`, value), "0")
   }
   return fmt.Sprintf(`'%v'`, value)
+}
+
+func isSqlFunction(value interface{}) bool {
+  matcher, _ := regexp.Compile(`^\w+\((\w+)?\)`)
+  return matcher.MatchString(value.(string))
 }
 
 func isNumber(value interface{}) bool {
