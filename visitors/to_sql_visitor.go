@@ -38,6 +38,8 @@ func (visitor *ToSqlVisitor) visit(item interface{}) string {
     return visitor.visitSqlFunctionNode(item.(*nodes.SqlFunctionNode))
   case *nodes.AttributeNode:
     return visitor.visitAttributeNode(item.(*nodes.AttributeNode))
+  case *nodes.SelectCoreNode:
+    return visitor.visitSelectCoreNode(item.(*nodes.SelectCoreNode))
   case string:
     return visitor.visitString(item.(string))
   case int:
@@ -101,8 +103,20 @@ func (visitor *ToSqlVisitor) visitSqlFunctionNode(function *nodes.SqlFunctionNod
 }
 
 func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) string {
-  return fmt.Sprintf("%s.%s", utils.Quote(visitor.visit(attribute.Left())),
+  return fmt.Sprintf("%v.%v", utils.Quote(visitor.visit(attribute.Left())),
     utils.Quote(visitor.visit(attribute.Right())))
+}
+
+func (visitor *ToSqlVisitor) visitSelectCoreNode(core *nodes.SelectCoreNode) (sql string) {
+  if 0 < len(core.Projections()) {
+    for _, projection := range core.Projections() {
+      sql += visitor.visit(projection)
+    }
+  } else {
+    sql += visitor.literal(core.Reference())
+  }
+  sql += " FROM " + utils.Quote(core.Reference().Name())
+  return
 }
 
 func (visitor *ToSqlVisitor) visitString(str string) string {
@@ -146,6 +160,10 @@ func (visitor *ToSqlVisitor) functionName(function string) string {
   default:
     panic("Unkown SQL Function.")
   }
+}
+
+func (visitor *ToSqlVisitor) literal(reference nodes.ReferenceInterface) string {
+  return fmt.Sprintf(`"%v".*`, reference.Name())
 }
 
 func ToSql() *ToSqlVisitor {
