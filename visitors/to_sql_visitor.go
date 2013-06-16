@@ -109,13 +109,22 @@ func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) 
 
 func (visitor *ToSqlVisitor) visitSelectCoreNode(core *nodes.SelectCoreNode) (sql string) {
   if 0 < len(core.Projections()) {
-    for _, projection := range core.Projections() {
-      sql += visitor.visit(projection)
+    projections := make([]string, len(core.Projections()))
+    for index, projection := range core.Projections() {
+      projections[index] = visitor.visit(projection)
     }
+    sql += strings.Join(projections, ",")
   } else {
     sql += visitor.literal(core.Reference())
   }
   sql += " FROM " + utils.Quote(core.Reference().Name())
+  if 0 < len(core.Wheres()) {
+    wheres := make([]string, len(core.Wheres()))
+    for index, where := range core.Wheres() {
+      wheres[index] = visitor.visit(where)
+    }
+    sql += strings.Join(wheres, ",")
+  }
   return
 }
 
