@@ -4,7 +4,7 @@ type LteNode struct {
   *Node
 }
 
-func (lte *LteNode) Or(other ComparisonInterface) OrInterface {
+func (lte *LteNode) Or(other ComparisonInterface) ComparisonInterface {
   return Or(lte, other)
 }
 

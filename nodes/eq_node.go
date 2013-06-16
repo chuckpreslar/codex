@@ -4,7 +4,7 @@ type EqNode struct {
   *Node
 }
 
-func (eq *EqNode) Or(other ComparisonInterface) OrInterface {
+func (eq *EqNode) Or(other ComparisonInterface) ComparisonInterface {
   return Or(eq, other)
 }
 

@@ -4,7 +4,7 @@ type GteNode struct {
   *Node
 }
 
-func (gte *GteNode) Or(other ComparisonInterface) OrInterface {
+func (gte *GteNode) Or(other ComparisonInterface) ComparisonInterface {
   return Or(gte, other)
 }
 

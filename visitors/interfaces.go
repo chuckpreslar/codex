@@ -4,7 +4,7 @@ import (
   "librarian/nodes"
 )
 
-type VisitorInterface interface {
+type VisitComparisonInterface interface {
   Accept(nodes.NodeInterface) string
   visit(interface{}) string
   visitEqNode(*nodes.EqNode) string

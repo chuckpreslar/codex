@@ -4,7 +4,7 @@ type MatchesNode struct {
   *Node
 }
 
-func (matches *MatchesNode) Or(other ComparisonInterface) OrInterface {
+func (matches *MatchesNode) Or(other ComparisonInterface) ComparisonInterface {
   return Or(matches, other)
 }
 

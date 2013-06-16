@@ -4,7 +4,7 @@ type OrNode struct {
   *Node
 }
 
-func (or *OrNode) Or(other ComparisonInterface) OrInterface {
+func (or *OrNode) Or(other ComparisonInterface) ComparisonInterface {
   return Or(or, other)
 }
 
@@ -16,6 +16,6 @@ func (or *OrNode) Value() interface{} {
   return or.Right()
 }
 
-func Or(comparison, other ComparisonInterface) OrInterface {
+func Or(comparison, other ComparisonInterface) ComparisonInterface {
   return &OrNode{&Node{comparison, other}}
 }

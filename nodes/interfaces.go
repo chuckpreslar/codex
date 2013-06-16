@@ -9,7 +9,7 @@ type ComparisonInterface interface {
   NodeInterface
   Attribute() AttributeInterface
   Value() interface{}
-  Or(ComparisonInterface) OrInterface
+  Or(ComparisonInterface) ComparisonInterface
 }
 
 type ComparableInterface interface {
@@ -21,10 +21,6 @@ type ComparableInterface interface {
   Lt(interface{}) ComparisonInterface
   Lte(interface{}) ComparisonInterface
   Matches(interface{}) ComparisonInterface
-}
-
-type OrInterface interface {
-  ComparisonInterface
 }
 
 type ReferenceInterface interface {
