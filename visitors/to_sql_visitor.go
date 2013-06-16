@@ -38,6 +38,8 @@ func (visitor *ToSqlVisitor) visit(item interface{}) string {
     return visitor.visitSqlFunctionNode(item.(*nodes.SqlFunctionNode))
   case *nodes.AttributeNode:
     return visitor.visitAttributeNode(item.(*nodes.AttributeNode))
+  case *nodes.ReferenceNode:
+    return visitor.visitReferenceNode(item.(*nodes.ReferenceNode))
   case *nodes.SelectCoreNode:
     return visitor.visitSelectCoreNode(item.(*nodes.SelectCoreNode))
   case string:
@@ -103,8 +105,12 @@ func (visitor *ToSqlVisitor) visitSqlFunctionNode(function *nodes.SqlFunctionNod
 }
 
 func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) string {
-  return fmt.Sprintf("%v.%v", utils.Quote(visitor.visit(attribute.Left())),
+  return fmt.Sprintf("%v.%v", visitor.visit(attribute.Left()),
     utils.Quote(visitor.visit(attribute.Right())))
+}
+
+func (visitor *ToSqlVisitor) visitReferenceNode(reference *nodes.ReferenceNode) string {
+  return fmt.Sprintf("%v", utils.Quote(visitor.visit(reference.Left())))
 }
 
 func (visitor *ToSqlVisitor) visitSelectCoreNode(core *nodes.SelectCoreNode) (sql string) {

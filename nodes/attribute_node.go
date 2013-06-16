@@ -2,11 +2,11 @@ package nodes
 
 type AttributeNode struct {
   *Node
-  reference ReferenceInterface
+  table string
 }
 
 func (attribute *AttributeNode) TableName() string {
-  return attribute.Left().(string)
+  return attribute.table
 }
 
 func (attribute *AttributeNode) Name() string {
@@ -14,7 +14,7 @@ func (attribute *AttributeNode) Name() string {
 }
 
 func (attribute *AttributeNode) Reference() ReferenceInterface {
-  return attribute.reference
+  return attribute.Left().(ReferenceInterface)
 }
 
 func (attribute *AttributeNode) Eq(value interface{}) ComparisonInterface {
@@ -45,5 +45,5 @@ func (attribute *AttributeNode) Matches(value interface{}) ComparisonInterface {
 }
 
 func Attribute(reference ReferenceInterface, name string) AttributeInterface {
-  return &AttributeNode{&Node{reference.Name(), name}, reference}
+  return &AttributeNode{&Node{reference, name}, reference.Name()}
 }
