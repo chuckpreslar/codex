@@ -88,6 +88,18 @@ func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) 
   return fmt.Sprintf("%s.%s", quote(visitor.visit(attribute.Left())), quote(visitor.visit(attribute.Right())))
 }
 
+func (visitor *ToSqlVisitor) visitString(str string) string {
+  return str
+}
+
+func (visitor *ToSqlVisitor) visitInt(i int) string {
+  return fmt.Sprintf("%d", i)
+}
+
+func (visitor *ToSqlVisitor) visitFloat64(f float64) string {
+  return fmt.Sprintf("%f", f)
+}
+
 func (visitor *ToSqlVisitor) functionName(function string) string {
   switch function = strings.ToLower(function); function {
   case "maximum":
@@ -117,18 +129,6 @@ func (visitor *ToSqlVisitor) functionName(function string) string {
   default:
     panic("Unkown SQL Function.")
   }
-}
-
-func (visitor *ToSqlVisitor) visitString(str string) string {
-  return str
-}
-
-func (visitor *ToSqlVisitor) visitInt(i int) string {
-  return fmt.Sprintf("%d", i)
-}
-
-func (visitor *ToSqlVisitor) visitFloat64(f float64) string {
-  return fmt.Sprintf("%f", f)
 }
 
 func ToSql() *ToSqlVisitor {
