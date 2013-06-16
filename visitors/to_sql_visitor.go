@@ -3,6 +3,7 @@ package visitors
 import (
   "fmt"
   "librarian/nodes"
+  "strconv"
 )
 
 type ToSqlVisitor struct {
@@ -34,6 +35,8 @@ func (visitor *ToSqlVisitor) visit(item interface{}) string {
     return visitor.visitString(item.(string))
   case int:
     return visitor.visitInt(item.(int))
+  case float64:
+    return visitor.visitFloat64(item.(float64))
   }
   panic("Unimplemented.")
 }
@@ -53,19 +56,19 @@ func (visitor *ToSqlVisitor) visitNeqNode(neq *nodes.NeqNode) string {
 }
 
 func (visitor *ToSqlVisitor) visitGtNode(gt *nodes.GtNode) string {
-  return fmt.Sprintf("%v > %v", visitor.visit(gt.Left()), visitor.visit(gt.Right()))
+  return fmt.Sprintf("%v > %v", visitor.visit(gt.Left()), tag(visitor.visit(gt.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitGteNode(gte *nodes.GteNode) string {
-  return fmt.Sprintf("%v >= %v", visitor.visit(gte.Left()), visitor.visit(gte.Right()))
+  return fmt.Sprintf("%v >= %v", visitor.visit(gte.Left()), tag(visitor.visit(gte.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitLtNode(lt *nodes.LtNode) string {
-  return fmt.Sprintf("%v < %v", visitor.visit(lt.Left()), visitor.visit(lt.Right()))
+  return fmt.Sprintf("%v < %v", visitor.visit(lt.Left()), tag(visitor.visit(lt.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitLteNode(lte *nodes.LteNode) string {
-  return fmt.Sprintf("%v <= %v", visitor.visit(lte.Left()), visitor.visit(lte.Right()))
+  return fmt.Sprintf("%v <= %v", visitor.visit(lte.Left()), tag(visitor.visit(lte.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) string {
@@ -80,6 +83,10 @@ func (visitor *ToSqlVisitor) visitInt(i int) string {
   return fmt.Sprintf("%d", i)
 }
 
+func (visitor *ToSqlVisitor) visitFloat64(f float64) string {
+  return fmt.Sprintf("%f", f)
+}
+
 func ToSql() *ToSqlVisitor {
   return &ToSqlVisitor{}
 }
@@ -89,12 +96,19 @@ func quote(value interface{}) string {
 }
 
 func tag(value interface{}) string {
-  switch value.(type) {
-  case string:
-    return fmt.Sprintf(`'%v'`, value)
-  case bool:
-    return fmt.Sprintf(`'%v'`, value)
-  default:
+  if isNumber(value) {
     return fmt.Sprintf(`%v`, value)
   }
+  return fmt.Sprintf(`'%v'`, value)
+}
+
+func isNumber(value interface{}) bool {
+  _, err := strconv.ParseInt(value.(string), 10, 32)
+  _, err = strconv.ParseInt(value.(string), 10, 64)
+  _, err = strconv.ParseFloat(value.(string), 32)
+  _, err = strconv.ParseFloat(value.(string), 64)
+  if nil != err {
+    return false
+  }
+  return true
 }
