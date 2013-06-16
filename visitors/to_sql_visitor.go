@@ -3,7 +3,7 @@ package visitors
 import (
   "fmt"
   "librarian/nodes"
-  "strconv"
+  "strings"
 )
 
 type ToSqlVisitor struct {
@@ -29,6 +29,8 @@ func (visitor *ToSqlVisitor) visit(item interface{}) string {
     return visitor.visitLtNode(item.(*nodes.LtNode))
   case *nodes.LteNode:
     return visitor.visitLteNode(item.(*nodes.LteNode))
+  case *nodes.OrNode:
+    return visitor.visitOrNode(item.(*nodes.OrNode))
   case *nodes.AttributeNode:
     return visitor.visitAttributeNode(item.(*nodes.AttributeNode))
   case string:
@@ -71,6 +73,10 @@ func (visitor *ToSqlVisitor) visitLteNode(lte *nodes.LteNode) string {
   return fmt.Sprintf("%v <= %v", visitor.visit(lte.Left()), tag(visitor.visit(lte.Right())))
 }
 
+func (visitor *ToSqlVisitor) visitOrNode(or *nodes.OrNode) string {
+  return fmt.Sprintf("%v OR %v", visitor.visit(or.Left()), tag(visitor.visit(or.Right())))
+}
+
 func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) string {
   return fmt.Sprintf("%s.%s", quote(visitor.visit(attribute.Left())), quote(visitor.visit(attribute.Right())))
 }
@@ -97,18 +103,11 @@ func quote(value interface{}) string {
 
 func tag(value interface{}) string {
   if isNumber(value) {
-    return fmt.Sprintf(`%v`, value)
+    return strings.TrimRight(fmt.Sprintf(`%v`, value), "0")
   }
   return fmt.Sprintf(`'%v'`, value)
 }
 
 func isNumber(value interface{}) bool {
-  _, err := strconv.ParseInt(value.(string), 10, 32)
-  _, err = strconv.ParseInt(value.(string), 10, 64)
-  _, err = strconv.ParseFloat(value.(string), 32)
-  _, err = strconv.ParseFloat(value.(string), 64)
-  if nil != err {
-    return false
-  }
   return true
 }

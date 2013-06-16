@@ -24,7 +24,7 @@ type ComparableInterface interface {
 }
 
 type OrInterface interface {
-  NodeInterface
+  ComparisonInterface
 }
 
 type ReferenceInterface interface {
