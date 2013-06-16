@@ -16,10 +16,6 @@ func (neq *NeqNode) Value() interface{} {
   return neq.Right()
 }
 
-func (neq *NeqNode) Left() AttributeInterface {
-  return neq.Attribute()
-}
-
 func Neq(attribute AttributeInterface, value interface{}) *NeqNode {
   return &NeqNode{&Node{attribute, value}}
 }

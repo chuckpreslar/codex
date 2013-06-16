@@ -16,10 +16,6 @@ func (lt *LtNode) Value() interface{} {
   return lt.Right()
 }
 
-func (lt *LtNode) Left() AttributeInterface {
-  return lt.Attribute()
-}
-
 func Lt(attribute AttributeInterface, value interface{}) *LtNode {
   return &LtNode{&Node{attribute, value}}
 }

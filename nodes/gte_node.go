@@ -16,10 +16,6 @@ func (gte *GteNode) Value() interface{} {
   return gte.Right()
 }
 
-func (gte *GteNode) Left() AttributeInterface {
-  return gte.Attribute()
-}
-
 func Gte(attribute AttributeInterface, value interface{}) *GteNode {
   return &GteNode{&Node{attribute, value}}
 }

@@ -6,13 +6,14 @@ type NodeInterface interface {
 }
 
 type ComparisonInterface interface {
-  Left() AttributeInterface
+  NodeInterface
   Attribute() AttributeInterface
   Value() interface{}
   Or(ComparisonInterface) OrInterface
 }
 
 type ComparableInterface interface {
+  NodeInterface
   Eq(interface{}) ComparisonInterface
   Neq(interface{}) ComparisonInterface
   Gt(interface{}) ComparisonInterface
@@ -23,8 +24,7 @@ type ComparableInterface interface {
 }
 
 type OrInterface interface {
-  Left() ComparisonInterface
-  Right() ComparisonInterface
+  NodeInterface
 }
 
 type ReferenceInterface interface {
@@ -34,7 +34,6 @@ type ReferenceInterface interface {
 }
 
 type AttributeInterface interface {
-  NodeInterface
   ComparableInterface
   GetName() string
   GetReference() ReferenceInterface

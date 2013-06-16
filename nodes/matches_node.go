@@ -16,10 +16,6 @@ func (matches *MatchesNode) Value() interface{} {
   return matches.Right()
 }
 
-func (matches *MatchesNode) Left() AttributeInterface {
-  return matches.Attribute()
-}
-
 func Matches(attribute AttributeInterface, value interface{}) *MatchesNode {
   return &MatchesNode{&Node{attribute, value}}
 }
