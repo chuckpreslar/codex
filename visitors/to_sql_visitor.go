@@ -3,7 +3,7 @@ package visitors
 import (
   "fmt"
   "librarian/nodes"
-  "regexp"
+  "librarian/visitors/utils"
   "strings"
 )
 
@@ -54,7 +54,7 @@ func (visitor *ToSqlVisitor) visitEqNode(eq *nodes.EqNode) string {
     return fmt.Sprintf("%v IS NULL", visitor.visit(eq.Left()))
   }
   return fmt.Sprintf("%v = %v", visitor.visit(eq.Left()),
-    tag(visitor.visit(eq.Right())))
+    utils.Tag(visitor.visit(eq.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitNeqNode(neq *nodes.NeqNode) string {
@@ -62,32 +62,32 @@ func (visitor *ToSqlVisitor) visitNeqNode(neq *nodes.NeqNode) string {
     return fmt.Sprintf("%v IS NOT NULL", visitor.visit(neq.Left()))
   }
   return fmt.Sprintf("%v != %v", visitor.visit(neq.Left()),
-    tag(visitor.visit(neq.Right())))
+    utils.Tag(visitor.visit(neq.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitGtNode(gt *nodes.GtNode) string {
   return fmt.Sprintf("%v > %v", visitor.visit(gt.Left()),
-    tag(visitor.visit(gt.Right())))
+    utils.Tag(visitor.visit(gt.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitGteNode(gte *nodes.GteNode) string {
   return fmt.Sprintf("%v >= %v", visitor.visit(gte.Left()),
-    tag(visitor.visit(gte.Right())))
+    utils.Tag(visitor.visit(gte.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitLtNode(lt *nodes.LtNode) string {
   return fmt.Sprintf("%v < %v", visitor.visit(lt.Left()),
-    tag(visitor.visit(lt.Right())))
+    utils.Tag(visitor.visit(lt.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitLteNode(lte *nodes.LteNode) string {
   return fmt.Sprintf("%v <= %v", visitor.visit(lte.Left()),
-    tag(visitor.visit(lte.Right())))
+    utils.Tag(visitor.visit(lte.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitMatchesNode(matches *nodes.MatchesNode) string {
   return fmt.Sprintf("%v LIKE %v", visitor.visit(matches.Left()),
-    tag(visitor.visit(matches.Right())))
+    utils.Tag(visitor.visit(matches.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitOrNode(or *nodes.OrNode) string {
@@ -101,8 +101,8 @@ func (visitor *ToSqlVisitor) visitSqlFunctionNode(function *nodes.SqlFunctionNod
 }
 
 func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) string {
-  return fmt.Sprintf("%s.%s", quote(visitor.visit(attribute.Left())),
-    quote(visitor.visit(attribute.Right())))
+  return fmt.Sprintf("%s.%s", utils.Quote(visitor.visit(attribute.Left())),
+    utils.Quote(visitor.visit(attribute.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitString(str string) string {
@@ -150,25 +150,4 @@ func (visitor *ToSqlVisitor) functionName(function string) string {
 
 func ToSql() *ToSqlVisitor {
   return &ToSqlVisitor{}
-}
-
-func quote(value interface{}) string {
-  return fmt.Sprintf(`"%v"`, value)
-}
-
-func tag(value interface{}) string {
-  if isNumber(value) || isSqlFunction(value) {
-    return strings.TrimRight(fmt.Sprintf(`%v`, value), "0")
-  }
-  return fmt.Sprintf(`'%v'`, value)
-}
-
-func isSqlFunction(value interface{}) bool {
-  matcher, _ := regexp.Compile(`^\w+\((\w+)?\)`)
-  return matcher.MatchString(value.(string))
-}
-
-func isNumber(value interface{}) bool {
-  matcher, _ := regexp.Compile(`\d`)
-  return matcher.MatchString(value.(string))
 }
