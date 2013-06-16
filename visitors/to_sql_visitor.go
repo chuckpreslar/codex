@@ -3,6 +3,7 @@ package visitors
 import (
   "fmt"
   "librarian/nodes"
+  "regexp"
   "strings"
 )
 
@@ -109,5 +110,6 @@ func tag(value interface{}) string {
 }
 
 func isNumber(value interface{}) bool {
-  return true
+  matcher, _ := regexp.Compile(`\d`)
+  return matcher.MatchString(value.(string))
 }
