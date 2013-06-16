@@ -143,7 +143,7 @@ func (visitor *ToSqlVisitor) visitInt(i int) string {
 }
 
 func (visitor *ToSqlVisitor) visitFloat64(f float64) string {
-  return fmt.Sprintf("%f", f)
+  return strings.TrimRight(fmt.Sprintf("%f", f), "0")
 }
 
 func (visitor *ToSqlVisitor) functionName(function string) string {

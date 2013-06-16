@@ -3,7 +3,6 @@ package utils
 import (
   "fmt"
   "regexp"
-  "strings"
 )
 
 func Quote(value interface{}) string {
@@ -12,7 +11,7 @@ func Quote(value interface{}) string {
 
 func Tag(value interface{}) string {
   if IsNumber(value) || IsSqlFunction(value) {
-    return strings.TrimRight(fmt.Sprintf(`%v`, value), "0")
+    return fmt.Sprintf(`%v`, value)
   }
   return fmt.Sprintf(`'%v'`, value)
 }
