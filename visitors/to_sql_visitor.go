@@ -22,17 +22,16 @@ func (visitor *ToSqlVisitor) visit(item interface{}) string {
     return visitor.visitAttributeNode(item.(*nodes.AttributeNode))
   case string:
     return visitor.visitString(item.(string))
-  default:
-    return ""
   }
+  panic("Unimplemented.")
 }
 
 func (visitor *ToSqlVisitor) visitEqNode(eq *nodes.EqNode) string {
-  return fmt.Sprintf("%v = %v", visitor.visit(eq.Left()), visitor.visit(eq.Right()))
+  return fmt.Sprintf("%v = %v", visitor.visit(eq.Left()), tag(visitor.visit(eq.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) string {
-  return fmt.Sprintf("%s.%s", quote(visitor.visit(attribute.Right())), quote(visitor.visit(attribute.Left())))
+  return fmt.Sprintf("%s.%s", quote(visitor.visit(attribute.Left())), quote(visitor.visit(attribute.Right())))
 }
 
 func (visitor *ToSqlVisitor) visitString(str string) string {
@@ -45,4 +44,15 @@ func ToSql() *ToSqlVisitor {
 
 func quote(value interface{}) string {
   return fmt.Sprintf(`"%v"`, value)
+}
+
+func tag(value interface{}) string {
+  switch value.(type) {
+  case string:
+    return fmt.Sprintf(`'%v'`, value)
+  case bool:
+    return fmt.Sprintf(`'%v'`, value)
+  default:
+    return fmt.Sprintf(`%v`, value)
+  }
 }

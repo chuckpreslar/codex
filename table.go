@@ -14,6 +14,6 @@ func (table Table) As(aliases ...string) Table {
 func NewTable(name string) Table {
   reference := nodes.Reference(name)
   return func(name string) nodes.AttributeInterface {
-    return nodes.Attribute(name, reference)
+    return nodes.Attribute(reference, name)
   }
 }
