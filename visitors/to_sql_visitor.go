@@ -81,11 +81,42 @@ func (visitor *ToSqlVisitor) visitOrNode(or *nodes.OrNode) string {
 }
 
 func (visitor *ToSqlVisitor) visitSqlFunctionNode(function *nodes.SqlFunctionNode) string {
-  return fmt.Sprintf("%v(%v)", function.FunctionName(), visitor.visit(function.Left()))
+  return fmt.Sprintf("%v(%v)", visitor.functionName(function.FunctionName()), visitor.visit(function.Left()))
 }
 
 func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) string {
   return fmt.Sprintf("%s.%s", quote(visitor.visit(attribute.Left())), quote(visitor.visit(attribute.Right())))
+}
+
+func (visitor *ToSqlVisitor) functionName(function string) string {
+  switch function = strings.ToLower(function); function {
+  case "maximum":
+    return "MAX"
+  case "minimum":
+    return "MIN"
+  case "average":
+    return "AVG"
+  case "count":
+    return "COUNT"
+  case "first":
+    return "FIRST"
+  case "last":
+    return "LAST"
+  case "sum":
+    return "SUM"
+  case "upper":
+    return "UPPER"
+  case "lower":
+    return "LOWER"
+  case "mid":
+    return "MID"
+  case "length":
+    return "LEN"
+  case "round":
+    return "ROUND"
+  default:
+    panic("Unkown SQL Function.")
+  }
 }
 
 func (visitor *ToSqlVisitor) visitString(str string) string {
