@@ -40,3 +40,8 @@ type AttributeInterface interface {
   Reference() ReferenceInterface
   TableName() string
 }
+
+type SqlFunctionInterface interface {
+  ComparableInterface
+  FunctionName() string
+}

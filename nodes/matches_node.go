@@ -16,6 +16,6 @@ func (matches *MatchesNode) Value() interface{} {
   return matches.Right()
 }
 
-func Matches(attribute AttributeInterface, value interface{}) *MatchesNode {
-  return &MatchesNode{&Node{attribute, value}}
+func Matches(value ComparableInterface, other interface{}) ComparisonInterface {
+  return &MatchesNode{&Node{value, other}}
 }

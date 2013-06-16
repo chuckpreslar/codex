@@ -16,6 +16,6 @@ func (neq *NeqNode) Value() interface{} {
   return neq.Right()
 }
 
-func Neq(attribute AttributeInterface, value interface{}) *NeqNode {
-  return &NeqNode{&Node{attribute, value}}
+func Neq(value ComparableInterface, other interface{}) ComparisonInterface {
+  return &NeqNode{&Node{value, other}}
 }

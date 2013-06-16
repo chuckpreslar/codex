@@ -18,6 +18,6 @@ func (reference *ReferenceNode) AddAliases(aliases ...string) ReferenceInterface
   return reference
 }
 
-func Reference(name string, aliases ...string) *ReferenceNode {
+func Reference(name string, aliases ...string) ReferenceInterface {
   return &ReferenceNode{&Node{name, nil}, aliases}
 }

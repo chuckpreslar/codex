@@ -13,7 +13,7 @@ func (or *OrNode) Attribute() AttributeInterface {
 }
 
 func (or *OrNode) Value() interface{} {
-  return or.Right().(AttributeInterface)
+  return or.Right()
 }
 
 func Or(comparison, other ComparisonInterface) OrInterface {
