@@ -30,6 +30,8 @@ func (visitor *ToSqlVisitor) visit(item interface{}) string {
     return visitor.visitLtNode(item.(*nodes.LtNode))
   case *nodes.LteNode:
     return visitor.visitLteNode(item.(*nodes.LteNode))
+  case *nodes.MatchesNode:
+    return visitor.visitMatchesNode(item.(*nodes.MatchesNode))
   case *nodes.OrNode:
     return visitor.visitOrNode(item.(*nodes.OrNode))
   case *nodes.SqlFunctionNode:
@@ -77,8 +79,12 @@ func (visitor *ToSqlVisitor) visitLteNode(lte *nodes.LteNode) string {
   return fmt.Sprintf("%v <= %v", visitor.visit(lte.Left()), tag(visitor.visit(lte.Right())))
 }
 
+func (visitor *ToSqlVisitor) visitMatchesNode(matches *nodes.MatchesNode) string {
+  return fmt.Sprintf("%v LIKE %v", visitor.visit(matches.Left()), tag(visitor.visit(matches.Right())))
+}
+
 func (visitor *ToSqlVisitor) visitOrNode(or *nodes.OrNode) string {
-  return fmt.Sprintf("%v OR %v", visitor.visit(or.Left()), tag(visitor.visit(or.Right())))
+  return fmt.Sprintf("%v OR %v", visitor.visit(or.Left()), visitor.visit(or.Right()))
 }
 
 func (visitor *ToSqlVisitor) visitSqlFunctionNode(function *nodes.SqlFunctionNode) string {

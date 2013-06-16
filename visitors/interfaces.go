@@ -13,6 +13,7 @@ type VisitorInterface interface {
   visitGteNode(*nodes.GteNode) string
   visitLtNode(*nodes.LtNode) string
   visitLteNode(*nodes.LteNode) string
+  visitMatchesNode(*nodes.MatchesNode) string
   visitOrNode(*nodes.OrNode) string
   visitSqlFunctionNode(*nodes.SqlFunctionNode) string
   visitAttributeNode(*nodes.AttributeNode) string
