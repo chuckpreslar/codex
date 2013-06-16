@@ -42,8 +42,9 @@ func (visitor *ToSqlVisitor) visit(item interface{}) string {
     return visitor.visitInt(item.(int))
   case float64:
     return visitor.visitFloat64(item.(float64))
+  default:
+    panic("Unimplemented visitor method.")
   }
-  panic("Unimplemented.")
 }
 
 func (visitor *ToSqlVisitor) visitEqNode(eq *nodes.EqNode) string {
