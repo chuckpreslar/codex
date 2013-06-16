@@ -123,9 +123,9 @@ func (visitor *ToSqlVisitor) visitSelectCoreNode(core *nodes.SelectCoreNode) (sq
     for index, where := range core.Wheres() {
       wheres[index] = visitor.visit(where)
     }
-    sql += strings.Join(wheres, ",")
+    sql += fmt.Sprintf(" WHERE %s", strings.Join(wheres, ","))
   }
-  return
+  return strings.Trim(sql, " ")
 }
 
 func (visitor *ToSqlVisitor) visitString(str string) string {
