@@ -13,123 +13,123 @@ type ToSqlVisitor struct {
 
 func (visitor *ToSqlVisitor) Accept(ast nodes.NodeInterface) string {
   visitor.ast = ast
-  return visitor.visit(ast)
+  return visitor.Visit(ast)
 }
 
-func (visitor *ToSqlVisitor) visit(item interface{}) string {
+func (visitor *ToSqlVisitor) Visit(item interface{}) string {
   switch item.(type) {
   case *nodes.EqNode:
-    return visitor.visitEqNode(item.(*nodes.EqNode))
+    return visitor.VisitEqNode(item.(*nodes.EqNode))
   case *nodes.NeqNode:
-    return visitor.visitNeqNode(item.(*nodes.NeqNode))
+    return visitor.VisitNeqNode(item.(*nodes.NeqNode))
   case *nodes.GtNode:
-    return visitor.visitGtNode(item.(*nodes.GtNode))
+    return visitor.VisitGtNode(item.(*nodes.GtNode))
   case *nodes.GteNode:
-    return visitor.visitGteNode(item.(*nodes.GteNode))
+    return visitor.VisitGteNode(item.(*nodes.GteNode))
   case *nodes.LtNode:
-    return visitor.visitLtNode(item.(*nodes.LtNode))
+    return visitor.VisitLtNode(item.(*nodes.LtNode))
   case *nodes.LteNode:
-    return visitor.visitLteNode(item.(*nodes.LteNode))
+    return visitor.VisitLteNode(item.(*nodes.LteNode))
   case *nodes.MatchesNode:
-    return visitor.visitMatchesNode(item.(*nodes.MatchesNode))
+    return visitor.VisitMatchesNode(item.(*nodes.MatchesNode))
   case *nodes.OrNode:
-    return visitor.visitOrNode(item.(*nodes.OrNode))
+    return visitor.VisitOrNode(item.(*nodes.OrNode))
   case *nodes.SqlFunctionNode:
-    return visitor.visitSqlFunctionNode(item.(*nodes.SqlFunctionNode))
+    return visitor.VisitSqlFunctionNode(item.(*nodes.SqlFunctionNode))
   case *nodes.AttributeNode:
-    return visitor.visitAttributeNode(item.(*nodes.AttributeNode))
+    return visitor.VisitAttributeNode(item.(*nodes.AttributeNode))
   case *nodes.RelationNode:
-    return visitor.visitRelationNode(item.(*nodes.RelationNode))
+    return visitor.VisitRelationNode(item.(*nodes.RelationNode))
   case *nodes.SelectCoreNode:
-    return visitor.visitSelectCoreNode(item.(*nodes.SelectCoreNode))
+    return visitor.VisitSelectCoreNode(item.(*nodes.SelectCoreNode))
   case string:
-    return visitor.visitString(item.(string))
+    return visitor.VisitString(item.(string))
   case int:
-    return visitor.visitInt(item.(int))
+    return visitor.VisitInt(item.(int))
   case float64:
-    return visitor.visitFloat64(item.(float64))
+    return visitor.VisitFloat64(item.(float64))
   default:
     panic("Unimplemented visitor method.")
   }
 }
 
-func (visitor *ToSqlVisitor) visitEqNode(eq *nodes.EqNode) string {
+func (visitor *ToSqlVisitor) VisitEqNode(eq *nodes.EqNode) string {
   if nil == eq.Right {
-    return fmt.Sprintf("%v IS NULL", visitor.visit(eq.Left))
+    return fmt.Sprintf("%v IS NULL", visitor.Visit(eq.Left))
   }
-  return fmt.Sprintf("%v = %v", visitor.visit(eq.Left),
-    utils.Tag(visitor.visit(eq.Right)))
+  return fmt.Sprintf("%v = %v", visitor.Visit(eq.Left),
+    utils.Tag(visitor.Visit(eq.Right)))
 }
 
-func (visitor *ToSqlVisitor) visitNeqNode(neq *nodes.NeqNode) string {
+func (visitor *ToSqlVisitor) VisitNeqNode(neq *nodes.NeqNode) string {
   if nil == neq.Right {
-    return fmt.Sprintf("%v IS NOT NULL", visitor.visit(neq.Left))
+    return fmt.Sprintf("%v IS NOT NULL", visitor.Visit(neq.Left))
   }
-  return fmt.Sprintf("%v != %v", visitor.visit(neq.Left),
-    utils.Tag(visitor.visit(neq.Right)))
+  return fmt.Sprintf("%v != %v", visitor.Visit(neq.Left),
+    utils.Tag(visitor.Visit(neq.Right)))
 }
 
-func (visitor *ToSqlVisitor) visitGtNode(gt *nodes.GtNode) string {
-  return fmt.Sprintf("%v > %v", visitor.visit(gt.Left),
-    utils.Tag(visitor.visit(gt.Right)))
+func (visitor *ToSqlVisitor) VisitGtNode(gt *nodes.GtNode) string {
+  return fmt.Sprintf("%v > %v", visitor.Visit(gt.Left),
+    utils.Tag(visitor.Visit(gt.Right)))
 }
 
-func (visitor *ToSqlVisitor) visitGteNode(gte *nodes.GteNode) string {
-  return fmt.Sprintf("%v >= %v", visitor.visit(gte.Left),
-    utils.Tag(visitor.visit(gte.Right)))
+func (visitor *ToSqlVisitor) VisitGteNode(gte *nodes.GteNode) string {
+  return fmt.Sprintf("%v >= %v", visitor.Visit(gte.Left),
+    utils.Tag(visitor.Visit(gte.Right)))
 }
 
-func (visitor *ToSqlVisitor) visitLtNode(lt *nodes.LtNode) string {
-  return fmt.Sprintf("%v < %v", visitor.visit(lt.Left),
-    utils.Tag(visitor.visit(lt.Right)))
+func (visitor *ToSqlVisitor) VisitLtNode(lt *nodes.LtNode) string {
+  return fmt.Sprintf("%v < %v", visitor.Visit(lt.Left),
+    utils.Tag(visitor.Visit(lt.Right)))
 }
 
-func (visitor *ToSqlVisitor) visitLteNode(lte *nodes.LteNode) string {
-  return fmt.Sprintf("%v <= %v", visitor.visit(lte.Left),
-    utils.Tag(visitor.visit(lte.Right)))
+func (visitor *ToSqlVisitor) VisitLteNode(lte *nodes.LteNode) string {
+  return fmt.Sprintf("%v <= %v", visitor.Visit(lte.Left),
+    utils.Tag(visitor.Visit(lte.Right)))
 }
 
-func (visitor *ToSqlVisitor) visitMatchesNode(matches *nodes.MatchesNode) string {
-  return fmt.Sprintf("%v LIKE %v", visitor.visit(matches.Left),
-    utils.Tag(visitor.visit(matches.Right)))
+func (visitor *ToSqlVisitor) VisitMatchesNode(matches *nodes.MatchesNode) string {
+  return fmt.Sprintf("%v LIKE %v", visitor.Visit(matches.Left),
+    utils.Tag(visitor.Visit(matches.Right)))
 }
 
-func (visitor *ToSqlVisitor) visitOrNode(or *nodes.OrNode) string {
-  return fmt.Sprintf("%v OR %v", visitor.visit(or.Left),
-    visitor.visit(or.Right))
+func (visitor *ToSqlVisitor) VisitOrNode(or *nodes.OrNode) string {
+  return fmt.Sprintf("%v OR %v", visitor.Visit(or.Left),
+    visitor.Visit(or.Right))
 }
 
-func (visitor *ToSqlVisitor) visitSqlFunctionNode(function *nodes.SqlFunctionNode) string {
-  return fmt.Sprintf("%v(%v)", visitor.functionName(function.FunctionName()),
-    visitor.visit(function.Left))
+func (visitor *ToSqlVisitor) VisitSqlFunctionNode(function *nodes.SqlFunctionNode) string {
+  return fmt.Sprintf("%v(%v)", visitor.FunctionName(function.FunctionName()),
+    visitor.Visit(function.Left))
 }
 
-func (visitor *ToSqlVisitor) visitAttributeNode(attribute *nodes.AttributeNode) string {
-  return fmt.Sprintf("%v.%v", visitor.visit(attribute.Left),
-    utils.Quote(visitor.visit(attribute.Right)))
+func (visitor *ToSqlVisitor) VisitAttributeNode(attribute *nodes.AttributeNode) string {
+  return fmt.Sprintf("%v.%v", visitor.Visit(attribute.Left),
+    utils.Quote(visitor.Visit(attribute.Right)))
 }
 
-func (visitor *ToSqlVisitor) visitRelationNode(relation *nodes.RelationNode) string {
-  return fmt.Sprintf("%v", utils.Quote(visitor.visit(relation.Left)))
+func (visitor *ToSqlVisitor) VisitRelationNode(relation *nodes.RelationNode) string {
+  return fmt.Sprintf("%v", utils.Quote(visitor.Visit(relation.Left)))
 }
 
-func (visitor *ToSqlVisitor) visitSelectCoreNode(core *nodes.SelectCoreNode) (sql string) {
+func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) (sql string) {
   return strings.Trim(sql, " ")
 }
 
-func (visitor *ToSqlVisitor) visitString(str string) string {
+func (visitor *ToSqlVisitor) VisitString(str string) string {
   return str
 }
 
-func (visitor *ToSqlVisitor) visitInt(i int) string {
+func (visitor *ToSqlVisitor) VisitInt(i int) string {
   return fmt.Sprintf("%d", i)
 }
 
-func (visitor *ToSqlVisitor) visitFloat64(f float64) string {
+func (visitor *ToSqlVisitor) VisitFloat64(f float64) string {
   return strings.TrimRight(fmt.Sprintf("%f", f), "0")
 }
 
-func (visitor *ToSqlVisitor) functionName(function string) string {
+func (visitor *ToSqlVisitor) FunctionName(function string) string {
   switch function = strings.ToLower(function); function {
   case "maximum":
     return "MAX"
