@@ -7,6 +7,8 @@ type SelectCoreNode struct {
   Wheres      []ComparisonInterface
 }
 
+func (core *SelectCoreNode) core() {}
+
 func (core *SelectCoreNode) AppendToProjections(attribute AttributeInterface) *SelectCoreNode {
   core.Projections = append(core.Projections, attribute)
   return core

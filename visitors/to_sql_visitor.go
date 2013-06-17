@@ -6,6 +6,16 @@ import (
   "strings"
 )
 
+const (
+  WHERE    = ` WHERE `
+  SPACE    = ` `
+  COMMA    = `, `
+  GROUP_BY = ` GROUP BY `
+  AND      = ` AND `
+  DISINCT  = `DISTINCT`
+  STAR     = `*`
+)
+
 type ToSqlVisitor struct {
   ast nodes.NodeInterface
 }
@@ -41,6 +51,8 @@ func (visitor *ToSqlVisitor) Visit(item interface{}) string {
     return visitor.VisitRelationNode(item.(*nodes.RelationNode))
   case *nodes.SelectCoreNode:
     return visitor.VisitSelectCoreNode(item.(*nodes.SelectCoreNode))
+  case *nodes.SelectStatementNode:
+    return visitor.VisitSelectStatementNode(item.(*nodes.SelectStatementNode))
   case string:
     return visitor.VisitString(item.(string))
   case int:
@@ -106,16 +118,45 @@ func (visitor *ToSqlVisitor) VisitSqlFunctionNode(function *nodes.SqlFunctionNod
 }
 
 func (visitor *ToSqlVisitor) VisitAttributeNode(attribute *nodes.AttributeNode) string {
-  return fmt.Sprintf("%v.%v", quote(visitor.Visit(attribute.Left)),
+  return fmt.Sprintf("%v.%v", visitor.Visit(attribute.Left),
     quote(attribute.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitRelationNode(relation *nodes.RelationNode) string {
-  return fmt.Sprintf("%v", relation.Left)
+  return fmt.Sprintf("%v", quote(relation.Left))
 }
 
-func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) (sql string) {
-  return strings.Trim(sql, " ")
+func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) string {
+  str := "SELECT "
+
+  if 0 == len(core.Projections) {
+    str = fmt.Sprintf("%v%v.%v", str, visitor.Visit(core.Relation), STAR)
+  } else {
+    for index, projection := range core.Projections {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(projection))
+      if index+1 != len(core.Projections) {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+  }
+
+  str += fmt.Sprintf(" FROM %v", visitor.Visit(core.Relation))
+
+  if 0 != len(core.Wheres) {
+    str = fmt.Sprintf("%v%v", str, WHERE)
+    for index, where := range core.Wheres {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(where))
+      if index+1 != len(core.Wheres) {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+  }
+
+  return strings.Trim(str, " ")
+}
+
+func (visitor *ToSqlVisitor) VisitSelectStatementNode(stmt *nodes.SelectStatementNode) string {
+  return visitor.Visit(stmt.CoreAtIndex(0))
 }
 
 func (visitor *ToSqlVisitor) VisitString(str string) string {
