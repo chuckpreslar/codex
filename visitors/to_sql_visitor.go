@@ -147,7 +147,7 @@ func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) str
     for index, where := range core.Wheres {
       str = fmt.Sprintf("%v%v", str, visitor.Visit(where))
       if index+1 != len(core.Wheres) {
-        str = fmt.Sprintf("%v%v", str, COMMA)
+        str = fmt.Sprintf("%v%v", str, AND)
       }
     }
   }

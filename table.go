@@ -34,6 +34,12 @@ func (table Table) Project(names ...interface{}) *SelectManager {
   return mgr
 }
 
+func (table Table) Where(comparison nodes.ComparisonInterface) *SelectManager {
+  mgr := Select(table.Relation())
+  mgr.Where(comparison)
+  return mgr
+}
+
 func NewTable(name string) Table {
   relation := nodes.Relation(name)
   return func(name string) nodes.AttributeInterface {

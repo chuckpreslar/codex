@@ -15,6 +15,11 @@ func (mgr *SelectManager) Project(attribute nodes.AttributeInterface) *SelectMan
   return mgr
 }
 
+func (mgr *SelectManager) Where(comparison nodes.ComparisonInterface) *SelectManager {
+  mgr.Context.AppendToWheres(comparison)
+  return mgr
+}
+
 func (mgr *SelectManager) ToSql() string {
   visitor := visitors.ToSql()
   return visitor.Accept(mgr.Tree)
