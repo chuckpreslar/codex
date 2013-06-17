@@ -9,11 +9,11 @@ func (lt *LtNode) Or(other ComparisonInterface) ComparisonInterface {
 }
 
 func (lt *LtNode) Attribute() AttributeInterface {
-  return lt.Left().(AttributeInterface)
+  return lt.Left.(AttributeInterface)
 }
 
 func (lt *LtNode) Value() interface{} {
-  return lt.Right()
+  return lt.Right
 }
 
 func Lt(value ComparableInterface, other interface{}) ComparisonInterface {

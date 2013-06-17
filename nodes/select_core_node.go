@@ -2,33 +2,21 @@ package nodes
 
 type SelectCoreNode struct {
   *Node
-  reference   ReferenceInterface
-  projections []AttributeInterface
-  wheres      []ComparisonInterface
-}
-
-func (core *SelectCoreNode) Reference() ReferenceInterface {
-  return core.reference
+  Relation    RelationInterface
+  Projections []AttributeInterface
+  Wheres      []ComparisonInterface
 }
 
 func (core *SelectCoreNode) AppendToProjections(attribute AttributeInterface) *SelectCoreNode {
-  core.projections = append(core.projections, attribute)
+  core.Projections = append(core.Projections, attribute)
   return core
-}
-
-func (core *SelectCoreNode) Projections() []AttributeInterface {
-  return core.projections
 }
 
 func (core *SelectCoreNode) AppendToWheres(comparison ComparisonInterface) *SelectCoreNode {
-  core.wheres = append(core.wheres, comparison)
+  core.Wheres = append(core.Wheres, comparison)
   return core
 }
 
-func (core *SelectCoreNode) Wheres() []ComparisonInterface {
-  return core.wheres
-}
-
-func SelectCore(reference ReferenceInterface, projections ...AttributeInterface) *SelectCoreNode {
-  return &SelectCoreNode{&Node{nil, nil}, reference, projections, []ComparisonInterface{}}
+func SelectCore(relation RelationInterface, projections ...AttributeInterface) *SelectCoreNode {
+  return &SelectCoreNode{&Node{nil, nil}, relation, projections, []ComparisonInterface{}}
 }

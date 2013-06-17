@@ -9,11 +9,11 @@ func (or *OrNode) Or(other ComparisonInterface) ComparisonInterface {
 }
 
 func (or *OrNode) Attribute() AttributeInterface {
-  return or.Left().(AttributeInterface)
+  return or.Left.(AttributeInterface)
 }
 
 func (or *OrNode) Value() interface{} {
-  return or.Right()
+  return or.Right
 }
 
 func Or(comparison, other ComparisonInterface) ComparisonInterface {

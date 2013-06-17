@@ -1,8 +1,7 @@
 package nodes
 
 type NodeInterface interface {
-  Left() interface{}
-  Right() interface{}
+  node()
 }
 
 type ComparisonInterface interface {
@@ -23,18 +22,17 @@ type ComparableInterface interface {
   Matches(interface{}) ComparisonInterface
 }
 
-type ReferenceInterface interface {
+type RelationInterface interface {
   NodeInterface
   Name() string
   Aliases() []string
-  AddAliases(...string) ReferenceInterface
+  AddAliases(...string) RelationInterface
 }
 
 type AttributeInterface interface {
   ComparableInterface
   Name() string
-  Reference() ReferenceInterface
-  TableName() string
+  Relation() RelationInterface
 }
 
 type SqlFunctionInterface interface {

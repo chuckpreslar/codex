@@ -7,21 +7,21 @@ import (
 type Table func(string) nodes.AttributeInterface
 
 func (table Table) As(aliases ...string) Table {
-  table("").Reference().AddAliases(aliases...)
+  table("").Relation().AddAliases(aliases...)
   return table
 }
 
-func (table Table) Reference() nodes.ReferenceInterface {
-  return table("").Reference()
+func (table Table) Relation() nodes.RelationInterface {
+  return table("").Relation()
 }
 
 func (table Table) TableName() string {
-  return table("").Reference().Name()
+  return table("").Relation().Name()
 }
 
 func NewTable(name string) Table {
-  reference := nodes.Reference(name)
+  relation := nodes.Relation(name)
   return func(name string) nodes.AttributeInterface {
-    return nodes.Attribute(reference, name)
+    return nodes.Attribute(relation, name)
   }
 }

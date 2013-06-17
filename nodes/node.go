@@ -1,14 +1,8 @@
 package nodes
 
 type Node struct {
-  left  interface{}
-  right interface{}
+  Left  interface{}
+  Right interface{}
 }
 
-func (node *Node) Left() interface{} {
-  return node.left
-}
-
-func (node *Node) Right() interface{} {
-  return node.right
-}
+func (node *Node) node() {}

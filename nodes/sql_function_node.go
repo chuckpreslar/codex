@@ -5,7 +5,7 @@ type SqlFunctionNode struct {
 }
 
 func (function *SqlFunctionNode) FunctionName() string {
-  return function.Right().(string)
+  return function.Right.(string)
 }
 
 func (function *SqlFunctionNode) Eq(value interface{}) ComparisonInterface {

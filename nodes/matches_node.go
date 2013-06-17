@@ -9,11 +9,11 @@ func (matches *MatchesNode) Or(other ComparisonInterface) ComparisonInterface {
 }
 
 func (matches *MatchesNode) Attribute() AttributeInterface {
-  return matches.Left().(AttributeInterface)
+  return matches.Left.(AttributeInterface)
 }
 
 func (matches *MatchesNode) Value() interface{} {
-  return matches.Right()
+  return matches.Right
 }
 
 func Matches(value ComparableInterface, other interface{}) ComparisonInterface {

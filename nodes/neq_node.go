@@ -9,11 +9,11 @@ func (neq *NeqNode) Or(other ComparisonInterface) ComparisonInterface {
 }
 
 func (neq *NeqNode) Attribute() AttributeInterface {
-  return neq.Left().(AttributeInterface)
+  return neq.Left.(AttributeInterface)
 }
 
 func (neq *NeqNode) Value() interface{} {
-  return neq.Right()
+  return neq.Right
 }
 
 func Neq(value ComparableInterface, other interface{}) ComparisonInterface {
