@@ -16,6 +16,6 @@ func (gt *GtNode) Value() interface{} {
   return gt.Right
 }
 
-func Gt(value ComparableInterface, other interface{}) ComparisonInterface {
+func Gt(value ComparableInterface, other interface{}) *GtNode {
   return &GtNode{&Node{value, other}}
 }

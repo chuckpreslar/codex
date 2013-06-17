@@ -16,6 +16,6 @@ func (or *OrNode) Value() interface{} {
   return or.Right
 }
 
-func Or(comparison, other ComparisonInterface) ComparisonInterface {
+func Or(comparison, other ComparisonInterface) *OrNode {
   return &OrNode{&Node{comparison, other}}
 }

@@ -16,6 +16,6 @@ func (eq *EqNode) Value() interface{} {
   return eq.Right
 }
 
-func Eq(value ComparableInterface, other interface{}) ComparisonInterface {
+func Eq(value ComparableInterface, other interface{}) *EqNode {
   return &EqNode{&Node{value, other}}
 }

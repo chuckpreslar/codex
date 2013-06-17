@@ -18,6 +18,6 @@ func (relation *RelationNode) AddAliases(aliases ...string) RelationInterface {
   return relation
 }
 
-func Relation(name string, aliases ...string) RelationInterface {
+func Relation(name string, aliases ...string) *RelationNode {
   return &RelationNode{&Node{name, nil}, aliases}
 }

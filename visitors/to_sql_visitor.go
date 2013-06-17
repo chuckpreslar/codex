@@ -7,6 +7,8 @@ import (
 )
 
 const (
+  SELECT   = ` SELECT `
+  FROM     = ` FROM `
   WHERE    = ` WHERE `
   SPACE    = ` `
   COMMA    = `, `
@@ -127,7 +129,7 @@ func (visitor *ToSqlVisitor) VisitRelationNode(relation *nodes.RelationNode) str
 }
 
 func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) string {
-  str := "SELECT "
+  str := fmt.Sprintf("%v", SELECT)
 
   if 0 == len(core.Projections) {
     str = fmt.Sprintf("%v%v.%v", str, visitor.Visit(core.Relation), STAR)
@@ -140,7 +142,7 @@ func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) str
     }
   }
 
-  str += fmt.Sprintf(" FROM %v", visitor.Visit(core.Relation))
+  str = fmt.Sprintf("%v%v%v", str, FROM, visitor.Visit(core.Relation))
 
   if 0 != len(core.Wheres) {
     str = fmt.Sprintf("%v%v", str, WHERE)

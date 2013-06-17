@@ -16,6 +16,6 @@ func (lt *LtNode) Value() interface{} {
   return lt.Right
 }
 
-func Lt(value ComparableInterface, other interface{}) ComparisonInterface {
+func Lt(value ComparableInterface, other interface{}) *LtNode {
   return &LtNode{&Node{value, other}}
 }
