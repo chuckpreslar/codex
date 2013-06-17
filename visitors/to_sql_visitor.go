@@ -3,7 +3,6 @@ package visitors
 import (
   "fmt"
   "librarian/nodes"
-  "librarian/visitors/utils"
   "strings"
 )
 
@@ -48,6 +47,8 @@ func (visitor *ToSqlVisitor) Visit(item interface{}) string {
     return visitor.VisitInt(item.(int))
   case float64:
     return visitor.VisitFloat64(item.(float64))
+  case bool:
+    return visitor.VisitBool(item.(bool))
   default:
     panic("Unimplemented visitor method.")
   }
@@ -58,7 +59,7 @@ func (visitor *ToSqlVisitor) VisitEqNode(eq *nodes.EqNode) string {
     return fmt.Sprintf("%v IS NULL", visitor.Visit(eq.Left))
   }
   return fmt.Sprintf("%v = %v", visitor.Visit(eq.Left),
-    utils.Tag(visitor.Visit(eq.Right)))
+    visitor.Visit(eq.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitNeqNode(neq *nodes.NeqNode) string {
@@ -66,32 +67,32 @@ func (visitor *ToSqlVisitor) VisitNeqNode(neq *nodes.NeqNode) string {
     return fmt.Sprintf("%v IS NOT NULL", visitor.Visit(neq.Left))
   }
   return fmt.Sprintf("%v != %v", visitor.Visit(neq.Left),
-    utils.Tag(visitor.Visit(neq.Right)))
+    visitor.Visit(neq.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitGtNode(gt *nodes.GtNode) string {
   return fmt.Sprintf("%v > %v", visitor.Visit(gt.Left),
-    utils.Tag(visitor.Visit(gt.Right)))
+    visitor.Visit(gt.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitGteNode(gte *nodes.GteNode) string {
   return fmt.Sprintf("%v >= %v", visitor.Visit(gte.Left),
-    utils.Tag(visitor.Visit(gte.Right)))
+    visitor.Visit(gte.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitLtNode(lt *nodes.LtNode) string {
   return fmt.Sprintf("%v < %v", visitor.Visit(lt.Left),
-    utils.Tag(visitor.Visit(lt.Right)))
+    visitor.Visit(lt.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitLteNode(lte *nodes.LteNode) string {
   return fmt.Sprintf("%v <= %v", visitor.Visit(lte.Left),
-    utils.Tag(visitor.Visit(lte.Right)))
+    visitor.Visit(lte.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitMatchesNode(matches *nodes.MatchesNode) string {
   return fmt.Sprintf("%v LIKE %v", visitor.Visit(matches.Left),
-    utils.Tag(visitor.Visit(matches.Right)))
+    visitor.Visit(matches.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitOrNode(or *nodes.OrNode) string {
@@ -105,12 +106,12 @@ func (visitor *ToSqlVisitor) VisitSqlFunctionNode(function *nodes.SqlFunctionNod
 }
 
 func (visitor *ToSqlVisitor) VisitAttributeNode(attribute *nodes.AttributeNode) string {
-  return fmt.Sprintf("%v.%v", visitor.Visit(attribute.Left),
-    utils.Quote(visitor.Visit(attribute.Right)))
+  return fmt.Sprintf("%v.%v", quote(visitor.Visit(attribute.Left)),
+    quote(attribute.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitRelationNode(relation *nodes.RelationNode) string {
-  return fmt.Sprintf("%v", utils.Quote(visitor.Visit(relation.Left)))
+  return fmt.Sprintf("%v", relation.Left)
 }
 
 func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) (sql string) {
@@ -118,15 +119,19 @@ func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) (sq
 }
 
 func (visitor *ToSqlVisitor) VisitString(str string) string {
-  return str
+  return tag(str)
 }
 
 func (visitor *ToSqlVisitor) VisitInt(i int) string {
-  return fmt.Sprintf("%d", i)
+  return tag(i)
 }
 
 func (visitor *ToSqlVisitor) VisitFloat64(f float64) string {
-  return strings.TrimRight(fmt.Sprintf("%f", f), "0")
+  return strings.TrimRight(tag(f), "0")
+}
+
+func (visitor *ToSqlVisitor) VisitBool(b bool) string {
+  return tag(b)
 }
 
 func (visitor *ToSqlVisitor) FunctionName(function string) string {
@@ -160,8 +165,24 @@ func (visitor *ToSqlVisitor) FunctionName(function string) string {
   }
 }
 
-func (visitor *ToSqlVisitor) literal(relation nodes.RelationInterface) string {
-  return fmt.Sprintf(`"%v".*`, relation.Name())
+func tag(value interface{}) string {
+  switch value.(type) {
+  case string:
+    return fmt.Sprintf(`'%v'`, value)
+  case bool:
+    return fmt.Sprintf(`'%v'`, value)
+  default:
+    return fmt.Sprintf(`%v`, value)
+  }
+}
+
+func quote(value interface{}) string {
+  switch value.(type) {
+  case string:
+    return fmt.Sprintf(`"%v"`, value)
+  default:
+    return fmt.Sprintf(`%v`, value)
+  }
 }
 
 func ToSql() *ToSqlVisitor {
