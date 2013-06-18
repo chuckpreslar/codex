@@ -2,12 +2,12 @@ package nodes
 
 type RelationNode struct {
   *Node
-  name  string
-  alias string
+  Name  string
+  Alias string
 }
 
 func (relation *RelationNode) As(alias string) *RelationNode {
-  relation.alias = alias
+  relation.Alias = alias
   return relation
 }
 

@@ -3,6 +3,7 @@ package visitors
 import (
   "fmt"
   "librarian/nodes"
+  "librarian/visitors/utils"
 )
 
 const (
@@ -23,34 +24,42 @@ func (visitor *ToSqlVisitor) Accept(node interface{}) string {
   return visitor.Visit(node)
 }
 
-func (visitor *ToSqlVisitor) Visit(item interface{}) string {
-  switch item.(type) {
+func (visitor *ToSqlVisitor) Visit(node interface{}) string {
+  switch node.(type) {
   case *nodes.ComparisonNode:
-    return visitor.VisitComparisonNode(item.(*nodes.ComparisonNode))
+    return visitor.VisitComparisonNode(node.(*nodes.ComparisonNode))
   case *nodes.EqualsNode:
-    return visitor.VisitEqualsNode(item.(*nodes.EqualsNode))
+    return visitor.VisitEqualsNode(node.(*nodes.EqualsNode))
   case *nodes.NotEqualsNode:
-    return visitor.VisitNotEqualsNode(item.(*nodes.NotEqualsNode))
+    return visitor.VisitNotEqualsNode(node.(*nodes.NotEqualsNode))
   case *nodes.GreaterThanNode:
-    return visitor.VisitGreaterThanNode(item.(*nodes.GreaterThanNode))
+    return visitor.VisitGreaterThanNode(node.(*nodes.GreaterThanNode))
   case *nodes.GreaterThanOrEqualsNode:
-    return visitor.VisitGreaterThanOrEqualsNode(item.(*nodes.GreaterThanOrEqualsNode))
+    return visitor.VisitGreaterThanOrEqualsNode(node.(*nodes.GreaterThanOrEqualsNode))
   case *nodes.LessThanNode:
-    return visitor.VisitLessThanNode(item.(*nodes.LessThanNode))
+    return visitor.VisitLessThanNode(node.(*nodes.LessThanNode))
   case *nodes.LessThanOrEqualsNode:
-    return visitor.VisitLessThanOrEqualsNode(item.(*nodes.LessThanOrEqualsNode))
+    return visitor.VisitLessThanOrEqualsNode(node.(*nodes.LessThanOrEqualsNode))
   case *nodes.MatchesNode:
-    return visitor.VisitMatchesNode(item.(*nodes.MatchesNode))
+    return visitor.VisitMatchesNode(node.(*nodes.MatchesNode))
   case *nodes.DoesNotMatchNode:
-    return visitor.VisitDoesNotMatchNode(item.(*nodes.DoesNotMatchNode))
+    return visitor.VisitDoesNotMatchNode(node.(*nodes.DoesNotMatchNode))
   case *nodes.AsNode:
-    return visitor.VisitAsNode(item.(*nodes.AsNode))
+    return visitor.VisitAsNode(node.(*nodes.AsNode))
   case *nodes.OrNode:
-    return visitor.VisitOrNode(item.(*nodes.OrNode))
+    return visitor.VisitOrNode(node.(*nodes.OrNode))
   case *nodes.AndNode:
-    return visitor.VisitAndNode(item.(*nodes.AndNode))
+    return visitor.VisitAndNode(node.(*nodes.AndNode))
+  case *nodes.AttributeNode:
+    return visitor.VisitAttributeNode(node.(*nodes.AttributeNode))
+  case *nodes.RelationNode:
+    return visitor.VisitRelationNode(node.(*nodes.RelationNode))
+  case *nodes.SelectCoreNode:
+    return visitor.VisitSelectCoreNode(node.(*nodes.SelectCoreNode))
   case int:
-    return visitor.VisitInt(item.(int))
+    return visitor.VisitInt(node.(int))
+  case string:
+    return visitor.VisitString(node.(string))
   default:
     panic("Unkown Node type.")
   }
@@ -119,8 +128,60 @@ func (visitor *ToSqlVisitor) VisitAndNode(and *nodes.AndNode) string {
     visitor.Visit(and.Right))
 }
 
+func (visitor *ToSqlVisitor) VisitAttributeNode(attribute *nodes.AttributeNode) string {
+  var relation string
+  if 0 < len(attribute.Relation.Alias) {
+    relation = attribute.Relation.Alias
+  } else {
+    relation = attribute.Relation.Name
+  }
+  return fmt.Sprintf("%v.%v", utils.Quote(relation), utils.Quote(attribute.Name))
+}
+
+func (visitor *ToSqlVisitor) VisitRelationNode(relation *nodes.RelationNode) string {
+  var name string
+  if 0 < len(relation.Alias) {
+    name = relation.Alias
+  } else {
+    name = relation.Name
+  }
+  return utils.Quote(name)
+}
+
+func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) string {
+  str := fmt.Sprintf("%v", SELECT)
+
+  if length := len(core.Projections) - 1; 0 <= length {
+    for index, projection := range core.Projections {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(projection))
+
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+  }
+
+  str = fmt.Sprintf("%v%v%v", str, FROM, visitor.Visit(core.Relation))
+
+  if length := len(core.Wheres) - 1; 0 <= length {
+    str = fmt.Sprintf("%v%v", str, WHERE)
+    for index, where := range core.Wheres {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(where))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+  }
+
+  return utils.Trim(str)
+}
+
 func (visitor *ToSqlVisitor) VisitInt(integer int) string {
   return fmt.Sprintf("%d", integer)
+}
+
+func (visitor *ToSqlVisitor) VisitString(str string) string {
+  return fmt.Sprintf("%s", utils.Tag(str))
 }
 
 func ToSql() *ToSqlVisitor {
