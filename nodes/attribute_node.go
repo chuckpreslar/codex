@@ -2,48 +2,42 @@ package nodes
 
 type AttributeNode struct {
   *Node
-  TableName string
+  Name     string
+  Relation *RelationNode
 }
 
-func (attribute *AttributeNode) Relation() RelationInterface {
-  return attribute.Left.(RelationInterface)
+func (attribute *AttributeNode) Equals(b interface{}) *ComparisonNode {
+  return Equals(attribute, b)
 }
 
-func (attribute *AttributeNode) Name() string {
-  return attribute.Right.(string)
+func (attribute *AttributeNode) NotEquals(b interface{}) *ComparisonNode {
+  return NotEquals(attribute, b)
 }
 
-func (attribute *AttributeNode) Eq(other interface{}) ComparisonInterface {
-  return Eq(attribute, other)
+func (attribute *AttributeNode) GreaterThan(b interface{}) *ComparisonNode {
+  return GreaterThan(attribute, b)
 }
 
-func (attribute *AttributeNode) Neq(other interface{}) ComparisonInterface {
-  return Neq(attribute, other)
-}
-func (attribute *AttributeNode) Gt(other interface{}) ComparisonInterface {
-  return Gt(attribute, other)
+func (attribute *AttributeNode) GreaterThanOrEquals(b interface{}) *ComparisonNode {
+  return GreaterThanOrEquals(attribute, b)
 }
 
-func (attribute *AttributeNode) Gte(other interface{}) ComparisonInterface {
-  return Gte(attribute, other)
+func (attribute *AttributeNode) LessThan(b interface{}) *ComparisonNode {
+  return LessThan(attribute, b)
 }
 
-func (attribute *AttributeNode) Lt(other interface{}) ComparisonInterface {
-  return Lt(attribute, other)
+func (attribute *AttributeNode) LessThanOrEquals(b interface{}) *ComparisonNode {
+  return LessThanOrEquals(attribute, b)
 }
 
-func (attribute *AttributeNode) Lte(other interface{}) ComparisonInterface {
-  return Lte(attribute, other)
+func (attribute *AttributeNode) Matches(b interface{}) *ComparisonNode {
+  return Matches(attribute, b)
 }
 
-func (attribute *AttributeNode) Matches(other interface{}) ComparisonInterface {
-  return Matches(attribute, other)
+func (attribute *AttributeNode) DoesNotMatch(b interface{}) *ComparisonNode {
+  return DoesNotMatch(attribute, b)
 }
 
-func (attribute *AttributeNode) As(other interface{}) ComparableInterface {
-  return As(attribute, other)
-}
-
-func Attribute(relation RelationInterface, name string) AttributeInterface {
-  return &AttributeNode{&Node{relation, name}, relation.Name()}
+func Attribute(name string, relation *RelationNode) *AttributeNode {
+  return &AttributeNode{&Node{}, name, relation}
 }
