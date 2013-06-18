@@ -2,15 +2,17 @@ package utils
 
 import (
   "fmt"
+  "strings"
 )
 
-type Stringified []string
-
-func (str *Stringified) Push(str string) *Stringified {
-  *str = append(*str, items...)
-  return str
+func Quote(value interface{}) string {
+  return fmt.Sprintf(`"%v"`, value)
 }
 
-func Stringified() *Stringified {
-  return &Stringified{}
+func Tag(value interface{}) string {
+  return fmt.Sprintf(`'%v'`, value)
+}
+
+func Trim(value interface{}) string {
+  return strings.Trim(strings.TrimRight(fmt.Sprintf("%v", value), "0"), " ")
 }
