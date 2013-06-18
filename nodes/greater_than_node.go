@@ -4,6 +4,6 @@ type GreaterThanNode struct {
   *Node
 }
 
-func GreaterThan(a, b interface{}) *GreaterThanNode {
-  return &GreaterThanNode{&Node{a, b}}
+func GreaterThan(a, b interface{}) *ComparisonNode {
+  return Comparison(&GreaterThanNode{&Node{a, b}})
 }

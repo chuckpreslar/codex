@@ -4,6 +4,6 @@ type DoesNotMatchNode struct {
   *Node
 }
 
-func DoesNotMatch(a, b interface{}) *DoesNotMatchNode {
-  return &DoesNotMatchNode{&Node{a, b}}
+func DoesNotMatch(a, b interface{}) *ComparisonNode {
+  return Comparison(&DoesNotMatchNode{&Node{a, b}})
 }

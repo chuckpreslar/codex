@@ -78,3 +78,23 @@ func TestVisitAsNode(t *testing.T) {
     t.Errorf("EqNode: Expected %s, got %s\n.", exepcted, sql)
   }
 }
+
+func TestVisitOrNode(t *testing.T) {
+  var right, left = 1, 2
+  as := nodes.Equals(left, right).Or(nodes.Equals(left, right))
+  sql := visitor.Accept(as)
+  exepcted := fmt.Sprintf("%v = %v OR %v = %v", left, right, left, right)
+  if sql != exepcted {
+    t.Errorf("EqNode: Expected %s, got %s\n.", exepcted, sql)
+  }
+}
+
+func TestVisitAndNode(t *testing.T) {
+  var right, left = 1, 2
+  as := nodes.Equals(left, right).And(nodes.Equals(left, right))
+  sql := visitor.Accept(as)
+  exepcted := fmt.Sprintf("%v = %v AND %v = %v", left, right, left, right)
+  if sql != exepcted {
+    t.Errorf("EqNode: Expected %s, got %s\n.", exepcted, sql)
+  }
+}

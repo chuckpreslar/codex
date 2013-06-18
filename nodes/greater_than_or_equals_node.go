@@ -4,6 +4,6 @@ type GreaterThanOrEqualsNode struct {
   *Node
 }
 
-func GreaterThanOrEquals(a, b interface{}) *GreaterThanOrEqualsNode {
-  return &GreaterThanOrEqualsNode{&Node{a, b}}
+func GreaterThanOrEquals(a, b interface{}) *ComparisonNode {
+  return Comparison(&GreaterThanOrEqualsNode{&Node{a, b}})
 }

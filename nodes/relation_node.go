@@ -2,13 +2,15 @@ package nodes
 
 type RelationNode struct {
   *Node
-  name       string
-  aliases    []string
-  tableAlias string
-  engine     interface{}
-  primaryKey interface{}
+  name  string
+  alias string
+}
+
+func (relation *RelationNode) As(alias string) *RelationNode {
+  relation.alias = alias
+  return relation
 }
 
 func Relation(name string) *RelationNode {
-  return &RelationNode{&Node{nil, nil}, name, []string{}, "", nil, nil}
+  return &RelationNode{&Node{nil, nil}, name, ""}
 }

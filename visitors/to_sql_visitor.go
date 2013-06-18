@@ -25,6 +25,8 @@ func (visitor *ToSqlVisitor) Accept(node interface{}) string {
 
 func (visitor *ToSqlVisitor) Visit(item interface{}) string {
   switch item.(type) {
+  case *nodes.ComparisonNode:
+    return visitor.VisitComparisonNode(item.(*nodes.ComparisonNode))
   case *nodes.EqualsNode:
     return visitor.VisitEqualsNode(item.(*nodes.EqualsNode))
   case *nodes.NotEqualsNode:
@@ -43,11 +45,19 @@ func (visitor *ToSqlVisitor) Visit(item interface{}) string {
     return visitor.VisitDoesNotMatchNode(item.(*nodes.DoesNotMatchNode))
   case *nodes.AsNode:
     return visitor.VisitAsNode(item.(*nodes.AsNode))
+  case *nodes.OrNode:
+    return visitor.VisitOrNode(item.(*nodes.OrNode))
+  case *nodes.AndNode:
+    return visitor.VisitAndNode(item.(*nodes.AndNode))
   case int:
     return visitor.VisitInt(item.(int))
   default:
     panic("Unkown Node type.")
   }
+}
+
+func (visitor *ToSqlVisitor) VisitComparisonNode(comparison *nodes.ComparisonNode) string {
+  return visitor.Visit(comparison.Left)
 }
 
 func (visitor *ToSqlVisitor) VisitEqualsNode(eq *nodes.EqualsNode) string {
@@ -98,6 +108,15 @@ func (visitor *ToSqlVisitor) VisitDoesNotMatchNode(dnm *nodes.DoesNotMatchNode) 
 func (visitor *ToSqlVisitor) VisitAsNode(as *nodes.AsNode) string {
   return fmt.Sprintf("%v AS %v", visitor.Visit(as.Left),
     visitor.Visit(as.Right))
+}
+
+func (visitor *ToSqlVisitor) VisitOrNode(or *nodes.OrNode) string {
+  return fmt.Sprintf("%v OR %v", visitor.Visit(or.Left),
+    visitor.Visit(or.Right))
+}
+func (visitor *ToSqlVisitor) VisitAndNode(and *nodes.AndNode) string {
+  return fmt.Sprintf("%v AND %v", visitor.Visit(and.Left),
+    visitor.Visit(and.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitInt(integer int) string {

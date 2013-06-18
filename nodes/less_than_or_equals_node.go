@@ -4,6 +4,6 @@ type LessThanOrEqualsNode struct {
   *Node
 }
 
-func LessThanOrEquals(a, b interface{}) *LessThanOrEqualsNode {
-  return &LessThanOrEqualsNode{&Node{a, b}}
+func LessThanOrEquals(a, b interface{}) *ComparisonNode {
+  return Comparison(&LessThanOrEqualsNode{&Node{a, b}})
 }

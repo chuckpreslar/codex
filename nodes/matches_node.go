@@ -4,6 +4,6 @@ type MatchesNode struct {
   *Node
 }
 
-func Matches(a, b interface{}) *MatchesNode {
-  return &MatchesNode{&Node{a, b}}
+func Matches(a, b interface{}) *ComparisonNode {
+  return Comparison(&MatchesNode{&Node{a, b}})
 }
