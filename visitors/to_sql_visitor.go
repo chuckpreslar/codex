@@ -54,6 +54,8 @@ func (visitor *ToSqlVisitor) Visit(node interface{}) string {
     return visitor.VisitAttributeNode(node.(*nodes.AttributeNode))
   case *nodes.RelationNode:
     return visitor.VisitRelationNode(node.(*nodes.RelationNode))
+  case *nodes.JoinSourceNode:
+    return visitor.VisitJoinSourceNode(node.(*nodes.JoinSourceNode))
   case *nodes.SelectCoreNode:
     return visitor.VisitSelectCoreNode(node.(*nodes.SelectCoreNode))
   case int:
@@ -148,6 +150,14 @@ func (visitor *ToSqlVisitor) VisitRelationNode(relation *nodes.RelationNode) str
   return utils.Quote(name)
 }
 
+func (visitor *ToSqlVisitor) VisitJoinSourceNode(source *nodes.JoinSourceNode) string {
+  str := fmt.Sprintf("%v", visitor.Visit(source.Left))
+  for _, join := range source.Right {
+    str = fmt.Sprintf(" %v ", visitor.Visit(join))
+  }
+  return utils.Trim(str)
+}
+
 func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) string {
   str := fmt.Sprintf("%v", SELECT)
 
@@ -161,7 +171,7 @@ func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) str
     }
   }
 
-  str = fmt.Sprintf("%v%v%v", str, FROM, visitor.Visit(core.Relation))
+  str = fmt.Sprintf("%v%v%v", str, FROM, visitor.Visit(core.Source))
 
   if length := len(core.Wheres) - 1; 0 <= length {
     str = fmt.Sprintf("%v%v", str, WHERE)

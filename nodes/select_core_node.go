@@ -2,7 +2,7 @@ package nodes
 
 type SelectCoreNode struct {
   *Node
-  Relation    *RelationNode
+  Source      interface{}
   Projections []interface{}
   Wheres      []interface{}
 }
@@ -18,5 +18,5 @@ func (core *SelectCoreNode) Where(a ...interface{}) *SelectCoreNode {
 }
 
 func SelectCore(relation *RelationNode) *SelectCoreNode {
-  return &SelectCoreNode{&Node{nil, nil}, relation, []interface{}{}, []interface{}{}}
+  return &SelectCoreNode{&Node{nil, nil}, JoinSource(relation), []interface{}{}, []interface{}{}}
 }
