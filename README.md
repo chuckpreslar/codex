@@ -58,22 +58,6 @@ sql := users.Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).
 
 ```
 
-#### Joins
-
-Still with me?  Last but not least, an example of a `JOIN` operation:
-
-```go
-// ...
-
-users := l.Table("users")
-orders := l.Table("orders")
-sql := users.
-        Project("id", "email", "first_name", "last_name").
-        Project(orders("id").As("order_id")).
-        Join(orders.On("user_id").Eq(users("id"))).
-        ToSql()
-```
-
 ## Notes
 
 This project is still under heavy development, a lot of work still needs to be done.  Come back in a week or so ;)
