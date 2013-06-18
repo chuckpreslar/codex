@@ -68,3 +68,13 @@ func TestVisitLessThanOrEqualsNode(t *testing.T) {
     t.Errorf("EqNode: Expected %s, got %s\n.", exepcted, sql)
   }
 }
+
+func TestVisitAsNode(t *testing.T) {
+  var right, left = 1, 2
+  as := nodes.As(right, left)
+  sql := visitor.Accept(as)
+  exepcted := fmt.Sprintf("%v AS %v", right, left)
+  if sql != exepcted {
+    t.Errorf("EqNode: Expected %s, got %s\n.", exepcted, sql)
+  }
+}

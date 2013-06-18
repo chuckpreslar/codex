@@ -41,6 +41,8 @@ func (visitor *ToSqlVisitor) Visit(item interface{}) string {
     return visitor.VisitMatchesNode(item.(*nodes.MatchesNode))
   case *nodes.DoesNotMatchNode:
     return visitor.VisitDoesNotMatchNode(item.(*nodes.DoesNotMatchNode))
+  case *nodes.AsNode:
+    return visitor.VisitAsNode(item.(*nodes.AsNode))
   case int:
     return visitor.VisitInt(item.(int))
   default:
@@ -87,9 +89,15 @@ func (visitor *ToSqlVisitor) VisitMatchesNode(matches *nodes.MatchesNode) string
   return fmt.Sprintf("%v LIKE %v", visitor.Visit(matches.Left),
     visitor.Visit(matches.Right))
 }
+
 func (visitor *ToSqlVisitor) VisitDoesNotMatchNode(dnm *nodes.DoesNotMatchNode) string {
   return fmt.Sprintf("%v NOT LIKE %v", visitor.Visit(dnm.Left),
     visitor.Visit(dnm.Right))
+}
+
+func (visitor *ToSqlVisitor) VisitAsNode(as *nodes.AsNode) string {
+  return fmt.Sprintf("%v AS %v", visitor.Visit(as.Left),
+    visitor.Visit(as.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitInt(integer int) string {
