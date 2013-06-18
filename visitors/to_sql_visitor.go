@@ -45,6 +45,8 @@ func (visitor *ToSqlVisitor) Visit(item interface{}) string {
     return visitor.VisitMatchesNode(item.(*nodes.MatchesNode))
   case *nodes.OrNode:
     return visitor.VisitOrNode(item.(*nodes.OrNode))
+  case *nodes.AsNode:
+    return visitor.VisitAsNode(item.(*nodes.AsNode))
   case *nodes.SqlFunctionNode:
     return visitor.VisitSqlFunctionNode(item.(*nodes.SqlFunctionNode))
   case *nodes.AttributeNode:
@@ -111,6 +113,11 @@ func (visitor *ToSqlVisitor) VisitMatchesNode(matches *nodes.MatchesNode) string
 
 func (visitor *ToSqlVisitor) VisitOrNode(or *nodes.OrNode) string {
   return fmt.Sprintf("%v OR %v", visitor.Visit(or.Left),
+    visitor.Visit(or.Right))
+}
+
+func (visitor *ToSqlVisitor) VisitAsNode(or *nodes.AsNode) string {
+  return fmt.Sprintf("%v AS %v", visitor.Visit(or.Left),
     visitor.Visit(or.Right))
 }
 

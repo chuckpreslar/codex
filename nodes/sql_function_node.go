@@ -8,31 +8,35 @@ func (function *SqlFunctionNode) FunctionName() string {
   return function.Right.(string)
 }
 
-func (function *SqlFunctionNode) Eq(value interface{}) ComparisonInterface {
-  return Eq(function, value)
+func (function *SqlFunctionNode) Eq(other interface{}) ComparisonInterface {
+  return Eq(function, other)
 }
 
-func (function *SqlFunctionNode) Neq(value interface{}) ComparisonInterface {
-  return Neq(function, value)
+func (function *SqlFunctionNode) Neq(other interface{}) ComparisonInterface {
+  return Neq(function, other)
 }
-func (function *SqlFunctionNode) Gt(value interface{}) ComparisonInterface {
-  return Gt(function, value)
-}
-
-func (function *SqlFunctionNode) Gte(value interface{}) ComparisonInterface {
-  return Gte(function, value)
+func (function *SqlFunctionNode) Gt(other interface{}) ComparisonInterface {
+  return Gt(function, other)
 }
 
-func (function *SqlFunctionNode) Lt(value interface{}) ComparisonInterface {
-  return Lt(function, value)
+func (function *SqlFunctionNode) Gte(other interface{}) ComparisonInterface {
+  return Gte(function, other)
 }
 
-func (function *SqlFunctionNode) Lte(value interface{}) ComparisonInterface {
-  return Lte(function, value)
+func (function *SqlFunctionNode) Lt(other interface{}) ComparisonInterface {
+  return Lt(function, other)
 }
 
-func (function *SqlFunctionNode) Matches(value interface{}) ComparisonInterface {
-  return Matches(function, value)
+func (function *SqlFunctionNode) Lte(other interface{}) ComparisonInterface {
+  return Lte(function, other)
+}
+
+func (function *SqlFunctionNode) Matches(other interface{}) ComparisonInterface {
+  return Matches(function, other)
+}
+
+func (function *SqlFunctionNode) As(other interface{}) ComparableInterface {
+  return As(function, other)
 }
 
 func Maximum(node NodeInterface) SqlFunctionInterface {

@@ -20,6 +20,7 @@ type ComparableInterface interface {
   Lt(interface{}) ComparisonInterface
   Lte(interface{}) ComparisonInterface
   Matches(interface{}) ComparisonInterface
+  As(interface{}) ComparableInterface
 }
 
 type RelationInterface interface {

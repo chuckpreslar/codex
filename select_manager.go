@@ -10,7 +10,7 @@ type SelectManager struct {
   Context *nodes.SelectCoreNode
 }
 
-func (mgr *SelectManager) Project(attribute nodes.AttributeInterface) *SelectManager {
+func (mgr *SelectManager) Project(attribute nodes.ComparableInterface) *SelectManager {
   mgr.Context.AppendToProjections(attribute)
   return mgr
 }

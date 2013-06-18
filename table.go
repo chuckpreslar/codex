@@ -26,10 +26,11 @@ func (table Table) Project(names ...interface{}) *SelectManager {
     case string:
       name = nodes.Attribute(table.Relation(), name.(string))
     case *nodes.AttributeNode:
+    case *nodes.AsNode:
     default:
       panic("Unkown argument type.")
     }
-    mgr.Project(name.(nodes.AttributeInterface))
+    mgr.Project(name.(nodes.ComparableInterface))
   }
   return mgr
 }

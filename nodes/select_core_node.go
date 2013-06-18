@@ -3,14 +3,14 @@ package nodes
 type SelectCoreNode struct {
   *Node
   Relation    RelationInterface
-  Projections []AttributeInterface
+  Projections []ComparableInterface
   Wheres      []ComparisonInterface
 }
 
 func (core *SelectCoreNode) core() {}
 
-func (core *SelectCoreNode) AppendToProjections(attribute AttributeInterface) *SelectCoreNode {
-  core.Projections = append(core.Projections, attribute)
+func (core *SelectCoreNode) AppendToProjections(comparable ComparableInterface) *SelectCoreNode {
+  core.Projections = append(core.Projections, comparable)
   return core
 }
 
@@ -19,6 +19,6 @@ func (core *SelectCoreNode) AppendToWheres(comparison ComparisonInterface) *Sele
   return core
 }
 
-func SelectCore(relation RelationInterface, projections ...AttributeInterface) *SelectCoreNode {
+func SelectCore(relation RelationInterface, projections ...ComparableInterface) *SelectCoreNode {
   return &SelectCoreNode{&Node{nil, nil}, relation, projections, []ComparisonInterface{}}
 }

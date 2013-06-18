@@ -13,31 +13,35 @@ func (attribute *AttributeNode) Name() string {
   return attribute.Right.(string)
 }
 
-func (attribute *AttributeNode) Eq(value interface{}) ComparisonInterface {
-  return Eq(attribute, value)
+func (attribute *AttributeNode) Eq(other interface{}) ComparisonInterface {
+  return Eq(attribute, other)
 }
 
-func (attribute *AttributeNode) Neq(value interface{}) ComparisonInterface {
-  return Neq(attribute, value)
+func (attribute *AttributeNode) Neq(other interface{}) ComparisonInterface {
+  return Neq(attribute, other)
 }
-func (attribute *AttributeNode) Gt(value interface{}) ComparisonInterface {
-  return Gt(attribute, value)
-}
-
-func (attribute *AttributeNode) Gte(value interface{}) ComparisonInterface {
-  return Gte(attribute, value)
+func (attribute *AttributeNode) Gt(other interface{}) ComparisonInterface {
+  return Gt(attribute, other)
 }
 
-func (attribute *AttributeNode) Lt(value interface{}) ComparisonInterface {
-  return Lt(attribute, value)
+func (attribute *AttributeNode) Gte(other interface{}) ComparisonInterface {
+  return Gte(attribute, other)
 }
 
-func (attribute *AttributeNode) Lte(value interface{}) ComparisonInterface {
-  return Lte(attribute, value)
+func (attribute *AttributeNode) Lt(other interface{}) ComparisonInterface {
+  return Lt(attribute, other)
 }
 
-func (attribute *AttributeNode) Matches(value interface{}) ComparisonInterface {
-  return Matches(attribute, value)
+func (attribute *AttributeNode) Lte(other interface{}) ComparisonInterface {
+  return Lte(attribute, other)
+}
+
+func (attribute *AttributeNode) Matches(other interface{}) ComparisonInterface {
+  return Matches(attribute, other)
+}
+
+func (attribute *AttributeNode) As(other interface{}) ComparableInterface {
+  return As(attribute, other)
 }
 
 func Attribute(relation RelationInterface, name string) AttributeInterface {
