@@ -3,7 +3,7 @@ package visitors
 import (
   "fmt"
   "librarian/nodes"
-  "librarian/visitors/utils"
+  "strings"
 )
 
 const (
@@ -145,7 +145,7 @@ func (visitor *ToSqlVisitor) VisitAttributeNode(attribute *nodes.AttributeNode) 
   } else {
     relation = attribute.Relation.Name
   }
-  return fmt.Sprintf("%v.%v", utils.Quote(relation), utils.Quote(attribute.Name))
+  return fmt.Sprintf("%v.%v", visitor.Quote(relation), visitor.Quote(attribute.Name))
 }
 
 func (visitor *ToSqlVisitor) VisitRelationNode(relation *nodes.RelationNode) string {
@@ -155,7 +155,7 @@ func (visitor *ToSqlVisitor) VisitRelationNode(relation *nodes.RelationNode) str
   } else {
     name = relation.Name
   }
-  return utils.Quote(name)
+  return visitor.Quote(name)
 }
 
 func (visitor *ToSqlVisitor) VisitJoinSourceNode(source *nodes.JoinSourceNode) string {
@@ -163,7 +163,7 @@ func (visitor *ToSqlVisitor) VisitJoinSourceNode(source *nodes.JoinSourceNode) s
   for _, join := range source.Right {
     str = fmt.Sprintf(" %v ", visitor.Visit(join))
   }
-  return utils.Trim(str)
+  return visitor.Trim(str)
 }
 
 func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) string {
@@ -191,7 +191,7 @@ func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) str
     }
   }
 
-  return utils.Trim(str)
+  return visitor.Trim(str)
 }
 
 func (visitor *ToSqlVisitor) VisitInt(integer int) string {
@@ -199,7 +199,21 @@ func (visitor *ToSqlVisitor) VisitInt(integer int) string {
 }
 
 func (visitor *ToSqlVisitor) VisitString(str string) string {
-  return fmt.Sprintf("%s", utils.Tag(str))
+  return fmt.Sprintf("%s", visitor.Tag(str))
+}
+
+// Utility functions.
+
+func (visitor *ToSqlVisitor) Quote(value interface{}) string {
+  return fmt.Sprintf(`"%v"`, value)
+}
+
+func (visitor *ToSqlVisitor) Tag(value interface{}) string {
+  return fmt.Sprintf(`'%v'`, value)
+}
+
+func (visitor *ToSqlVisitor) Trim(value interface{}) string {
+  return strings.Trim(strings.TrimRight(fmt.Sprintf("%v", value), "0"), " ")
 }
 
 func ToSql() *ToSqlVisitor {

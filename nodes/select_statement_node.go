@@ -11,5 +11,8 @@ type SelectStatementNode struct {
 }
 
 func SelectStatement() *SelectStatementNode {
-  return &SelectStatementNode{&Node{}, []interface{}{}, nil, nil, nil, nil, nil}
+  return &SelectStatementNode{&Node{},
+    []interface{}{},
+    nil, nil, nil,
+    nil, nil}
 }
