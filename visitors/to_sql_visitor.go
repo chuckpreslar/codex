@@ -250,7 +250,7 @@ func (visitor *ToSqlVisitor) VisitBool(boolean bool) string {
 }
 
 func (visitor *ToSqlVisitor) VisitFloat64(float float64) string {
-  return fmt.Sprintf("%f", float)
+  return fmt.Sprintf("%s", visitor.Trim(float))
 }
 
 // Utility functions.
