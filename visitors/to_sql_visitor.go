@@ -72,6 +72,8 @@ func (visitor *ToSqlVisitor) Visit(node interface{}) string {
     return visitor.VisitInt(node.(int))
   case string:
     return visitor.VisitString(node.(string))
+  case bool:
+    return visitor.VisitBool(node.(bool))
   default:
     panic(fmt.Sprintf("Unkown Node type: %T", node))
   }
@@ -239,6 +241,10 @@ func (visitor *ToSqlVisitor) VisitInt(integer int) string {
 
 func (visitor *ToSqlVisitor) VisitString(str string) string {
   return fmt.Sprintf("%s", visitor.Tag(str))
+}
+
+func (visitor *ToSqlVisitor) VisitBool(boolean bool) string {
+  return fmt.Sprintf("%s", visitor.Tag(boolean))
 }
 
 // Utility functions.
