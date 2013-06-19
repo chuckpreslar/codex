@@ -17,18 +17,19 @@ func (mgmt *SelectManager) Project(projections ...interface{}) *SelectManager {
       projection = nodes.Attribute(projection.(string), mgmt.Relation)
     default:
     }
-    mgmt.Context.Project(projection)
+    mgmt.Context.Projections = append(mgmt.Context.Projections, projection)
   }
   return mgmt
 }
 
-func (mgmt *SelectManager) Where(comparison ...interface{}) *SelectManager {
-  mgmt.Context.Where(comparison...)
+func (mgmt *SelectManager) Where(comparison interface{}) *SelectManager {
+  mgmt.Context.Wheres = append(mgmt.Context.Wheres, comparison)
   return mgmt
 }
 
 func (mgmt *SelectManager) InnerJoin(expression interface{}) *SelectManager {
-  mgmt.Context.Source.Join(nodes.InnerJoin(expression))
+  mgmt.Context.Source.Right = append(mgmt.Context.Source.Right,
+    nodes.InnerJoin(expression))
   return mgmt
 }
 
@@ -40,4 +41,15 @@ func (mgmt *SelectManager) Limit(take interface{}) *SelectManager {
 func (mgmt *SelectManager) Offset(skip interface{}) *SelectManager {
   mgmt.Tree.Offset = nodes.Offset(skip)
   return mgmt
+}
+
+func (mgmt *SelectManager) ToSql() string {
+  return ""
+}
+
+func NewSelectManager(relation *nodes.RelationNode) *SelectManager {
+  tree := nodes.SelectStatement()
+  core := nodes.SelectCore(relation)
+  tree.Cores = append(tree.Cores, core)
+  return &SelectManager{tree, core, relation}
 }

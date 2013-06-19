@@ -14,6 +14,18 @@ func (table Table) On(a interface{}) *nodes.OnNode {
   return nodes.On(table.Relation(), a)
 }
 
+func (table Table) Project(a ...interface{}) *SelectManager {
+  return NewSelectManager(table.Relation()).Project(a...)
+}
+
+func (table Table) Where(a interface{}) *SelectManager {
+  return NewSelectManager(table.Relation()).Where(a)
+}
+
+func (table Table) InnerJoin(a interface{}) *SelectManager {
+  return NewSelectManager(table.Relation()).InnerJoin(a)
+}
+
 func NewTable(name string) Table {
   relation := nodes.Relation(name)
   return func(name string) *nodes.AttributeNode {

@@ -58,6 +58,10 @@ func (visitor *ToSqlVisitor) Visit(node interface{}) string {
     return visitor.VisitRelationNode(node.(*nodes.RelationNode))
   case *nodes.JoinSourceNode:
     return visitor.VisitJoinSourceNode(node.(*nodes.JoinSourceNode))
+  case *nodes.InnerJoinNode:
+    return visitor.VisitInnerJoinNode(node.(*nodes.InnerJoinNode))
+  case *nodes.LimitNode:
+    return visitor.VisitLimitNode(node.(*nodes.LimitNode))
   case *nodes.SelectCoreNode:
     return visitor.VisitSelectCoreNode(node.(*nodes.SelectCoreNode))
   case int:
@@ -164,6 +168,14 @@ func (visitor *ToSqlVisitor) VisitJoinSourceNode(source *nodes.JoinSourceNode) s
     str = fmt.Sprintf(" %v ", visitor.Visit(join))
   }
   return visitor.Trim(str)
+}
+
+func (visitor *ToSqlVisitor) VisitInnerJoinNode(join *nodes.InnerJoinNode) string {
+  return fmt.Sprintf("INNER JOIN %v", visitor.Visit(join.Left))
+}
+
+func (visitor *ToSqlVisitor) VisitLimitNode(limit *nodes.LimitNode) string {
+  return fmt.Sprintf("LIMIT %v", visitor.Visit(limit.Left))
 }
 
 func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) string {

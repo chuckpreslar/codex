@@ -119,6 +119,27 @@ func TestVisitOnNode(t *testing.T) {
   sql := visitor.Accept(on)
   expected := fmt.Sprintf(`"table" ON "other"."id" = "table"."others_id"`)
   if sql != expected {
-    t.Errorf("OrNode: Expected %s, got %s\n.", expected, sql)
+    t.Errorf("OnNode: Expected %s, got %s\n.", expected, sql)
+  }
+}
+
+func TestVisitInnerJoinNode(t *testing.T) {
+  table := librarian.NewTable("table")
+  other := librarian.NewTable("other")
+  join := nodes.InnerJoin(table.On(other("id").Equals(table("others_id"))))
+  sql := visitor.Accept(join)
+  expected := fmt.Sprintf(`INNER JOIN "table" ON "other"."id" = "table"."others_id"`)
+  if sql != expected {
+    t.Errorf("InnerJoinNode: Expected %s, got %s\n.", expected, sql)
+  }
+}
+
+func TestVisitLimitNode(t *testing.T) {
+  take := 1
+  limit := nodes.Limit(take)
+  sql := visitor.Accept(limit)
+  expected := fmt.Sprintf(`LIMIT %v`, take)
+  if sql != expected {
+    t.Errorf("InnerJoinNode: Expected %s, got %s\n.", expected, sql)
   }
 }

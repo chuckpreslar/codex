@@ -22,7 +22,7 @@ func (core *SelectCoreNode) Where(a ...interface{}) *SelectCoreNode {
 }
 
 func (core *SelectCoreNode) Join(a ...interface{}) *SelectCoreNode {
-  core.Source.Join(a)
+  core.Source.Right = append(core.Source.Right, a...)
   return core
 }
 
