@@ -2,8 +2,9 @@ package nodes
 
 type RelationNode struct {
   *Node
-  Name  string
-  Alias string
+  Name   string
+  Alias  string
+  Engine string
 }
 
 func (relation *RelationNode) As(alias string) *RelationNode {
@@ -12,5 +13,5 @@ func (relation *RelationNode) As(alias string) *RelationNode {
 }
 
 func Relation(name string) *RelationNode {
-  return &RelationNode{&Node{nil, nil}, name, ""}
+  return &RelationNode{&Node{nil, nil}, name, "", ""}
 }

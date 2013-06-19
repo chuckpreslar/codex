@@ -26,6 +26,10 @@ func (table Table) InnerJoin(a interface{}) *SelectManager {
   return NewSelectManager(table.Relation()).InnerJoin(a)
 }
 
+func (table Table) ToSql() string {
+  return NewSelectManager(table.Relation()).ToSql()
+}
+
 func NewTable(name string) Table {
   relation := nodes.Relation(name)
   return func(name string) *nodes.AttributeNode {

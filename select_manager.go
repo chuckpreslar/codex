@@ -1,6 +1,7 @@
 package librarian
 
 import (
+  "fmt"
   "librarian/nodes"
 )
 
@@ -44,7 +45,15 @@ func (mgmt *SelectManager) Offset(skip interface{}) *SelectManager {
 }
 
 func (mgmt *SelectManager) ToSql() string {
-  return ""
+  var engine string
+  if 0 == len(mgmt.Relation.Engine) {
+    engine = "to_sql"
+  }
+  visitor, ok := VISITORS[engine]
+  if !ok {
+    panic(fmt.Sprintf("No engine found for %v.\n", engine))
+  }
+  return visitor.Accept(mgmt.Tree)
 }
 
 func NewSelectManager(relation *nodes.RelationNode) *SelectManager {

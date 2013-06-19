@@ -140,6 +140,16 @@ func TestVisitLimitNode(t *testing.T) {
   sql := visitor.Accept(limit)
   expected := fmt.Sprintf(`LIMIT %v`, take)
   if sql != expected {
-    t.Errorf("InnerJoinNode: Expected %s, got %s\n.", expected, sql)
+    t.Errorf("LimitNode: Expected %s, got %s\n.", expected, sql)
+  }
+}
+
+func TestVisitOffsetNode(t *testing.T) {
+  skip := 1
+  offset := nodes.Offset(skip)
+  sql := visitor.Accept(offset)
+  expected := fmt.Sprintf(`OFFSET %v`, skip)
+  if sql != expected {
+    t.Errorf("OffsetNode: Expected %s, got %s\n.", expected, sql)
   }
 }
