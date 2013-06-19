@@ -215,7 +215,20 @@ func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) str
 }
 
 func (visitor *ToSqlVisitor) VisitSelectStatementNode(stmt *nodes.SelectStatementNode) string {
-  return ""
+  str := ""
+  for _, core := range stmt.Cores {
+    str = fmt.Sprintf("%v%v", str, visitor.Visit(core))
+  }
+
+  if nil != stmt.Limit {
+    str = fmt.Sprintf("%v %v", str, visitor.Visit(stmt.Limit))
+  }
+
+  if nil != stmt.Offset {
+    str = fmt.Sprintf("%v %v", str, visitor.Visit(stmt.Offset))
+  }
+
+  return str
 }
 
 func (visitor *ToSqlVisitor) VisitInt(integer int) string {
