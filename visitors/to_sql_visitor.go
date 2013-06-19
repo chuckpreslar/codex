@@ -66,6 +66,8 @@ func (visitor *ToSqlVisitor) Visit(node interface{}) string {
     return visitor.VisitOffsetNode(node.(*nodes.OffsetNode))
   case *nodes.SelectCoreNode:
     return visitor.VisitSelectCoreNode(node.(*nodes.SelectCoreNode))
+  case *nodes.SelectStatementNode:
+    return visitor.VisitSelectStatementNode(node.(*nodes.SelectStatementNode))
   case int:
     return visitor.VisitInt(node.(int))
   case string:
@@ -167,7 +169,7 @@ func (visitor *ToSqlVisitor) VisitRelationNode(relation *nodes.RelationNode) str
 func (visitor *ToSqlVisitor) VisitJoinSourceNode(source *nodes.JoinSourceNode) string {
   str := fmt.Sprintf("%v", visitor.Visit(source.Left))
   for _, join := range source.Right {
-    str = fmt.Sprintf(" %v ", visitor.Visit(join))
+    str = fmt.Sprintf("%v %v ", str, visitor.Visit(join))
   }
   return visitor.Trim(str)
 }
@@ -210,6 +212,10 @@ func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) str
   }
 
   return visitor.Trim(str)
+}
+
+func (visitor *ToSqlVisitor) VisitSelectStatementNode(stmt *nodes.SelectStatementNode) string {
+  return ""
 }
 
 func (visitor *ToSqlVisitor) VisitInt(integer int) string {

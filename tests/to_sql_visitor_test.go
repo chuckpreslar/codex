@@ -102,11 +102,13 @@ func TestVisitAndNode(t *testing.T) {
 
 func TestVisitSelectCoreNode(t *testing.T) {
   table := librarian.NewTable("table")
+  other := librarian.NewTable("other")
   core := nodes.SelectCore(table.Relation()).
     Project(table("col_one"), table("col_two")).
-    Where(table("col_one").Equals("test"))
+    Where(table("col_one").Equals("test")).
+    Join(nodes.InnerJoin(other.On(other("id").Equals(table("other_id")))))
   sql := visitor.Accept(core)
-  expected := fmt.Sprintf(`SELECT "table"."col_one", "table"."col_two" FROM "table" WHERE "table"."col_one" = 'test'`)
+  expected := fmt.Sprintf(`SELECT "table"."col_one", "table"."col_two" FROM "table" INNER JOIN "other" ON "other"."id" = "table"."other_id" WHERE "table"."col_one" = 'test'`)
   if sql != expected {
     t.Errorf("SelectCoreNode: Expected %s, got %s\n.", expected, sql)
   }
