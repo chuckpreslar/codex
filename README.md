@@ -54,7 +54,20 @@ An example of how to search for records that meet a specified criteria:
 // ...
 
 users := l.NewTable("users")
-sql := users.Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).ToSql()
+sql := users.Where(users("id").Equals(1).Or(users("email").Equals("test@example.com"))).ToSql()
+
+```
+
+#### Joins
+
+```go
+// ...
+
+users := l.NewTable("users")
+orders := l.NewTable("orders")
+sql := users.InnerJoin(orders.On(orders("id").Equals(users("order_id")))).ToSql()
+
+// SELECT "users".* FROM "users" INNER JOIN "orders" ON "orders"."id" = "users"."order_id"
 
 ```
 
