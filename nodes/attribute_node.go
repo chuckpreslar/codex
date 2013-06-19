@@ -70,6 +70,10 @@ func (attribute *AttributeNode) NotLike(b interface{}) *ComparisonNode {
   return DoesNotMatch(attribute, b)
 }
 
+func (attribute *AttributeNode) As(b interface{}) *AsNode {
+  return As(attribute, b)
+}
+
 func Attribute(name string, relation *RelationNode) *AttributeNode {
   return &AttributeNode{&Node{}, name, relation}
 }
