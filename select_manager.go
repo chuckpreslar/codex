@@ -33,11 +33,11 @@ func (mgmt *SelectManager) InnerJoin(expression interface{}) *SelectManager {
 }
 
 func (mgmt *SelectManager) Limit(take interface{}) *SelectManager {
-  mgmt.Tree.Limit = *nodes.Limit(take)
+  mgmt.Tree.Limit = nodes.Limit(take)
   return mgmt
 }
 
 func (mgmt *SelectManager) Offset(skip interface{}) *SelectManager {
-  mgmt.Tree.Offset = *nodes.Offset(skip)
+  mgmt.Tree.Offset = nodes.Offset(skip)
   return mgmt
 }
