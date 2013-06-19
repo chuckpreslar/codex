@@ -197,6 +197,8 @@ func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) str
         str = fmt.Sprintf("%v%v", str, COMMA)
       }
     }
+  } else {
+    str = fmt.Sprintf("%v%v.%v", str, visitor.Visit(core.Relation), "*")
   }
 
   str = fmt.Sprintf("%v%v%v", str, FROM, visitor.Visit(core.Source))

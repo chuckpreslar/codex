@@ -2,6 +2,7 @@ package nodes
 
 type SelectCoreNode struct {
   *Node
+  Relation      *RelationNode
   Source        *JoinSourceNode
   Projections   []interface{}
   Wheres        []interface{}
@@ -29,6 +30,7 @@ func (core *SelectCoreNode) Join(a ...interface{}) *SelectCoreNode {
 func SelectCore(relation *RelationNode) *SelectCoreNode {
   return &SelectCoreNode{
     &Node{nil, nil},
+    relation,
     JoinSource(relation),
     []interface{}{},
     []interface{}{},
