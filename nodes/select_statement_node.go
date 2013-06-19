@@ -10,9 +10,9 @@ type SelectStatementNode struct {
   With   interface{}
 }
 
-func SelectStatement() *SelectStatementNode {
+func SelectStatement(relation *RelationNode) *SelectStatementNode {
   return &SelectStatementNode{&Node{},
-    []interface{}{},
+    []interface{}{SelectCore(relation)},
     nil, nil, nil,
     nil, nil}
 }

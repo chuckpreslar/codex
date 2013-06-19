@@ -57,8 +57,7 @@ func (mgmt *SelectManager) ToSql() string {
 }
 
 func NewSelectManager(relation *nodes.RelationNode) *SelectManager {
-  tree := nodes.SelectStatement()
-  core := nodes.SelectCore(relation)
-  tree.Cores = append(tree.Cores, core)
-  return &SelectManager{tree, core, relation}
+  tree := nodes.SelectStatement(relation)
+  core := tree.Cores[0]
+  return &SelectManager{tree, core.(*nodes.SelectCoreNode), relation}
 }
