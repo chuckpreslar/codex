@@ -48,6 +48,8 @@ func (visitor *ToSqlVisitor) Visit(node interface{}) string {
     return visitor.VisitAsNode(node.(*nodes.AsNode))
   case *nodes.OrNode:
     return visitor.VisitOrNode(node.(*nodes.OrNode))
+  case *nodes.OnNode:
+    return visitor.VisitOnNode(node.(*nodes.OnNode))
   case *nodes.AndNode:
     return visitor.VisitAndNode(node.(*nodes.AndNode))
   case *nodes.AttributeNode:
@@ -63,7 +65,7 @@ func (visitor *ToSqlVisitor) Visit(node interface{}) string {
   case string:
     return visitor.VisitString(node.(string))
   default:
-    panic("Unkown Node type.")
+    panic(fmt.Sprintf("Unkown Node type: %T", node))
   }
 }
 
@@ -125,9 +127,15 @@ func (visitor *ToSqlVisitor) VisitOrNode(or *nodes.OrNode) string {
   return fmt.Sprintf("%v OR %v", visitor.Visit(or.Left),
     visitor.Visit(or.Right))
 }
+
 func (visitor *ToSqlVisitor) VisitAndNode(and *nodes.AndNode) string {
   return fmt.Sprintf("%v AND %v", visitor.Visit(and.Left),
     visitor.Visit(and.Right))
+}
+
+func (visitor *ToSqlVisitor) VisitOnNode(on *nodes.OnNode) string {
+  return fmt.Sprintf("%v ON %v", visitor.Visit(on.Left),
+    visitor.Visit(on.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitAttributeNode(attribute *nodes.AttributeNode) string {

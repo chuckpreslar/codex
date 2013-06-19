@@ -111,3 +111,14 @@ func TestVisitSelectCoreNode(t *testing.T) {
     t.Errorf("SelectCoreNode: Expected %s, got %s\n.", expected, sql)
   }
 }
+
+func TestVisitOnNode(t *testing.T) {
+  table := librarian.NewTable("table")
+  other := librarian.NewTable("other")
+  on := table.On(other("id").Equals(table("others_id")))
+  sql := visitor.Accept(on)
+  expected := fmt.Sprintf(`"table" ON "other"."id" = "table"."others_id"`)
+  if sql != expected {
+    t.Errorf("OrNode: Expected %s, got %s\n.", expected, sql)
+  }
+}
