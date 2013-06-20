@@ -56,6 +56,8 @@ func (visitor *ToSqlVisitor) Visit(node interface{}) string {
     return visitor.VisitAttributeNode(node.(*nodes.AttributeNode))
   case *nodes.RelationNode:
     return visitor.VisitRelationNode(node.(*nodes.RelationNode))
+  case *nodes.FromNode:
+    return visitor.VisitFromNode(node.(*nodes.FromNode))
   case *nodes.JoinSourceNode:
     return visitor.VisitJoinSourceNode(node.(*nodes.JoinSourceNode))
   case *nodes.InnerJoinNode:
@@ -170,10 +172,14 @@ func (visitor *ToSqlVisitor) VisitRelationNode(relation *nodes.RelationNode) str
   return visitor.Quote(name)
 }
 
+func (visitor *ToSqlVisitor) VisitFromNode(from *nodes.FromNode) string {
+  return fmt.Sprintf(", %v", visitor.Visit(from.Left))
+}
+
 func (visitor *ToSqlVisitor) VisitJoinSourceNode(source *nodes.JoinSourceNode) string {
   str := fmt.Sprintf("%v", visitor.Visit(source.Left))
   for _, join := range source.Right {
-    str = fmt.Sprintf("%v %v ", str, visitor.Visit(join))
+    str = fmt.Sprintf("%v%v ", str, visitor.Visit(join))
   }
   return visitor.Trim(str)
 }

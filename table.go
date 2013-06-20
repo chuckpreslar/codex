@@ -10,8 +10,17 @@ func (table Table) Relation() *nodes.RelationNode {
   return table("").Relation
 }
 
+func (table Table) As(alias string) Table {
+  table.Relation().Alias = alias
+  return table
+}
+
 func (table Table) On(a interface{}) *nodes.OnNode {
   return nodes.On(table.Relation(), a)
+}
+
+func (table Table) From(a interface{}) *SelectManager {
+  return NewSelectManager(table.Relation()).From(a)
 }
 
 func (table Table) Project(a ...interface{}) *SelectManager {

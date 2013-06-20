@@ -39,6 +39,17 @@ func (mgmt *SelectManager) Limit(take interface{}) *SelectManager {
   return mgmt
 }
 
+func (mgmt *SelectManager) From(from interface{}) *SelectManager {
+  switch from.(type) {
+  case string:
+    from = nodes.From(nodes.Relation(from.(string)))
+  default:
+  }
+  mgmt.Context.Source.Right = append([]interface{}{from},
+    mgmt.Context.Source.Right...)
+  return mgmt
+}
+
 func (mgmt *SelectManager) Offset(skip interface{}) *SelectManager {
   mgmt.Tree.Offset = nodes.Offset(skip)
   return mgmt
