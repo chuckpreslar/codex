@@ -172,6 +172,7 @@ func (visitor *ToSqlVisitor) VisitRelationNode(relation *nodes.RelationNode) str
   return visitor.Quote(name)
 }
 
+// FIXME: Spacing issue.
 func (visitor *ToSqlVisitor) VisitFromNode(from *nodes.FromNode) string {
   return fmt.Sprintf(", %v", visitor.Visit(from.Left))
 }
@@ -179,7 +180,7 @@ func (visitor *ToSqlVisitor) VisitFromNode(from *nodes.FromNode) string {
 func (visitor *ToSqlVisitor) VisitJoinSourceNode(source *nodes.JoinSourceNode) string {
   str := fmt.Sprintf("%v", visitor.Visit(source.Left))
   for _, join := range source.Right {
-    str = fmt.Sprintf("%v%v ", str, visitor.Visit(join))
+    str = fmt.Sprintf("%v %v ", str, visitor.Visit(join))
   }
   return visitor.Trim(str)
 }
