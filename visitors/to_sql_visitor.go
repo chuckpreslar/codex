@@ -10,6 +10,8 @@ const (
   SELECT   = ` SELECT `
   FROM     = ` FROM `
   WHERE    = ` WHERE `
+  LIMIT    = ` LIMIT `
+  OFFSET   = ` OFFSET `
   SPACE    = ` `
   COMMA    = `, `
   GROUP_BY = ` GROUP BY `
@@ -172,7 +174,6 @@ func (visitor *ToSqlVisitor) VisitRelationNode(relation *nodes.RelationNode) str
   return visitor.Quote(name)
 }
 
-// FIXME: Spacing issue.
 func (visitor *ToSqlVisitor) VisitFromNode(from *nodes.FromNode) string {
   return fmt.Sprintf(", %v", visitor.Visit(from.Left))
 }
@@ -180,21 +181,21 @@ func (visitor *ToSqlVisitor) VisitFromNode(from *nodes.FromNode) string {
 func (visitor *ToSqlVisitor) VisitJoinSourceNode(source *nodes.JoinSourceNode) string {
   str := fmt.Sprintf("%v", visitor.Visit(source.Left))
   for _, join := range source.Right {
-    str = fmt.Sprintf("%v %v ", str, visitor.Visit(join))
+    str = fmt.Sprintf("%v%v", str, visitor.Visit(join))
   }
   return visitor.Trim(str)
 }
 
 func (visitor *ToSqlVisitor) VisitInnerJoinNode(join *nodes.InnerJoinNode) string {
-  return fmt.Sprintf("INNER JOIN %v", visitor.Visit(join.Left))
+  return fmt.Sprintf(" INNER JOIN %v", visitor.Visit(join.Left))
 }
 
 func (visitor *ToSqlVisitor) VisitLimitNode(limit *nodes.LimitNode) string {
-  return fmt.Sprintf("LIMIT %v", visitor.Visit(limit.Left))
+  return fmt.Sprintf("%v%v", LIMIT, visitor.Visit(limit.Left))
 }
 
 func (visitor *ToSqlVisitor) VisitOffsetNode(offset *nodes.OffsetNode) string {
-  return fmt.Sprintf("OFFSET %v", visitor.Visit(offset.Left))
+  return fmt.Sprintf("%v%v", OFFSET, visitor.Visit(offset.Left))
 }
 
 func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) string {
@@ -234,11 +235,11 @@ func (visitor *ToSqlVisitor) VisitSelectStatementNode(stmt *nodes.SelectStatemen
   }
 
   if nil != stmt.Limit {
-    str = fmt.Sprintf("%v %v", str, visitor.Visit(stmt.Limit))
+    str = fmt.Sprintf("%v%v", str, visitor.Visit(stmt.Limit))
   }
 
   if nil != stmt.Offset {
-    str = fmt.Sprintf("%v %v", str, visitor.Visit(stmt.Offset))
+    str = fmt.Sprintf("%v%v", str, visitor.Visit(stmt.Offset))
   }
 
   return str
