@@ -7,17 +7,21 @@ import (
 )
 
 const (
-  SELECT   = ` SELECT `
-  FROM     = ` FROM `
-  WHERE    = ` WHERE `
-  LIMIT    = ` LIMIT `
-  OFFSET   = ` OFFSET `
-  SPACE    = ` `
-  COMMA    = `, `
-  GROUP_BY = ` GROUP BY `
-  AND      = ` AND `
-  DISINCT  = `DISTINCT`
-  STAR     = `*`
+  SELECT     = ` SELECT `
+  FROM       = ` FROM `
+  WHERE      = ` WHERE `
+  LIMIT      = ` LIMIT `
+  OFFSET     = ` OFFSET `
+  SPACE      = ` `
+  COMMA      = `, `
+  GROUP_BY   = ` GROUP BY `
+  AND        = ` AND `
+  OR         = ` OR `
+  ON         = ` ON `
+  AS         = ` AS `
+  INNER_JOIN = ` INNER JOIN `
+  DISINCT    = `DISTINCT`
+  STAR       = `*`
 )
 
 type ToSqlVisitor struct{}
@@ -135,22 +139,22 @@ func (visitor *ToSqlVisitor) VisitDoesNotMatchNode(dnm *nodes.DoesNotMatchNode) 
 }
 
 func (visitor *ToSqlVisitor) VisitAsNode(as *nodes.AsNode) string {
-  return fmt.Sprintf("%v AS %v", visitor.Visit(as.Left),
+  return fmt.Sprintf("%v%v%v", visitor.Visit(as.Left), AS,
     visitor.Visit(as.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitOrNode(or *nodes.OrNode) string {
-  return fmt.Sprintf("%v OR %v", visitor.Visit(or.Left),
+  return fmt.Sprintf("%v%v%v", visitor.Visit(or.Left), OR,
     visitor.Visit(or.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitAndNode(and *nodes.AndNode) string {
-  return fmt.Sprintf("%v AND %v", visitor.Visit(and.Left),
+  return fmt.Sprintf("%v%v%v", visitor.Visit(and.Left), AND,
     visitor.Visit(and.Right))
 }
 
 func (visitor *ToSqlVisitor) VisitOnNode(on *nodes.OnNode) string {
-  return fmt.Sprintf("%v ON %v", visitor.Visit(on.Left),
+  return fmt.Sprintf("%v%v%v", visitor.Visit(on.Left), ON,
     visitor.Visit(on.Right))
 }
 
@@ -175,7 +179,7 @@ func (visitor *ToSqlVisitor) VisitRelationNode(relation *nodes.RelationNode) str
 }
 
 func (visitor *ToSqlVisitor) VisitFromNode(from *nodes.FromNode) string {
-  return fmt.Sprintf(", %v", visitor.Visit(from.Left))
+  return fmt.Sprintf("%v%v", COMMA, visitor.Visit(from.Left))
 }
 
 func (visitor *ToSqlVisitor) VisitJoinSourceNode(source *nodes.JoinSourceNode) string {
@@ -187,7 +191,7 @@ func (visitor *ToSqlVisitor) VisitJoinSourceNode(source *nodes.JoinSourceNode) s
 }
 
 func (visitor *ToSqlVisitor) VisitInnerJoinNode(join *nodes.InnerJoinNode) string {
-  return fmt.Sprintf(" INNER JOIN %v", visitor.Visit(join.Left))
+  return fmt.Sprintf("%v%v", INNER_JOIN, visitor.Visit(join.Left))
 }
 
 func (visitor *ToSqlVisitor) VisitLimitNode(limit *nodes.LimitNode) string {
@@ -210,7 +214,7 @@ func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) str
       }
     }
   } else {
-    str = fmt.Sprintf("%v%v.%v", str, visitor.Visit(core.Relation), "*")
+    str = fmt.Sprintf("%v%v.%v", str, visitor.Visit(core.Relation), STAR)
   }
 
   str = fmt.Sprintf("%v%v%v", str, FROM, visitor.Visit(core.Source))
