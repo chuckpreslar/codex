@@ -87,10 +87,6 @@ sql := users.Set(users("admin").Eq(true)).Where(users("id").Eq(1)).ToSql()
 
 ```
 
-## Notes
-
-This project is still under heavy development, a lot of work still needs to be done.  Come back in a week or so ;)
-
 ## License
 
 > The MIT License (MIT)
