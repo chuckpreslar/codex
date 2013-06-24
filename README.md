@@ -71,6 +71,17 @@ sql := users.InnerJoin(orders.On(orders("id").Eq(users("order_id")))).ToSql()
 
 ```
 
+#### Updates
+
+```go
+// ...
+users := l.NewTable("users")
+sql := users.Set(users("admin").Eq(true)).Where(users("id").Eq(1)).ToSql()
+
+// UPDATE "users" SET "users"."admin" = 'true' WHERE "users"."id" = 1
+
+```
+
 ## Notes
 
 This project is still under heavy development, a lot of work still needs to be done.  Come back in a week or so ;)
