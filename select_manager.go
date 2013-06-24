@@ -9,6 +9,7 @@ type SelectManager struct {
   Tree     *nodes.SelectStatementNode
   Context  *nodes.SelectCoreNode
   Relation *nodes.RelationNode
+  Engine   interface{}
 }
 
 func (mgmt *SelectManager) Project(projections ...interface{}) *SelectManager {
@@ -70,5 +71,5 @@ func (mgmt *SelectManager) ToSql() string {
 func NewSelectManager(relation *nodes.RelationNode) *SelectManager {
   tree := nodes.SelectStatement(relation)
   core := tree.Cores[0]
-  return &SelectManager{tree, core.(*nodes.SelectCoreNode), relation}
+  return &SelectManager{tree, core.(*nodes.SelectCoreNode), relation, nil}
 }
