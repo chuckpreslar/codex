@@ -8,12 +8,14 @@ import (
 
 const (
   SELECT     = ` SELECT `
+  UPDATE     = ` UPDATE `
   FROM       = ` FROM `
   WHERE      = ` WHERE `
   LIMIT      = ` LIMIT `
   OFFSET     = ` OFFSET `
   SPACE      = ` `
   COMMA      = `, `
+  SET        = ` SET `
   GROUP_BY   = ` GROUP BY `
   AND        = ` AND `
   OR         = ` OR `
@@ -76,6 +78,8 @@ func (visitor *ToSqlVisitor) Visit(node interface{}) string {
     return visitor.VisitSelectCoreNode(node.(*nodes.SelectCoreNode))
   case *nodes.SelectStatementNode:
     return visitor.VisitSelectStatementNode(node.(*nodes.SelectStatementNode))
+  case *nodes.UpdateStatementNode:
+    return visitor.VisitUpdateStatementNode(node.(*nodes.UpdateStatementNode))
   case int:
     return visitor.VisitInt(node.(int))
   case string:
@@ -224,7 +228,7 @@ func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) str
     for index, where := range core.Wheres {
       str = fmt.Sprintf("%v%v", str, visitor.Visit(where))
       if index != length {
-        str = fmt.Sprintf("%v%v", str, COMMA)
+        str = fmt.Sprintf("%v%v", str, AND)
       }
     }
   }
@@ -234,6 +238,7 @@ func (visitor *ToSqlVisitor) VisitSelectCoreNode(core *nodes.SelectCoreNode) str
 
 func (visitor *ToSqlVisitor) VisitSelectStatementNode(stmt *nodes.SelectStatementNode) string {
   str := ""
+
   for _, core := range stmt.Cores {
     str = fmt.Sprintf("%v%v", str, visitor.Visit(core))
   }
@@ -247,6 +252,32 @@ func (visitor *ToSqlVisitor) VisitSelectStatementNode(stmt *nodes.SelectStatemen
   }
 
   return str
+}
+
+func (visitor *ToSqlVisitor) VisitUpdateStatementNode(stmt *nodes.UpdateStatementNode) string {
+  str := fmt.Sprintf("%v%v", UPDATE, visitor.Visit(stmt.Relation))
+
+  if length := len(stmt.Values) - 1; 0 <= length {
+    str = fmt.Sprintf("%v%v", str, SET)
+    for index, value := range stmt.Values {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(value))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+  }
+
+  if length := len(stmt.Wheres) - 1; 0 <= length {
+    str = fmt.Sprintf("%v%v", str, WHERE)
+    for index, where := range stmt.Wheres {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(where))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, AND)
+      }
+    }
+  }
+
+  return visitor.Trim(str)
 }
 
 func (visitor *ToSqlVisitor) VisitInt(integer int) string {
