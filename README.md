@@ -39,6 +39,7 @@ Now that wasn't too bad, was it?
 You can, of course, speed up your queries by only selecting the columns you need:
 
 ```go
+
 // ...
 
 users := l.NewTable("users")
@@ -51,6 +52,7 @@ sql := users.Project("id", "email", "first_name", "last_name").ToSql()
 An example of how to search for records that meet a specified criteria:
 
 ```go
+
 // ...
 
 users := l.NewTable("users")
@@ -61,6 +63,7 @@ sql := users.Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).
 #### Joins
 
 ```go
+
 // ...
 
 users := l.NewTable("users")
@@ -74,17 +77,15 @@ sql := users.InnerJoin(orders.On(orders("id").Eq(users("order_id")))).ToSql()
 #### Updates
 
 ```go
+
 // ...
+
 users := l.NewTable("users")
 sql := users.Set(users("admin").Eq(true)).Where(users("id").Eq(1)).ToSql()
 
 // UPDATE "users" SET "users"."admin" = 'true' WHERE "users"."id" = 1
 
 ```
-
-## Notes
-
-This project is still under heavy development, a lot of work still needs to be done.  Come back in a week or so ;)
 
 ## License
 
