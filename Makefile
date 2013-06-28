@@ -1,5 +1,5 @@
 test:
-	@cd tests && go test -race
+	@cd tests && go test
 
 PHONY:
 	test
