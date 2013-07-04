@@ -1,6 +1,6 @@
 package tree
 
 type Relation struct {
-  Name string
+  Name  string
   Alias string
 }
