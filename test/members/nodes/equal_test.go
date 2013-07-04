@@ -14,3 +14,27 @@ func TestEqual(t *testing.T) {
     t.Errorf("Expect Right Equal leaf to equal %v, got %v.", right, equal.Right)
   }
 }
+
+func TestEqualOr(t *testing.T) {
+  left, right := 1, 2
+  equal := &nodes.Equal{&nodes.Binary{left, right}}
+  other := 3
+  or := equal.Or(other)
+  if equal != or.Left {
+    t.Errorf("Expect Left Or leaf to equal %v, got %v.", equal, equal.Left)
+  } else if other != or.Right {
+    t.Errorf("Expect Right Or leaf to equal %v, got %v.", other, equal.Right)
+  }
+}
+
+func TestEqualAnd(t *testing.T) {
+  left, right := 1, 2
+  equal := &nodes.Equal{&nodes.Binary{left, right}}
+  other := 3
+  and := equal.And(other)
+  if equal != and.Left {
+    t.Errorf("Expect Left And leaf to equal %v, got %v.", equal, equal.Left)
+  } else if other != and.Right {
+    t.Errorf("Expect Right And leaf to equal %v, got %v.", other, equal.Right)
+  }
+}
