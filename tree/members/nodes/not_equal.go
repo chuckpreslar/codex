@@ -1,13 +1,18 @@
 package nodes
 
+// NotEqual node struct
 type NotEqual struct {
   *Binary
 }
 
-func (n *NotEqual) Or(other interface{}) *Or {
-  return &Or{&Binary{n, other}}
+// Returns an Or node with leafs containing references
+// to the original and other
+func (neq *NotEqual) Or(other interface{}) *Or {
+  return &Or{&Binary{neq, other}}
 }
 
-func (n *NotEqual) And(other interface{}) *And {
-  return &And{&Binary{n, other}}
+// Returns an And node with leafs containing references
+// to the original and other
+func (neq *NotEqual) And(other interface{}) *And {
+  return &And{&Binary{neq, other}}
 }

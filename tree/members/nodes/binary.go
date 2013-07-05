@@ -1,6 +1,7 @@
 package nodes
 
+// Binary node struct
 type Binary struct {
-  Left interface{}
+  Left  interface{}
   Right interface{}
 }

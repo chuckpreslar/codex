@@ -1,13 +1,18 @@
 package nodes
 
+// Or node struct
 type Or struct {
   *Binary
 }
 
-func (o *Or) Or(other interface{}) *Or {
-  return &Or{&Binary{o, other}}
+// Returns an Or node with leafs containing references
+// to the original and other
+func (or *Or) Or(other interface{}) *Or {
+  return &Or{&Binary{or, other}}
 }
 
-func (o *Or) And(other interface{}) *And {
-  return &And{&Binary{o, other}}
+// Returns an And node with leafs containing references
+// to the original and other
+func (or *Or) And(other interface{}) *And {
+  return &And{&Binary{or, other}}
 }

@@ -1,13 +1,18 @@
 package nodes
 
+// GreaterThan node struct
 type GreaterThan struct {
   *Binary
 }
 
-func (g *GreaterThan) Or(other interface{}) *Or {
-  return &Or{&Binary{g, other}}
+// Returns an Or node with leafs containing references
+// to the original and other
+func (gt *GreaterThan) Or(other interface{}) *Or {
+  return &Or{&Binary{gt, other}}
 }
 
-func (g *GreaterThan) And(other interface{}) *And {
-  return &And{&Binary{g, other}}
+// Returns an And node with leafs containing references
+// to the original and other
+func (gt *GreaterThan) And(other interface{}) *And {
+  return &And{&Binary{gt, other}}
 }

@@ -1,13 +1,18 @@
 package nodes
 
+// Equal node struct
 type Equal struct {
   *Binary
 }
 
-func (e *Equal) Or(other interface{}) *Or {
-  return &Or{&Binary{e, other}}
+// Returns an Or node with leafs containing references
+// to the original and other
+func (eq *Equal) Or(other interface{}) *Or {
+  return &Or{&Binary{eq, other}}
 }
 
-func (e *Equal) And(other interface{}) *And {
-  return &And{&Binary{e, other}}
+// Returns an And node with leafs containing references
+// to the original and other
+func (eq *Equal) And(other interface{}) *And {
+  return &And{&Binary{eq, other}}
 }
