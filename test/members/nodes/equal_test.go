@@ -7,7 +7,7 @@ import (
 
 func TestEqual(t *testing.T) {
   left, right := 1, 2
-  equal := &nodes.Equal{&nodes.Binary{left, right}}
+  equal := &nodes.Equal{left, right}
   if left != equal.Left {
     t.Errorf("Expect Left Equal leaf to equal %v, got %v.", left, equal.Left)
   } else if right != equal.Right {
@@ -17,7 +17,7 @@ func TestEqual(t *testing.T) {
 
 func TestEqualOr(t *testing.T) {
   left, right := 1, 2
-  equal := &nodes.Equal{&nodes.Binary{left, right}}
+  equal := &nodes.Equal{left, right}
   other := 3
   or := equal.Or(other)
   if equal != or.Left {
@@ -29,7 +29,7 @@ func TestEqualOr(t *testing.T) {
 
 func TestEqualAnd(t *testing.T) {
   left, right := 1, 2
-  equal := &nodes.Equal{&nodes.Binary{left, right}}
+  equal := &nodes.Equal{left, right}
   other := 3
   and := equal.And(other)
   if equal != and.Left {

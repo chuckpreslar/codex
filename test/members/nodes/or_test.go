@@ -7,7 +7,7 @@ import (
 
 func TestOr(t *testing.T) {
   left, right := 1, 2
-  or := &nodes.Or{&nodes.Binary{left, right}}
+  or := &nodes.Or{left, right}
   if left != or.Left {
     t.Errorf("Expect Left Or leaf to equal %v, got %v.", left, or.Left)
   } else if right != or.Right {

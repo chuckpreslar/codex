@@ -1,18 +1,16 @@
 package nodes
 
 // GreaterThan node struct
-type GreaterThan struct {
-  *Binary // Embedded Binary node.
-}
+type GreaterThan Binary
 
 // Returns an Or node with leafs containing references
 // to the original and other
 func (gt *GreaterThan) Or(other interface{}) *Or {
-  return &Or{&Binary{gt, other}}
+  return &Or{gt, other}
 }
 
 // Returns an And node with leafs containing references
 // to the original and other
 func (gt *GreaterThan) And(other interface{}) *And {
-  return &And{&Binary{gt, other}}
+  return &And{gt, other}
 }

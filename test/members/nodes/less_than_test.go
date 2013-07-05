@@ -7,7 +7,7 @@ import (
 
 func TestLessThan(t *testing.T) {
   left, right := 1, 2
-  lessThan := &nodes.LessThan{&nodes.Binary{left, right}}
+  lessThan := &nodes.LessThan{left, right}
   if left != lessThan.Left {
     t.Errorf("Expect Left LessThan leaf to equal %v, got %v.", left, lessThan.Left)
   } else if right != lessThan.Right {
@@ -17,7 +17,7 @@ func TestLessThan(t *testing.T) {
 
 func TestLessThanOr(t *testing.T) {
   left, right := 1, 2
-  lessThan := &nodes.LessThan{&nodes.Binary{left, right}}
+  lessThan := &nodes.LessThan{left, right}
   other := 3
   or := lessThan.Or(other)
   if lessThan != or.Left {
@@ -29,7 +29,7 @@ func TestLessThanOr(t *testing.T) {
 
 func TestLessThanAnd(t *testing.T) {
   left, right := 1, 2
-  lessThan := &nodes.LessThan{&nodes.Binary{left, right}}
+  lessThan := &nodes.LessThan{left, right}
   other := 3
   and := lessThan.And(other)
   if lessThan != and.Left {

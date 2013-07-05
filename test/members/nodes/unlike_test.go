@@ -7,7 +7,7 @@ import (
 
 func TestUnlike(t *testing.T) {
   left, right := 1, 2
-  unlike := &nodes.Unlike{&nodes.Binary{left, right}}
+  unlike := &nodes.Unlike{left, right}
   if left != unlike.Left {
     t.Errorf("Expect Left Unlike leaf to equal %v, got %v.", left, unlike.Left)
   } else if right != unlike.Right {
@@ -17,7 +17,7 @@ func TestUnlike(t *testing.T) {
 
 func TestUnlikeOr(t *testing.T) {
   left, right := 1, 2
-  unlike := &nodes.Unlike{&nodes.Binary{left, right}}
+  unlike := &nodes.Unlike{left, right}
   other := 3
   or := unlike.Or(other)
   if unlike != or.Left {
@@ -29,7 +29,7 @@ func TestUnlikeOr(t *testing.T) {
 
 func TestUnlikeAnd(t *testing.T) {
   left, right := 1, 2
-  unlike := &nodes.Unlike{&nodes.Binary{left, right}}
+  unlike := &nodes.Unlike{left, right}
   other := 3
   and := unlike.And(other)
   if unlike != and.Left {

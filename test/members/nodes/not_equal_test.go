@@ -7,7 +7,7 @@ import (
 
 func TestNotEqual(t *testing.T) {
   left, right := 1, 2
-  notEqual := &nodes.NotEqual{&nodes.Binary{left, right}}
+  notEqual := &nodes.NotEqual{left, right}
   if left != notEqual.Left {
     t.Errorf("Expect Left NotEqual leaf to equal %v, got %v.", left, notEqual.Left)
   } else if right != notEqual.Right {
@@ -17,7 +17,7 @@ func TestNotEqual(t *testing.T) {
 
 func TestNotEqualOr(t *testing.T) {
   left, right := 1, 2
-  notEqual := &nodes.NotEqual{&nodes.Binary{left, right}}
+  notEqual := &nodes.NotEqual{left, right}
   other := 3
   or := notEqual.Or(other)
   if notEqual != or.Left {
@@ -29,7 +29,7 @@ func TestNotEqualOr(t *testing.T) {
 
 func TestNotEqualAnd(t *testing.T) {
   left, right := 1, 2
-  notEqual := &nodes.NotEqual{&nodes.Binary{left, right}}
+  notEqual := &nodes.NotEqual{left, right}
   other := 3
   and := notEqual.And(other)
   if notEqual != and.Left {

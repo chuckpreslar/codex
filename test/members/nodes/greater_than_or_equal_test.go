@@ -7,7 +7,7 @@ import (
 
 func TestGreaterThanOrEqual(t *testing.T) {
   left, right := 1, 2
-  greaterThanOrEqual := &nodes.GreaterThanOrEqual{&nodes.Binary{left, right}}
+  greaterThanOrEqual := &nodes.GreaterThanOrEqual{left, right}
   if left != greaterThanOrEqual.Left {
     t.Errorf("Expect Left GreaterThanOrEqual leaf to equal %v, got %v.", left, greaterThanOrEqual.Left)
   } else if right != greaterThanOrEqual.Right {
@@ -17,7 +17,7 @@ func TestGreaterThanOrEqual(t *testing.T) {
 
 func TestGreaterThanOrEqualOr(t *testing.T) {
   left, right := 1, 2
-  greaterThanOrEqual := &nodes.GreaterThanOrEqual{&nodes.Binary{left, right}}
+  greaterThanOrEqual := &nodes.GreaterThanOrEqual{left, right}
   other := 3
   or := greaterThanOrEqual.Or(other)
   if greaterThanOrEqual != or.Left {
@@ -29,7 +29,7 @@ func TestGreaterThanOrEqualOr(t *testing.T) {
 
 func TestGreaterThanOrEqualAnd(t *testing.T) {
   left, right := 1, 2
-  greaterThanOrEqual := &nodes.GreaterThanOrEqual{&nodes.Binary{left, right}}
+  greaterThanOrEqual := &nodes.GreaterThanOrEqual{left, right}
   other := 3
   and := greaterThanOrEqual.And(other)
   if greaterThanOrEqual != and.Left {
