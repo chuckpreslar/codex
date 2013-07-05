@@ -2,7 +2,7 @@ package nodes
 
 // LessThan node struct
 type LessThan struct {
-  *Binary
+  *Binary // Embedded Binary node.
 }
 
 // Returns an Or node with leafs containing references

@@ -2,7 +2,7 @@ package nodes
 
 // GreaterThan node struct
 type GreaterThan struct {
-  *Binary
+  *Binary // Embedded Binary node.
 }
 
 // Returns an Or node with leafs containing references

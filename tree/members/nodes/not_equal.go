@@ -2,7 +2,7 @@ package nodes
 
 // NotEqual node struct
 type NotEqual struct {
-  *Binary
+  *Binary // Embedded Binary node.
 }
 
 // Returns an Or node with leafs containing references

@@ -2,7 +2,7 @@ package nodes
 
 // Or node struct
 type Or struct {
-  *Binary
+  *Binary // Embedded Binary node.
 }
 
 // Returns an Or node with leafs containing references

@@ -2,7 +2,7 @@ package nodes
 
 // Like node struct
 type Like struct {
-  *Binary
+  *Binary // Embedded Binary node.
 }
 
 // Returns an Or node with leafs containing references
