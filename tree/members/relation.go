@@ -1,4 +1,4 @@
-package tree
+package members
 
 type Relation struct {
   Name  string
