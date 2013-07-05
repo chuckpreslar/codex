@@ -20,9 +20,9 @@ func TestNotEqualOr(t *testing.T) {
   notEqual := &nodes.NotEqual{left, right}
   other := 3
   or := notEqual.Or(other)
-  if notEqual != or.Left {
+  if notEqual != or.Expr.(*nodes.Or).Left {
     t.Errorf("Expect Left Or leaf to equal %v, got %v.", notEqual, notEqual.Left)
-  } else if other != or.Right {
+  } else if other != or.Expr.(*nodes.Or).Right {
     t.Errorf("Expect Right Or leaf to equal %v, got %v.", other, notEqual.Right)
   }
 }
@@ -32,9 +32,9 @@ func TestNotEqualAnd(t *testing.T) {
   notEqual := &nodes.NotEqual{left, right}
   other := 3
   and := notEqual.And(other)
-  if notEqual != and.Left {
+  if notEqual != and.Expr.(*nodes.And).Left {
     t.Errorf("Expect Left And leaf to equal %v, got %v.", notEqual, notEqual.Left)
-  } else if other != and.Right {
+  } else if other != and.Expr.(*nodes.And).Right  {
     t.Errorf("Expect Right And leaf to equal %v, got %v.", other, notEqual.Right)
   }
 }

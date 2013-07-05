@@ -5,12 +5,12 @@ type Equal Binary
 
 // Returns an Or node with leafs containing references
 // to the original and other
-func (eq *Equal) Or(other interface{}) *Or {
-  return &Or{eq, other}
+func (eq *Equal) Or(other interface{}) *Grouping {
+  return &Grouping{&Or{eq, other}}
 }
 
 // Returns an And node with leafs containing references
 // to the original and other
-func (eq *Equal) And(other interface{}) *And {
-  return &And{eq, other}
+func (eq *Equal) And(other interface{}) *Grouping {
+  return &Grouping{&And{eq, other}}
 }

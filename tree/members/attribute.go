@@ -60,12 +60,12 @@ func (attr *Attribute) Unlike(other interface{}) *nodes.Unlike {
 
 // Returns and Or node containing a reference to the
 // attribute and other
-func (attr *Attribute) Or(other interface{}) *nodes.Or {
-  return &nodes.Or{attr, other}
+func (attr *Attribute) Or(other interface{}) *nodes.Grouping {
+  return &nodes.Grouping{&nodes.Or{attr, other}}
 }
 
 // Returns and And node containing a reference to the
 // attribute and other
-func (attr *Attribute) And(other interface{}) *nodes.And {
-  return &nodes.And{attr, other}
+func (attr *Attribute) And(other interface{}) *nodes.Grouping {
+  return &nodes.Grouping{&nodes.And{attr, other}}
 }

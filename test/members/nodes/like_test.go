@@ -20,10 +20,10 @@ func TestLikeOr(t *testing.T) {
   like := &nodes.Like{left, right}
   other := 3
   or := like.Or(other)
-  if like != or.Left {
-    t.Errorf("Expect Left Or leaf to equal %v, got %v.", like, or.Left)
-  } else if other != or.Right {
-    t.Errorf("Expect Right Or leaf to equal %v, got %v.", other, or.Right)
+  if like != or.Expr.(*nodes.Or).Left {
+    t.Errorf("Expect Left Or leaf to equal %v, got %v.", like, or.Expr.(*nodes.Or).Left)
+  } else if other != or.Expr.(*nodes.Or).Right {
+    t.Errorf("Expect Right Or leaf to equal %v, got %v.", other, or.Expr.(*nodes.Or).Right)
   }
 }
 
@@ -32,9 +32,9 @@ func TestLikeAnd(t *testing.T) {
   like := &nodes.Like{left, right}
   other := 3
   and := like.And(other)
-  if like != and.Left {
-    t.Errorf("Expect Left And leaf to equal %v, got %v.", like, and.Left)
-  } else if other != and.Right {
-    t.Errorf("Expect Right And leaf to equal %v, got %v.", other, and.Right)
+  if like != and.Expr.(*nodes.And).Left {
+    t.Errorf("Expect Left And leaf to equal %v, got %v.", like, and.Expr.(*nodes.And).Left)
+  } else if other != and.Expr.(*nodes.And).Right  {
+    t.Errorf("Expect Right And leaf to equal %v, got %v.", other, and.Expr.(*nodes.And).Right )
   }
 }

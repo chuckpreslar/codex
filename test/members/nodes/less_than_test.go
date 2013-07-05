@@ -20,10 +20,10 @@ func TestLessThanOr(t *testing.T) {
   lessThan := &nodes.LessThan{left, right}
   other := 3
   or := lessThan.Or(other)
-  if lessThan != or.Left {
-    t.Errorf("Expect Left Or leaf to equal %v, got %v.", lessThan, or.Left)
-  } else if other != or.Right {
-    t.Errorf("Expect Right Or leaf to equal %v, got %v.", other, or.Right)
+  if lessThan != or.Expr.(*nodes.Or).Left {
+    t.Errorf("Expect Left Or leaf to equal %v, got %v.", lessThan, or.Expr.(*nodes.Or).Left)
+  } else if other != or.Expr.(*nodes.Or).Right {
+    t.Errorf("Expect Right Or leaf to equal %v, got %v.", other, or.Expr.(*nodes.Or).Right)
   }
 }
 
@@ -32,9 +32,9 @@ func TestLessThanAnd(t *testing.T) {
   lessThan := &nodes.LessThan{left, right}
   other := 3
   and := lessThan.And(other)
-  if lessThan != and.Left {
-    t.Errorf("Expect Left And leaf to equal %v, got %v.", lessThan, and.Left)
-  } else if other != and.Right {
-    t.Errorf("Expect Right And leaf to equal %v, got %v.", other, and.Right)
+  if lessThan != and.Expr.(*nodes.And).Left {
+    t.Errorf("Expect Left And leaf to equal %v, got %v.", lessThan, and.Expr.(*nodes.And).Left)
+  } else if other != and.Expr.(*nodes.And).Right  {
+    t.Errorf("Expect Right And leaf to equal %v, got %v.", other, and.Expr.(*nodes.And).Right )
   }
 }

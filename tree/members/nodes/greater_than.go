@@ -5,12 +5,12 @@ type GreaterThan Binary
 
 // Returns an Or node with leafs containing references
 // to the original and other
-func (gt *GreaterThan) Or(other interface{}) *Or {
-  return &Or{gt, other}
+func (gt *GreaterThan) Or(other interface{}) *Grouping {
+  return &Grouping{&Or{gt, other}}
 }
 
 // Returns an And node with leafs containing references
 // to the original and other
-func (gt *GreaterThan) And(other interface{}) *And {
-  return &And{gt, other}
+func (gt *GreaterThan) And(other interface{}) *Grouping {
+  return &Grouping{&And{gt, other}}
 }

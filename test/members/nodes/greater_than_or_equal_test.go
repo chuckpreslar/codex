@@ -20,10 +20,10 @@ func TestGreaterThanOrEqualOr(t *testing.T) {
   greaterThanOrEqual := &nodes.GreaterThanOrEqual{left, right}
   other := 3
   or := greaterThanOrEqual.Or(other)
-  if greaterThanOrEqual != or.Left {
-    t.Errorf("Expect Left Or leaf to equal %v, got %v.", greaterThanOrEqual, or.Left)
-  } else if other != or.Right {
-    t.Errorf("Expect Right Or leaf to equal %v, got %v.", other, or.Right)
+  if greaterThanOrEqual != or.Expr.(*nodes.Or).Left {
+    t.Errorf("Expect Left Or leaf to equal %v, got %v.", greaterThanOrEqual, or.Expr.(*nodes.Or).Left)
+  } else if other != or.Expr.(*nodes.Or).Right {
+    t.Errorf("Expect Right Or leaf to equal %v, got %v.", other, or.Expr.(*nodes.Or).Right)
   }
 }
 
@@ -32,9 +32,9 @@ func TestGreaterThanOrEqualAnd(t *testing.T) {
   greaterThanOrEqual := &nodes.GreaterThanOrEqual{left, right}
   other := 3
   and := greaterThanOrEqual.And(other)
-  if greaterThanOrEqual != and.Left {
-    t.Errorf("Expect Left And leaf to equal %v, got %v.", greaterThanOrEqual, and.Left)
-  } else if other != and.Right {
-    t.Errorf("Expect Right And leaf to equal %v, got %v.", other, and.Right)
+  if greaterThanOrEqual != and.Expr.(*nodes.And).Left {
+    t.Errorf("Expect Left And leaf to equal %v, got %v.", greaterThanOrEqual, and.Expr.(*nodes.And).Left)
+  } else if other != and.Expr.(*nodes.And).Right  {
+    t.Errorf("Expect Right And leaf to equal %v, got %v.", other, and.Expr.(*nodes.And).Right )
   }
 }

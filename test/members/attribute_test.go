@@ -2,6 +2,7 @@ package members
 
 import (
   "librarian/tree/members"
+  "librarian/tree/members/nodes"
   "testing"
 )
 
@@ -126,10 +127,10 @@ func TestAttributeOr(t *testing.T) {
   attr := &members.Attribute{name, relation}
   other := 1
   or := attr.Or(other)
-  if attr != or.Left {
-    t.Errorf("Expect Left Or leaf to equal %v, got %v.", attr, or.Left)
-  } else if other != or.Right {
-    t.Errorf("Expect Right Or leaf to equal %v, got %v.", other, or.Right)
+  if attr != or.Expr.(*nodes.Or).Left {
+    t.Errorf("Expect Left Or leaf to equal %v, got %v.", attr, or.Expr.(*nodes.Or).Left)
+  } else if other != or.Expr.(*nodes.Or).Right {
+    t.Errorf("Expect Right Or leaf to equal %v, got %v.", other, or.Expr.(*nodes.Or).Right)
   }
 }
 
@@ -139,9 +140,9 @@ func TestAttributeAnd(t *testing.T) {
   attr := &members.Attribute{name, relation}
   other := 1
   and := attr.And(other)
-  if attr != and.Left {
-    t.Errorf("Expect Left Or leaf to equal %v, got %v.", attr, and.Left)
-  } else if other != and.Right {
-    t.Errorf("Expect Right Or leaf to equal %v, got %v.", other, and.Right)
+  if attr != and.Expr.(*nodes.And).Left {
+    t.Errorf("Expect Left Or leaf to equal %v, got %v.", attr, and.Expr.(*nodes.And).Left)
+  } else if other != and.Expr.(*nodes.And).Right {
+    t.Errorf("Expect Right Or leaf to equal %v, got %v.", other, and.Expr.(*nodes.And).Right)
   }
 }
