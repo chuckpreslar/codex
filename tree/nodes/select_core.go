@@ -1,7 +1,7 @@
 package nodes
 
 type SelectCore struct {
-  Relation *Relation
+  Souce       *JoinSource
   Projections []interface{}
-  Wheres []interface{}
+  Wheres      []interface{}
 }
