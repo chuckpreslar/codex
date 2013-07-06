@@ -212,9 +212,9 @@ func TestVisitSelectCore(t *testing.T) {
   attribute := &nodes.Attribute{"id", relation}
   inner := &nodes.InnerJoin{relation, &nodes.On{&nodes.Equal{1, 1}}}
   source := &nodes.JoinSource{relation, []interface{}{inner}}
-  filter := &nodes.Equal{1, 1}
+  filter := &nodes.Grouping{&nodes.And{&nodes.Equal{1, 1}, &nodes.NotEqual{1, 2}}}
   core := &nodes.SelectCore{relation, source, []interface{}{attribute}, []interface{}{filter}}
-  expected := fmt.Sprintf(`SELECT "testing"."id" FROM "testing" INNER JOIN "testing" ON 1 = 1 WHERE 1 = 1`)
+  expected := fmt.Sprintf(`SELECT "testing"."id" FROM "testing" INNER JOIN "testing" ON 1 = 1 WHERE (1 = 1 AND 1 != 2)`)
   if got := visitor.Accept(core); expected != got {
     t.Errorf("VisitSelectCore was expected to return %s, got %s", expected, got)
   }
