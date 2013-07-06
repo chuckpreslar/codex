@@ -34,6 +34,18 @@ func (accessor Accessor) Where(expr interface{}) *SelectManager {
   return accessor.From(accessor.Relation()).Where(expr)
 }
 
+func (accessor Accessor) InnerJoin(expr interface{}) *SelectManager {
+  return accessor.From(accessor.Relation()).InnerJoin(expr)
+}
+
+func (accessor Accessor) OuterJoin(expr interface{}) *SelectManager {
+  return accessor.From(accessor.Relation()).OuterJoin(expr)
+}
+
+func (accessor Accessor) ToSql() string {
+  return accessor.From(accessor.Relation()).ToSql()
+}
+
 func Table(name string) Accessor {
   relation := &nodes.Relation{name, ""}
   return func(name string) *nodes.Attribute {
