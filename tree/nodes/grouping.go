@@ -9,3 +9,7 @@ func (grouping *Grouping) Or(other interface{}) *Grouping {
 func (grouping *Grouping) And(other interface{}) *Grouping {
   return &Grouping{&And{grouping, other}}
 }
+
+func (grouping *Grouping) Not() *Not {
+  return &Not{grouping}
+}
