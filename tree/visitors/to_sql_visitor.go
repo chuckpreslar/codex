@@ -31,6 +31,12 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
     return visitor.VisitLike(o.(*nodes.Like))
   case *nodes.Unlike:
     return visitor.VisitUnlike(o.(*nodes.Unlike))
+  case *nodes.Or:
+    return visitor.VisitOr(o.(*nodes.Or))
+  case *nodes.And:
+    return visitor.VisitAnd(o.(*nodes.And))
+  case *nodes.Grouping:
+    return visitor.VisitGrouping(o.(*nodes.Grouping))
   // Standard type visitors.
   case string:
     return visitor.VisitString(o)
@@ -45,7 +51,7 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
   }
 }
 
-// Being comparison visitors.
+// Being comparison node visitors.
 
 func (visitor *ToSqlVisitor) VisitEqual(o *nodes.Equal) string {
   if nil == o.Right {
@@ -87,7 +93,23 @@ func (visitor *ToSqlVisitor) VisitUnlike(o *nodes.Unlike) string {
   return fmt.Sprintf("%v NOT LIKE %v", visitor.Visit(o.Left), visitor.Visit(o.Right))
 }
 
-// End comparison visitors.
+func (visitor *ToSqlVisitor) VisitOr(o *nodes.Or) string {
+  return fmt.Sprintf("%v OR %v", visitor.Visit(o.Left), visitor.Visit(o.Right))
+}
+
+func (visitor *ToSqlVisitor) VisitAnd(o *nodes.And) string {
+  return fmt.Sprintf("%v AND %v", visitor.Visit(o.Left), visitor.Visit(o.Right))
+}
+
+// End comparison node visitors.
+
+// Begin SQL node visitors.
+
+func (visitor *ToSqlVisitor) VisitGrouping(o *nodes.Grouping) string {
+  return fmt.Sprintf("(%v)", visitor.Visit(o.Expr))
+}
+
+// End SQL node visitors.
 
 // Begin standard type visitors.
 

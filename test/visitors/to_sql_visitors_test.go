@@ -99,6 +99,36 @@ func TestVisitUnlike(t *testing.T) {
   }
 }
 
+func TestVisitOr(t *testing.T) {
+  visitor := &visitors.ToSqlVisitor{}
+  left, right := 1, 1
+  equal := &nodes.Or{left, right}
+  expected := fmt.Sprintf("%v OR %v", left, right)
+  if got := visitor.Accept(equal); expected != got {
+    t.Errorf("VisitOr was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestVisitAnd(t *testing.T) {
+  visitor := &visitors.ToSqlVisitor{}
+  left, right := 1, 1
+  equal := &nodes.And{left, right}
+  expected := fmt.Sprintf("%v AND %v", left, right)
+  if got := visitor.Accept(equal); expected != got {
+    t.Errorf("VisitAnd was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestVisitGrouping(t *testing.T) {
+  visitor := &visitors.ToSqlVisitor{}
+  expr := 1
+  equal := &nodes.Grouping{expr}
+  expected := fmt.Sprintf("(%v)", expr)
+  if got := visitor.Accept(equal); expected != got {
+    t.Errorf("VisitGrouping was expected to return %s, got %s", expected, got)
+  }
+}
+
 func TestVisitString(t *testing.T) {
   visitor := &visitors.ToSqlVisitor{}
   value, expected := `test`, `'test'`
