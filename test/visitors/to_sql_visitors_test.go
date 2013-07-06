@@ -119,6 +119,32 @@ func TestVisitAnd(t *testing.T) {
   }
 }
 
+func TestVisitRelation(t *testing.T) {
+  visitor := &visitors.ToSqlVisitor{}
+  name, alias := "users", "site_members"
+  equal := &nodes.Relation{name, ""}
+  expected := fmt.Sprintf(`"%v"`, name)
+  if got := visitor.Accept(equal); expected != got {
+    t.Errorf("VisitRelation was expected to return %s, got %s", expected, got)
+  }
+  equal.Alias = alias
+  expected = fmt.Sprintf(`"%v"`, alias)
+  if got := visitor.Accept(equal); expected != got {
+    t.Errorf("VisitRelation was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestVisitAttribute(t *testing.T) {
+  visitor := &visitors.ToSqlVisitor{}
+  relationName, columnName := "testing", "id"
+  relation := &nodes.Relation{relationName, ""}
+  equal := &nodes.Attribute{columnName, relation}
+  expected := fmt.Sprintf(`"%v"."%v"`, relationName, columnName)
+  if got := visitor.Accept(equal); expected != got {
+    t.Errorf("VisitAttribute was expected to return %s, got %s", expected, got)
+  }
+}
+
 func TestVisitGrouping(t *testing.T) {
   visitor := &visitors.ToSqlVisitor{}
   expr := 1

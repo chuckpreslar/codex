@@ -9,6 +9,13 @@ import (
 const (
   SPACE = ` `
   COMMA = `, `
+  STAR  = `*`
+
+  // Keywords
+  SELECT = ` SELECT `
+  FROM   = ` FROM `
+  WHERE  = ` WHERE `
+  AND    = ` AND `
 )
 
 type ToSqlVisitor struct{}
@@ -41,6 +48,10 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
   case *nodes.And:
     return visitor.VisitAnd(o.(*nodes.And))
   // Begin SQL node visitors.
+  case *nodes.Relation:
+    return visitor.VisitRelation(o.(*nodes.Relation))
+  case *nodes.Attribute:
+    return visitor.VisitAttribute(o.(*nodes.Attribute))
   case *nodes.Grouping:
     return visitor.VisitGrouping(o.(*nodes.Grouping))
   case *nodes.Not:
@@ -119,6 +130,18 @@ func (visitor *ToSqlVisitor) VisitAnd(o *nodes.And) string {
 
 // Begin SQL node visitors.
 
+func (visitor *ToSqlVisitor) VisitRelation(o *nodes.Relation) string {
+  if 0 < len(o.Alias) {
+    return visitor.QuoteTableName(o.Alias)
+  }
+
+  return visitor.QuoteTableName(o.Name)
+}
+
+func (visitor *ToSqlVisitor) VisitAttribute(o *nodes.Attribute) string {
+  return fmt.Sprintf("%v.%v", visitor.Visit(o.Relation), visitor.QuoteColumnName(o.Name))
+}
+
 func (visitor *ToSqlVisitor) VisitGrouping(o *nodes.Grouping) string {
   return fmt.Sprintf("(%v)", visitor.Visit(o.Expr))
 }
@@ -143,6 +166,36 @@ func (visitor *ToSqlVisitor) VisitOn(o *nodes.On) string {
   return fmt.Sprintf("ON %v", visitor.Visit(o.Expr))
 }
 
+func (visitor *ToSqlVisitor) VisitSelectCore(o *nodes.SelectCore) string {
+  str := fmt.Sprintf("%v", SELECT)
+
+  if length := len(o.Projections) - 1; 0 <= length {
+    for index, projection := range o.Projections {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(projection))
+
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+  } else {
+    str = fmt.Sprintf("%v%v.%v", str, visitor.Visit(o.Relation), STAR)
+  }
+
+  str = fmt.Sprintf("%v%v%v", str, FROM, visitor.Visit(o.Source))
+
+  if length := len(o.Wheres) - 1; 0 <= length {
+    str = fmt.Sprintf("%v%v", str, WHERE)
+    for index, where := range o.Wheres {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(where))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, AND)
+      }
+    }
+  }
+
+  return strings.Trim(str, " ")
+}
+
 // End SQL node visitors.
 
 // Begin standard type visitors.
@@ -164,3 +217,15 @@ func (visitor *ToSqlVisitor) VisitBool(o interface{}) string {
 }
 
 // End standard Type visitors.
+
+// Begin helper visitors.
+
+func (visitor *ToSqlVisitor) QuoteTableName(o interface{}) string {
+  return fmt.Sprintf(`"%v"`, o)
+}
+
+func (visitor *ToSqlVisitor) QuoteColumnName(o interface{}) string {
+  return fmt.Sprintf(`"%v"`, o)
+}
+
+// End helper visitors.
