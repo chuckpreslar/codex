@@ -35,8 +35,11 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
     return visitor.VisitOr(o.(*nodes.Or))
   case *nodes.And:
     return visitor.VisitAnd(o.(*nodes.And))
+  // Begin SQL node visitors.
   case *nodes.Grouping:
     return visitor.VisitGrouping(o.(*nodes.Grouping))
+  case *nodes.Not:
+    return visitor.VisitNot(o.(*nodes.Not))
   // Standard type visitors.
   case string:
     return visitor.VisitString(o)
@@ -47,7 +50,7 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
   case bool:
     return visitor.VisitBool(o)
   default:
-    panic(fmt.Sprintf("No visitor method for <%T>.", o, o))
+    panic(fmt.Sprintf("No visitor method for <%T>.", o))
   }
 }
 
@@ -107,6 +110,10 @@ func (visitor *ToSqlVisitor) VisitAnd(o *nodes.And) string {
 
 func (visitor *ToSqlVisitor) VisitGrouping(o *nodes.Grouping) string {
   return fmt.Sprintf("(%v)", visitor.Visit(o.Expr))
+}
+
+func (visitor *ToSqlVisitor) VisitNot(o *nodes.Not) string {
+  return fmt.Sprintf("NOT (%v)", visitor.Visit(o.Expr))
 }
 
 // End SQL node visitors.

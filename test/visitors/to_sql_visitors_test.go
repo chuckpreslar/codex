@@ -129,6 +129,16 @@ func TestVisitGrouping(t *testing.T) {
   }
 }
 
+func TestVisitNot(t *testing.T) {
+  visitor := &visitors.ToSqlVisitor{}
+  expr := 1
+  equal := &nodes.Not{expr}
+  expected := fmt.Sprintf("NOT (%v)", expr)
+  if got := visitor.Accept(equal); expected != got {
+    t.Errorf("VisitNot was expected to return %s, got %s", expected, got)
+  }
+}
+
 func TestVisitString(t *testing.T) {
   visitor := &visitors.ToSqlVisitor{}
   value, expected := `test`, `'test'`
