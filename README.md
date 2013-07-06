@@ -27,7 +27,7 @@ import (
 )
 
 
-users := l.NewTable("users")
+users := l.Table("users")
 sql := users.ToSql()
 
 ```
@@ -42,7 +42,7 @@ You can, of course, speed up your queries by only selecting the columns you need
 
 // ...
 
-users := l.NewTable("users")
+users := l.Table("users")
 sql := users.Project("id", "email", "first_name", "last_name").ToSql()
 
 ```
@@ -55,7 +55,7 @@ An example of how to search for records that meet a specified criteria:
 
 // ...
 
-users := l.NewTable("users")
+users := l.TTable("users")
 sql := users.Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).ToSql()
 
 ```
@@ -66,24 +66,11 @@ sql := users.Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).
 
 // ...
 
-users := l.NewTable("users")
-orders := l.NewTable("orders")
-sql := users.InnerJoin(orders.On(orders("id").Eq(users("order_id")))).ToSql()
+users := l.Table("users")
+orders := l.Table("orders")
+sql := users.InnerJoin(orders).On(users("order_id").Eq(orders("id"))).ToSql()
 
 // SELECT "users".* FROM "users" INNER JOIN "orders" ON "orders"."id" = "users"."order_id"
-
-```
-
-#### Updates
-
-```go
-
-// ...
-
-users := l.NewTable("users")
-sql := users.Set(users("admin").Eq(true)).Where(users("id").Eq(1)).ToSql()
-
-// UPDATE "users" SET "users"."admin" = 'true' WHERE "users"."id" = 1
 
 ```
 
