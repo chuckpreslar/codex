@@ -1,33 +1,33 @@
-![librarian](http://i.imgur.com/lvQmuIY.png)
+# codex
 
 ## About
 
-Librarian is **NOT** intended to be an ORM, but a relation algebra inspired by [Arel](http://www.github.com/rails/arel). Project is still under heavy development.
+Codex is **NOT** intended to be an ORM, but a relation algebra inspired by [Arel](http://www.github.com/rails/arel). Project is still under heavy development.
 
 ## Installation
 
 With Google's [Go](http://www.golang.org) installed on your machine:
 
-    $ go get -u github.com/chuckpreslar/librarian
+    $ go get -u github.com/chuckpreslar/codex
 
 ## Usage
 
-To show a little sample of what using Libraian looks like, lets assume you have a table in your database (we'll call it `users`) and you want to select all the records it contains.  The SQL looks a little like this:
+To show a little sample of what using Codex looks like, lets assume you have a table in your database (we'll call it `users`) and you want to select all the records it contains.  The SQL looks a little like this:
 
 ```sql
 SELECT "users".* FROM "users"
 ```
 
-Now using Librarian:
+Now using Codex:
 
 ```go
 import (
   /* Maybe some other imports. */
-  l "github.com/chuckpreslar/librarian"
+  "github.com/chuckpreslar/codex"
 )
 
 
-users := l.Table("users")
+users := codex.Table("users")
 sql := users.ToSql()
 
 ```
@@ -42,7 +42,7 @@ You can, of course, speed up your queries by only selecting the columns you need
 
 // ...
 
-users := l.Table("users")
+users := codex.Table("users")
 sql := users.Project("id", "email", "first_name", "last_name").ToSql()
 
 ```
@@ -55,7 +55,7 @@ An example of how to search for records that meet a specified criteria:
 
 // ...
 
-users := l.Table("users")
+users := codex.Table("users")
 sql := users.Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).ToSql()
 
 ```
@@ -66,8 +66,8 @@ sql := users.Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).
 
 // ...
 
-users := l.Table("users")
-orders := l.Table("orders")
+users := codex.Table("users")
+orders := codex.Table("orders")
 sql := users.InnerJoin(orders).On(users("order_id").Eq(orders("id"))).ToSql()
 
 // SELECT "users".* FROM "users" INNER JOIN "orders" ON "orders"."id" = "users"."order_id"

@@ -1,7 +1,7 @@
 package nodes
 
 import (
-  "librarian/tree/nodes"
+  "codex/tree/nodes"
   "testing"
 )
 

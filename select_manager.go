@@ -1,8 +1,8 @@
-package librarian
+package codex
 
 import (
-  "librarian/tree/nodes"
-  "librarian/tree/visitors"
+  "codex/tree/nodes"
+  "codex/tree/visitors"
 )
 
 type SelectManager struct {

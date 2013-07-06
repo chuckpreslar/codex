@@ -1,7 +1,7 @@
-package librarian
+package codex
 
 import (
-  "librarian/tree/nodes"
+  "codex/tree/nodes"
 )
 
 type Accessor func(string) *nodes.Attribute

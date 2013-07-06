@@ -2,8 +2,8 @@ package visitors
 
 import (
   "fmt"
-  "librarian/tree/nodes"
-  "librarian/tree/visitors"
+  "codex/tree/nodes"
+  "codex/tree/visitors"
   "testing"
 )
 
