@@ -1,7 +1,6 @@
-package tree
+package librarian
 
 import (
-  "librarian/tree/managers"
   "librarian/tree/nodes"
 )
 
@@ -15,24 +14,23 @@ func (accessor Accessor) Name() string {
   return accessor("").Relation.Name
 }
 
-func (accessor Accessor) From(table *nodes.Relation) *managers.SelectManager {
+func (accessor Accessor) From(table *nodes.Relation) *SelectManager {
   statement := &nodes.SelectStatement{
-    make([]*nodes.SelectCore, 0),
-    &nodes.Limit{}, &nodes.Offset{},
+    Cores: make([]*nodes.SelectCore, 0),
   }
   core := &nodes.SelectCore{table,
     &nodes.JoinSource{table, []interface{}{}},
     []interface{}{}, []interface{}{},
   }
   statement.Cores = append(statement.Cores, core)
-  return &managers.SelectManager{statement, core}
+  return &SelectManager{statement, core}
 }
 
-func (accessor Accessor) Project(projections ...interface{}) *managers.SelectManager {
+func (accessor Accessor) Project(projections ...interface{}) *SelectManager {
   return accessor.From(accessor.Relation()).Project(projections...)
 }
 
-func (accessor Accessor) Where(expr interface{}) *managers.SelectManager {
+func (accessor Accessor) Where(expr interface{}) *SelectManager {
   return accessor.From(accessor.Relation()).Where(expr)
 }
 

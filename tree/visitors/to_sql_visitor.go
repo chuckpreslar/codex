@@ -165,7 +165,7 @@ func (visitor *ToSqlVisitor) VisitNot(o *nodes.Not) string {
 }
 
 func (visitor *ToSqlVisitor) VisitLiteral(o *nodes.Literal) string {
-  return fmt.Sprintf("%v", visitor.Visit(o.Expr))
+  return fmt.Sprintf("%v", o.Expr)
 }
 
 func (visitor *ToSqlVisitor) VisitInnerJoin(o *nodes.InnerJoin) string {
