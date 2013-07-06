@@ -58,6 +58,8 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
     return visitor.VisitGrouping(o.(*nodes.Grouping))
   case *nodes.Not:
     return visitor.VisitNot(o.(*nodes.Not))
+  case *nodes.Literal:
+    return visitor.VisitLiteral(o.(*nodes.Literal))
   case *nodes.InnerJoin:
     return visitor.VisitInnerJoin(o.(*nodes.InnerJoin))
   case *nodes.OuterJoin:
@@ -160,6 +162,10 @@ func (visitor *ToSqlVisitor) VisitGrouping(o *nodes.Grouping) string {
 
 func (visitor *ToSqlVisitor) VisitNot(o *nodes.Not) string {
   return fmt.Sprintf("NOT (%v)", visitor.Visit(o.Expr))
+}
+
+func (visitor *ToSqlVisitor) VisitLiteral(o *nodes.Literal) string {
+  return fmt.Sprintf("%v", visitor.Visit(o.Expr))
 }
 
 func (visitor *ToSqlVisitor) VisitInnerJoin(o *nodes.InnerJoin) string {

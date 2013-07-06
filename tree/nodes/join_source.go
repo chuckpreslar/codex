@@ -1,6 +1,6 @@
 package nodes
 
 type JoinSource struct {
-  Left interface{}
+  Left  interface{}
   Right []interface{}
 }
