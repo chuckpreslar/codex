@@ -195,6 +195,26 @@ func TestVisitOn(t *testing.T) {
   }
 }
 
+func TestVisitLimit(t *testing.T) {
+  visitor := &visitors.ToSqlVisitor{}
+  expr := 1
+  equal := &nodes.Limit{expr}
+  expected := fmt.Sprintf(" LIMIT %v", expr)
+  if got := visitor.Accept(equal); expected != got {
+    t.Errorf("VisitOn was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestVisitOffset(t *testing.T) {
+  visitor := &visitors.ToSqlVisitor{}
+  expr := 1
+  equal := &nodes.Offset{expr}
+  expected := fmt.Sprintf(" OFFSET %v", expr)
+  if got := visitor.Accept(equal); expected != got {
+    t.Errorf("VisitOn was expected to return %s, got %s", expected, got)
+  }
+}
+
 func TestVisitJoinSource(t *testing.T) {
   visitor := &visitors.ToSqlVisitor{}
   relation := &nodes.Relation{"testing", ""}
@@ -216,6 +236,21 @@ func TestVisitSelectCore(t *testing.T) {
   core := &nodes.SelectCore{relation, source, []interface{}{attribute}, []interface{}{filter}}
   expected := fmt.Sprintf(`SELECT "testing"."id" FROM "testing" INNER JOIN "testing" ON 1 = 1 WHERE (1 = 1 AND 1 != 2)`)
   if got := visitor.Accept(core); expected != got {
+    t.Errorf("VisitSelectCore was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestVisitSelectStatement(t *testing.T) {
+  visitor := &visitors.ToSqlVisitor{}
+  relation := &nodes.Relation{"testing", ""}
+  attribute := &nodes.Attribute{"id", relation}
+  inner := &nodes.InnerJoin{relation, &nodes.On{&nodes.Equal{1, 1}}}
+  source := &nodes.JoinSource{relation, []interface{}{inner}}
+  filter := &nodes.Grouping{&nodes.And{&nodes.Equal{1, 1}, &nodes.NotEqual{1, 2}}}
+  core := &nodes.SelectCore{relation, source, []interface{}{attribute}, []interface{}{filter}}
+  statement := &nodes.SelectStatement{[]*nodes.SelectCore{core}, &nodes.Limit{1}, &nodes.Offset{1}}
+  expected := fmt.Sprintf(`SELECT "testing"."id" FROM "testing" INNER JOIN "testing" ON 1 = 1 WHERE (1 = 1 AND 1 != 2) LIMIT 1 OFFSET 1`)
+  if got := visitor.Accept(statement); expected != got {
     t.Errorf("VisitSelectCore was expected to return %s, got %s", expected, got)
   }
 }

@@ -15,6 +15,8 @@ const (
   SELECT = ` SELECT `
   FROM   = ` FROM `
   WHERE  = ` WHERE `
+  LIMIT  = ` LIMIT `
+  OFFSET = ` OFFSET `
   AND    = ` AND `
 )
 
@@ -62,10 +64,16 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
     return visitor.VisitOuterJoin(o.(*nodes.OuterJoin))
   case *nodes.On:
     return visitor.VisitOn(o.(*nodes.On))
+  case *nodes.Limit:
+    return visitor.VisitLimit(o.(*nodes.Limit))
+  case *nodes.Offset:
+    return visitor.VisitOffset(o.(*nodes.Offset))
   case *nodes.JoinSource:
     return visitor.VisitJoinSource(o.(*nodes.JoinSource))
   case *nodes.SelectCore:
     return visitor.VisitSelectCore(o.(*nodes.SelectCore))
+  case *nodes.SelectStatement:
+    return visitor.VisitSelectStatement(o.(*nodes.SelectStatement))
   // Standard type visitors.
   case string:
     return visitor.VisitString(o)
@@ -170,6 +178,14 @@ func (visitor *ToSqlVisitor) VisitOn(o *nodes.On) string {
   return fmt.Sprintf("ON %v", visitor.Visit(o.Expr))
 }
 
+func (visitor *ToSqlVisitor) VisitLimit(o *nodes.Limit) string {
+  return fmt.Sprintf("%v%v", LIMIT, visitor.Visit(o.Expr))
+}
+
+func (visitor *ToSqlVisitor) VisitOffset(o *nodes.Offset) string {
+  return fmt.Sprintf("%v%v", OFFSET, visitor.Visit(o.Expr))
+}
+
 func (visitor *ToSqlVisitor) VisitJoinSource(o *nodes.JoinSource) string {
   str := fmt.Sprintf("%v", visitor.Visit(o.Left))
   if length := len(o.Right) - 1; 0 <= length {
@@ -212,6 +228,24 @@ func (visitor *ToSqlVisitor) VisitSelectCore(o *nodes.SelectCore) string {
   }
 
   return strings.Trim(str, " ")
+}
+
+func (visitor *ToSqlVisitor) VisitSelectStatement(o *nodes.SelectStatement) string {
+  str := ""
+
+  for _, core := range o.Cores {
+    str = fmt.Sprintf("%v%v", str, visitor.Visit(core))
+  }
+
+  if nil != o.Limit {
+    str = fmt.Sprintf("%v%v", str, visitor.Visit(o.Limit))
+  }
+
+  if nil != o.Offset {
+    str = fmt.Sprintf("%v%v", str, visitor.Visit(o.Offset))
+  }
+
+  return str
 }
 
 // End SQL node visitors.
