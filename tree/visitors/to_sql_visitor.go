@@ -62,6 +62,10 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
     return visitor.VisitOuterJoin(o.(*nodes.OuterJoin))
   case *nodes.On:
     return visitor.VisitOn(o.(*nodes.On))
+  case *nodes.JoinSource:
+    return visitor.VisitJoinSource(o.(*nodes.JoinSource))
+  case *nodes.SelectCore:
+    return visitor.VisitSelectCore(o.(*nodes.SelectCore))
   // Standard type visitors.
   case string:
     return visitor.VisitString(o)
@@ -164,6 +168,20 @@ func (visitor *ToSqlVisitor) VisitOuterJoin(o *nodes.OuterJoin) string {
 
 func (visitor *ToSqlVisitor) VisitOn(o *nodes.On) string {
   return fmt.Sprintf("ON %v", visitor.Visit(o.Expr))
+}
+
+func (visitor *ToSqlVisitor) VisitJoinSource(o *nodes.JoinSource) string {
+  str := fmt.Sprintf("%v", visitor.Visit(o.Left))
+  if length := len(o.Right) - 1; 0 <= length {
+    str = fmt.Sprintf("%v%v", str, SPACE)
+    for index, join := range o.Right {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(join))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, SPACE)
+      }
+    }
+  }
+  return strings.Trim(str, " ")
 }
 
 func (visitor *ToSqlVisitor) VisitSelectCore(o *nodes.SelectCore) string {

@@ -195,6 +195,31 @@ func TestVisitOn(t *testing.T) {
   }
 }
 
+func TestVisitJoinSource(t *testing.T) {
+  visitor := &visitors.ToSqlVisitor{}
+  relation := &nodes.Relation{"testing", ""}
+  inner := &nodes.InnerJoin{relation, &nodes.On{&nodes.Equal{1, 1}}}
+  source := &nodes.JoinSource{relation, []interface{}{inner}}
+  expected := `"testing" INNER JOIN "testing" ON 1 = 1`
+  if got := visitor.Accept(source); expected != got {
+    t.Errorf("VisitJoinSource was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestVisitSelectCore(t *testing.T) {
+  visitor := &visitors.ToSqlVisitor{}
+  relation := &nodes.Relation{"testing", ""}
+  attribute := &nodes.Attribute{"id", relation}
+  inner := &nodes.InnerJoin{relation, &nodes.On{&nodes.Equal{1, 1}}}
+  source := &nodes.JoinSource{relation, []interface{}{inner}}
+  filter := &nodes.Equal{1, 1}
+  core := &nodes.SelectCore{relation, source, []interface{}{attribute}, []interface{}{filter}}
+  expected := fmt.Sprintf(`SELECT "testing"."id" FROM "testing" INNER JOIN "testing" ON 1 = 1 WHERE 1 = 1`)
+  if got := visitor.Accept(core); expected != got {
+    t.Errorf("VisitSelectCore was expected to return %s, got %s", expected, got)
+  }
+}
+
 func TestVisitString(t *testing.T) {
   visitor := &visitors.ToSqlVisitor{}
   value, expected := `test`, `'test'`
