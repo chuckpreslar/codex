@@ -49,6 +49,8 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
     return visitor.VisitInnerJoin(o.(*nodes.InnerJoin))
   case *nodes.OuterJoin:
     return visitor.VisitOuterJoin(o.(*nodes.OuterJoin))
+  case *nodes.On:
+    return visitor.VisitOn(o.(*nodes.On))
   // Standard type visitors.
   case string:
     return visitor.VisitString(o)
@@ -135,6 +137,10 @@ func (visitor *ToSqlVisitor) VisitInnerJoin(o *nodes.InnerJoin) string {
 
 func (visitor *ToSqlVisitor) VisitOuterJoin(o *nodes.OuterJoin) string {
   return fmt.Sprintf("LEFT OUTER JOIN %v %v", visitor.Visit(o.Left), visitor.Visit(o.Right))
+}
+
+func (visitor *ToSqlVisitor) VisitOn(o *nodes.On) string {
+  return fmt.Sprintf("ON %v", visitor.Visit(o.Expr))
 }
 
 // End SQL node visitors.

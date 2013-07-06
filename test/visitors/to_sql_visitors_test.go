@@ -159,6 +159,16 @@ func TestVisitOuterJoin(t *testing.T) {
   }
 }
 
+func TestVisitOn(t *testing.T) {
+  visitor := &visitors.ToSqlVisitor{}
+  expr := 1
+  equal := &nodes.On{expr}
+  expected := fmt.Sprintf("ON %v", expr)
+  if got := visitor.Accept(equal); expected != got {
+    t.Errorf("VisitOn was expected to return %s, got %s", expected, got)
+  }
+}
+
 func TestVisitString(t *testing.T) {
   visitor := &visitors.ToSqlVisitor{}
   value, expected := `test`, `'test'`
