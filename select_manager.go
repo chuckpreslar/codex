@@ -78,11 +78,9 @@ func (mgmt *SelectManager) On(expr interface{}) *SelectManager {
 
   switch last.(type) {
   case *nodes.InnerJoin:
-    join := last.(*nodes.InnerJoin)
-    join.Right = &nodes.On{expr}
+    last.(*nodes.InnerJoin).Right = &nodes.On{expr}
   case *nodes.OuterJoin:
-    join := last.(*nodes.OuterJoin)
-    join.Right = &nodes.On{expr}
+    last.(*nodes.OuterJoin).Right = &nodes.On{expr}
   default:
   }
 
