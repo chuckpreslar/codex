@@ -55,7 +55,7 @@ An example of how to search for records that meet a specified criteria:
 
 // ...
 
-users := l.TTable("users")
+users := l.Table("users")
 sql := users.Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).ToSql()
 
 ```
