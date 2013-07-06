@@ -139,6 +139,26 @@ func TestVisitNot(t *testing.T) {
   }
 }
 
+func TestVisitInnerJoin(t *testing.T) {
+  visitor := &visitors.ToSqlVisitor{}
+  left, right := 1, 1
+  equal := &nodes.InnerJoin{left, right}
+  expected := fmt.Sprintf("INNER JOIN %v %v", left, right)
+  if got := visitor.Accept(equal); expected != got {
+    t.Errorf("VisitInnerJoin was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestVisitOuterJoin(t *testing.T) {
+  visitor := &visitors.ToSqlVisitor{}
+  left, right := 1, 1
+  equal := &nodes.OuterJoin{left, right}
+  expected := fmt.Sprintf("LEFT OUTER JOIN %v %v", left, right)
+  if got := visitor.Accept(equal); expected != got {
+    t.Errorf("VisitInnerJoin was expected to return %s, got %s", expected, got)
+  }
+}
+
 func TestVisitString(t *testing.T) {
   visitor := &visitors.ToSqlVisitor{}
   value, expected := `test`, `'test'`

@@ -6,6 +6,11 @@ import (
   "strings"
 )
 
+const (
+  SPACE = ` `
+  COMMA = `, `
+)
+
 type ToSqlVisitor struct{}
 
 func (visitor *ToSqlVisitor) Accept(o interface{}) string {
@@ -40,6 +45,10 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
     return visitor.VisitGrouping(o.(*nodes.Grouping))
   case *nodes.Not:
     return visitor.VisitNot(o.(*nodes.Not))
+  case *nodes.InnerJoin:
+    return visitor.VisitInnerJoin(o.(*nodes.InnerJoin))
+  case *nodes.OuterJoin:
+    return visitor.VisitOuterJoin(o.(*nodes.OuterJoin))
   // Standard type visitors.
   case string:
     return visitor.VisitString(o)
@@ -114,6 +123,18 @@ func (visitor *ToSqlVisitor) VisitGrouping(o *nodes.Grouping) string {
 
 func (visitor *ToSqlVisitor) VisitNot(o *nodes.Not) string {
   return fmt.Sprintf("NOT (%v)", visitor.Visit(o.Expr))
+}
+
+func (visitor *ToSqlVisitor) VisitInnerJoin(o *nodes.InnerJoin) string {
+  str := fmt.Sprintf("INNER JOIN %v", visitor.Visit(o.Left))
+  if nil != o.Right {
+    str = fmt.Sprintf("%v%v%v", str, SPACE, visitor.Visit(o.Right))
+  }
+  return str
+}
+
+func (visitor *ToSqlVisitor) VisitOuterJoin(o *nodes.OuterJoin) string {
+  return fmt.Sprintf("LEFT OUTER JOIN %v %v", visitor.Visit(o.Left), visitor.Visit(o.Right))
 }
 
 // End SQL node visitors.

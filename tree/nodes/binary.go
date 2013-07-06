@@ -10,3 +10,5 @@ type As Binary
 type Between Binary
 type JoinSource Binary
 type Join Binary
+type InnerJoin Binary
+type OuterJoin Binary
