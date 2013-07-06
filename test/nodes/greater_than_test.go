@@ -1,7 +1,7 @@
 package nodes
 
 import (
-  "librarian/tree/members/nodes"
+  "librarian/tree/nodes"
   "testing"
 )
 
@@ -34,7 +34,7 @@ func TestGreaterThanAnd(t *testing.T) {
   and := greaterThan.And(other)
   if greaterThan != and.Expr.(*nodes.And).Left {
     t.Errorf("Expect Left And leaf to equal %v, got %v.", greaterThan, and.Expr.(*nodes.And).Left)
-  } else if other != and.Expr.(*nodes.And).Right  {
-    t.Errorf("Expect Right And leaf to equal %v, got %v.", other, and.Expr.(*nodes.And).Right )
+  } else if other != and.Expr.(*nodes.And).Right {
+    t.Errorf("Expect Right And leaf to equal %v, got %v.", other, and.Expr.(*nodes.And).Right)
   }
 }

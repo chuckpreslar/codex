@@ -1,7 +1,7 @@
 package nodes
 
 import (
-  "librarian/tree/members/nodes"
+  "librarian/tree/nodes"
   "testing"
 )
 

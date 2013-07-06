@@ -1,15 +1,14 @@
-package members
+package nodes
 
 import (
-  "librarian/tree/members"
-  "librarian/tree/members/nodes"
+  "librarian/tree/nodes"
   "testing"
 )
 
 func TestAttribute(t *testing.T) {
-  relation := &members.Relation{}
+  relation := &nodes.Relation{}
   name := "testing"
-  attr := &members.Attribute{name, relation}
+  attr := &nodes.Attribute{name, relation}
   if relation != attr.Relation {
     t.Errorf("Expected Attributes relation reference to be stored.")
   } else if name != attr.Name {
@@ -18,9 +17,9 @@ func TestAttribute(t *testing.T) {
 }
 
 func TestAttributeEq(t *testing.T) {
-  relation := &members.Relation{}
+  relation := &nodes.Relation{}
   name := "testing"
-  attr := &members.Attribute{name, relation}
+  attr := &nodes.Attribute{name, relation}
   other := 1
   eq := attr.Eq(other)
   if attr != eq.Left {
@@ -31,9 +30,9 @@ func TestAttributeEq(t *testing.T) {
 }
 
 func TestAttributeNeq(t *testing.T) {
-  relation := &members.Relation{}
+  relation := &nodes.Relation{}
   name := "testing"
-  attr := &members.Attribute{name, relation}
+  attr := &nodes.Attribute{name, relation}
   other := 1
   neq := attr.Neq(other)
   if attr != neq.Left {
@@ -44,9 +43,9 @@ func TestAttributeNeq(t *testing.T) {
 }
 
 func TestAttributeGt(t *testing.T) {
-  relation := &members.Relation{}
+  relation := &nodes.Relation{}
   name := "testing"
-  attr := &members.Attribute{name, relation}
+  attr := &nodes.Attribute{name, relation}
   other := 1
   gt := attr.Gt(other)
   if attr != gt.Left {
@@ -57,9 +56,9 @@ func TestAttributeGt(t *testing.T) {
 }
 
 func TestAttributeGte(t *testing.T) {
-  relation := &members.Relation{}
+  relation := &nodes.Relation{}
   name := "testing"
-  attr := &members.Attribute{name, relation}
+  attr := &nodes.Attribute{name, relation}
   other := 1
   gte := attr.Gte(other)
   if attr != gte.Left {
@@ -70,9 +69,9 @@ func TestAttributeGte(t *testing.T) {
 }
 
 func TestAttributeLt(t *testing.T) {
-  relation := &members.Relation{}
+  relation := &nodes.Relation{}
   name := "testing"
-  attr := &members.Attribute{name, relation}
+  attr := &nodes.Attribute{name, relation}
   other := 1
   lt := attr.Lt(other)
   if attr != lt.Left {
@@ -83,9 +82,9 @@ func TestAttributeLt(t *testing.T) {
 }
 
 func TestAttributeLte(t *testing.T) {
-  relation := &members.Relation{}
+  relation := &nodes.Relation{}
   name := "testing"
-  attr := &members.Attribute{name, relation}
+  attr := &nodes.Attribute{name, relation}
   other := 1
   lte := attr.Lte(other)
   if attr != lte.Left {
@@ -96,9 +95,9 @@ func TestAttributeLte(t *testing.T) {
 }
 
 func TestAttributeLike(t *testing.T) {
-  relation := &members.Relation{}
+  relation := &nodes.Relation{}
   name := "testing"
-  attr := &members.Attribute{name, relation}
+  attr := &nodes.Attribute{name, relation}
   other := 1
   like := attr.Like(other)
   if attr != like.Left {
@@ -109,9 +108,9 @@ func TestAttributeLike(t *testing.T) {
 }
 
 func TestAttributeUnlike(t *testing.T) {
-  relation := &members.Relation{}
+  relation := &nodes.Relation{}
   name := "testing"
-  attr := &members.Attribute{name, relation}
+  attr := &nodes.Attribute{name, relation}
   other := 1
   unlike := attr.Unlike(other)
   if attr != unlike.Left {
@@ -122,9 +121,9 @@ func TestAttributeUnlike(t *testing.T) {
 }
 
 func TestAttributeOr(t *testing.T) {
-  relation := &members.Relation{}
+  relation := &nodes.Relation{}
   name := "testing"
-  attr := &members.Attribute{name, relation}
+  attr := &nodes.Attribute{name, relation}
   other := 1
   or := attr.Or(other)
   if attr != or.Expr.(*nodes.Or).Left {
@@ -135,9 +134,9 @@ func TestAttributeOr(t *testing.T) {
 }
 
 func TestAttributeAnd(t *testing.T) {
-  relation := &members.Relation{}
+  relation := &nodes.Relation{}
   name := "testing"
-  attr := &members.Attribute{name, relation}
+  attr := &nodes.Attribute{name, relation}
   other := 1
   and := attr.And(other)
   if attr != and.Expr.(*nodes.And).Left {
