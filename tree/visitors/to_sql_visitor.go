@@ -76,6 +76,8 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
     return visitor.VisitSelectCore(o.(*nodes.SelectCore))
   case *nodes.SelectStatement:
     return visitor.VisitSelectStatement(o.(*nodes.SelectStatement))
+  case *nodes.Values:
+    return visitor.VisitValues(o.(*nodes.Values))
   case *nodes.InsertStatement:
     return visitor.VisitInsertStatement(o.(*nodes.InsertStatement))
   // Standard type visitors.
@@ -256,6 +258,31 @@ func (visitor *ToSqlVisitor) VisitSelectStatement(o *nodes.SelectStatement) stri
   return str
 }
 
+func (visitor *ToSqlVisitor) VisitValues(o *nodes.Values) string {
+  str := ""
+  // def visit_Arel_Nodes_Values o, a
+  //   "VALUES (#{o.expressions.zip(o.columns).map { |value, attr|
+  //     if Nodes::SqlLiteral === value
+  //       visit value, a
+  //     else
+  //       quote(value, attr && column_for(attr))
+  //     end
+  //   }.join ', '})"
+  // end
+  if length := len(o.Expressions) - 1; 0 <= length {
+    str = fmt.Sprintf("%vVALUES (", str)
+    for index, value := range o.Expressions {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(value))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+    str = fmt.Sprintf("%v)", str)
+  }
+
+  return str
+}
+
 func (visitor *ToSqlVisitor) VisitInsertStatement(o *nodes.InsertStatement) string {
   str := fmt.Sprintf("INSERT INTO %v ", visitor.Visit(o.Relation))
 
@@ -278,18 +305,7 @@ func (visitor *ToSqlVisitor) VisitInsertStatement(o *nodes.InsertStatement) stri
     }
   }
 
-  if length := len(o.Values) - 1; 0 <= length {
-    str = fmt.Sprintf("%vVALUES (", str)
-    for index, value := range o.Values {
-      str = fmt.Sprintf("%v%v", str, visitor.Visit(value))
-      if index != length {
-        str = fmt.Sprintf("%v%v", str, COMMA)
-      } else {
-        str = fmt.Sprintf("%v)", str)
-      }
-    }
-  }
-
+  str = fmt.Sprintf("%v%v", str, visitor.VisitValues(o.Values))
   return str
 }
 

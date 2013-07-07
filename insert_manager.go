@@ -35,21 +35,32 @@ func (mgmt *InsertManager) Insert(values ...interface{}) *InsertManager {
   case Values:
     return mgmt.InsertValues(value.(Values))
   default:
-    mgmt.Tree.Values = append(mgmt.Tree.Values, values...)
+    if nil == mgmt.Tree.Values {
+      mgmt.Tree.Values = &nodes.Values{Expressions: append([]interface{}{}, values...)}
+    } else {
+      mgmt.Tree.Values.Expressions = append([]interface{}{}, values...)
+    }
   }
   return mgmt
 }
 
 func (mgmt *InsertManager) InsertValues(values Values) *InsertManager {
-  for column, value := range values {
-    mgmt.Tree.Columns = append(mgmt.Tree.Columns, column)
-    mgmt.Tree.Values = append(mgmt.Tree.Values, value)
+  mgmt.Tree.Columns = append(mgmt.Tree.Columns, values.Columns()...)
+  if nil == mgmt.Tree.Values {
+    mgmt.Tree.Values = &nodes.Values{values.Values(), values.Columns()}
+  } else {
+    mgmt.Tree.Values.Expressions = append([]interface{}{}, values.Values()...)
+    mgmt.Tree.Values.Columns = append([]interface{}{}, values.Columns()...)
   }
   return mgmt
 }
 
 func (mgmt *InsertManager) Into(columns ...interface{}) *InsertManager {
-  mgmt.Tree.Columns = append(mgmt.Tree.Columns, columns...)
+  if nil == mgmt.Tree.Values {
+    mgmt.Tree.Values = &nodes.Values{Columns: []interface{}{}}
+  }
+  mgmt.Tree.Values.Columns = append([]interface{}{}, columns...)
+  mgmt.Tree.Columns = append([]interface{}{}, columns...)
 
   return mgmt
 }

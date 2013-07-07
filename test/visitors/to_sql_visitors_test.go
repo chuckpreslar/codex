@@ -251,17 +251,17 @@ func TestVisitSelectStatement(t *testing.T) {
   statement := &nodes.SelectStatement{[]*nodes.SelectCore{core}, &nodes.Limit{1}, &nodes.Offset{1}}
   expected := fmt.Sprintf(`SELECT "testing"."id" FROM "testing" INNER JOIN "testing" ON 1 = 1 WHERE (1 = 1 AND 1 != 2) LIMIT 1 OFFSET 1`)
   if got := visitor.Accept(statement); expected != got {
-    t.Errorf("VisitSelectCore was expected to return %s, got %s", expected, got)
+    t.Errorf("VisitSelectStatement was expected to return %s, got %s", expected, got)
   }
 }
 
 func TestVisitInsertStatement(t *testing.T) {
   visitor := &visitors.ToSqlVisitor{}
   relation := &nodes.Relation{"testing", ""}
-  statement := &nodes.InsertStatement{relation, []interface{}{"col", "umn"}, []interface{}{"val", "ue"}}
+  statement := &nodes.InsertStatement{relation, []interface{}{"col", "umn"}, &nodes.Values{[]interface{}{"val", "ue"}, nil}}
   expected := `INSERT INTO "testing" ("col", "umn") VALUES ('val', 'ue')`
   if got := visitor.Accept(statement); expected != got {
-    t.Errorf("VisitSelectCore was expected to return %s, got %s", expected, got)
+    t.Errorf("VisitInsertStatement was expected to return %s, got %s", expected, got)
   }
 }
 
