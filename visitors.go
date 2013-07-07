@@ -5,5 +5,6 @@ import (
 )
 
 var VISITORS = map[interface{}]visitors.VisitorInterface{
-  "to_sql": &visitors.ToSqlVisitor{},
+  "to_sql":   &visitors.ToSqlVisitor{},
+  "postgres": &visitors.PostgresVisitor{&visitors.ToSqlVisitor{}},
 }

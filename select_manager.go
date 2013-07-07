@@ -82,6 +82,11 @@ func (mgmt *SelectManager) On(expr interface{}) *SelectManager {
   return mgmt
 }
 
+func (mgmt *SelectManager) SetEngine(engine interface{}) *SelectManager {
+  mgmt.Engine = engine
+  return mgmt
+}
+
 func (mgmt *SelectManager) ToSql() string {
   if nil == mgmt.Engine {
     mgmt.Engine = "to_sql"

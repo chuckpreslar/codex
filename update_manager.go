@@ -57,6 +57,11 @@ func (mgmt *UpdateManager) Limit(expr interface{}) *UpdateManager {
   return mgmt
 }
 
+func (mgmt *UpdateManager) SetEngine(engine interface{}) *UpdateManager {
+  mgmt.Engine = engine
+  return mgmt
+}
+
 func (mgmt *UpdateManager) ToSql() string {
   if nil == mgmt.Engine {
     mgmt.Engine = "to_sql"

@@ -65,6 +65,11 @@ func (mgmt *InsertManager) Into(columns ...interface{}) *InsertManager {
   return mgmt
 }
 
+func (mgmt *InsertManager) SetEngine(engine interface{}) *InsertManager {
+  mgmt.Engine = engine
+  return mgmt
+}
+
 func (mgmt *InsertManager) ToSql() string {
   if nil == mgmt.Engine {
     mgmt.Engine = "to_sql"

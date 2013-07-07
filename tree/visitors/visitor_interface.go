@@ -7,38 +7,38 @@ import (
 type VisitorInterface interface {
   // Base methods.
   Accept(interface{}) string
-  Visit(interface{}) string
+  Visit(interface{}, VisitorInterface) string
 
   // Node visitors.
-  VisitAssignment(*nodes.Assignment) string
-  VisitEqual(*nodes.Equal) string
-  VisitNotEqual(*nodes.NotEqual) string
-  VisitGreaterThan(*nodes.GreaterThan) string
-  VisitGreaterThanOrEqual(*nodes.GreaterThanOrEqual) string
-  VisitLessThan(*nodes.LessThan) string
-  VisitLessThanOrEqual(*nodes.LessThanOrEqual) string
-  VisitLike(*nodes.Like) string
-  VisitUnlike(*nodes.Unlike) string
-  VisitOr(*nodes.Or) string
-  VisitAnd(*nodes.And) string
-  VisitRelation(*nodes.Relation) string
-  VisitAttribute(*nodes.Attribute) string
-  VisitGrouping(*nodes.Grouping) string
-  VisitNot(*nodes.Not) string
-  VisitLiteral(*nodes.Literal) string
-  VisitInnerJoin(*nodes.InnerJoin) string
-  VisitOuterJoin(*nodes.OuterJoin) string
-  VisitOn(*nodes.On) string
-  VisitUnqualifiedColumn(*nodes.UnqualifiedColumn) string
-  VisitLimit(*nodes.Limit) string
-  VisitOffset(*nodes.Offset) string
-  VisitJoinSource(*nodes.JoinSource) string
-  VisitSelectCore(*nodes.SelectCore) string
-  VisitSelectStatement(*nodes.SelectStatement) string
-  VisitValues(*nodes.Values) string
-  VisitInsertStatement(*nodes.InsertStatement) string
-  VisitUpdateStatement(*nodes.UpdateStatement) string
-  VisitDeleteStatement(*nodes.DeleteStatement) string
+  VisitAssignment(*nodes.Assignment, VisitorInterface) string
+  VisitEqual(*nodes.Equal, VisitorInterface) string
+  VisitNotEqual(*nodes.NotEqual, VisitorInterface) string
+  VisitGreaterThan(*nodes.GreaterThan, VisitorInterface) string
+  VisitGreaterThanOrEqual(*nodes.GreaterThanOrEqual, VisitorInterface) string
+  VisitLessThan(*nodes.LessThan, VisitorInterface) string
+  VisitLessThanOrEqual(*nodes.LessThanOrEqual, VisitorInterface) string
+  VisitLike(*nodes.Like, VisitorInterface) string
+  VisitUnlike(*nodes.Unlike, VisitorInterface) string
+  VisitOr(*nodes.Or, VisitorInterface) string
+  VisitAnd(*nodes.And, VisitorInterface) string
+  VisitRelation(*nodes.Relation, VisitorInterface) string
+  VisitAttribute(*nodes.Attribute, VisitorInterface) string
+  VisitGrouping(*nodes.Grouping, VisitorInterface) string
+  VisitNot(*nodes.Not, VisitorInterface) string
+  VisitLiteral(*nodes.Literal, VisitorInterface) string
+  VisitInnerJoin(*nodes.InnerJoin, VisitorInterface) string
+  VisitOuterJoin(*nodes.OuterJoin, VisitorInterface) string
+  VisitOn(*nodes.On, VisitorInterface) string
+  VisitUnqualifiedColumn(*nodes.UnqualifiedColumn, VisitorInterface) string
+  VisitLimit(*nodes.Limit, VisitorInterface) string
+  VisitOffset(*nodes.Offset, VisitorInterface) string
+  VisitJoinSource(*nodes.JoinSource, VisitorInterface) string
+  VisitSelectCore(*nodes.SelectCore, VisitorInterface) string
+  VisitSelectStatement(*nodes.SelectStatement, VisitorInterface) string
+  VisitValues(*nodes.Values, VisitorInterface) string
+  VisitInsertStatement(*nodes.InsertStatement, VisitorInterface) string
+  VisitUpdateStatement(*nodes.UpdateStatement, VisitorInterface) string
+  VisitDeleteStatement(*nodes.DeleteStatement, VisitorInterface) string
 
   // Base visitors.
   VisitString(interface{}) string

@@ -14,6 +14,11 @@ func (mgmt *DeleteManager) Delete(expr interface{}) *DeleteManager {
   return mgmt
 }
 
+func (mgmt *DeleteManager) SetEngine(engine interface{}) *DeleteManager {
+  mgmt.Engine = engine
+  return mgmt
+}
+
 func (mgmt *DeleteManager) ToSql() string {
   if nil == mgmt.Engine {
     mgmt.Engine = "to_sql"
