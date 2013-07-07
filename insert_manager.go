@@ -12,7 +12,7 @@ type InsertManager struct {
 type Values map[interface{}]interface{}
 
 func (values Values) Columns() []interface{} {
-  cols := make([]interface{}, len(values))
+  cols := make([]interface{}, 0)
   for column, _ := range values {
     cols = append(cols, column)
   }
@@ -21,7 +21,7 @@ func (values Values) Columns() []interface{} {
 }
 
 func (values Values) Values() []interface{} {
-  vals := make([]interface{}, len(values))
+  vals := make([]interface{}, 0)
   for _, value := range values {
     vals = append(vals, value)
   }
@@ -45,13 +45,13 @@ func (mgmt *InsertManager) Insert(values ...interface{}) *InsertManager {
 }
 
 func (mgmt *InsertManager) InsertValues(values Values) *InsertManager {
-  mgmt.Tree.Columns = append(mgmt.Tree.Columns, values.Columns()...)
   if nil == mgmt.Tree.Values {
     mgmt.Tree.Values = &nodes.Values{values.Values(), values.Columns()}
   } else {
     mgmt.Tree.Values.Expressions = append([]interface{}{}, values.Values()...)
     mgmt.Tree.Values.Columns = append([]interface{}{}, values.Columns()...)
   }
+  mgmt.Tree.Columns = append([]interface{}{}, values.Columns()...)
   return mgmt
 }
 
