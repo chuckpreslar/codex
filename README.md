@@ -84,8 +84,11 @@ sql := users.Insert("Jon", "Doe", "jon@example.com").
 
 // OR
 
-sql := users.Insert(codex.Values{"first_name": "Jon", "last_name": "Doe", "email": "jon@example.com"}).
-    ToSql()
+sql := users.Insert(codex.Values{
+                "first_name": "Jon",
+                "last_name": "Doe",
+                "email": "jon@example.com"
+            }).ToSql()
 
 // INSERT INTO "users" ("first_name", "last_name", "email") VALUES ('Jon', 'Doe', 'jon@example.com')
 ```
