@@ -5,8 +5,11 @@ import (
 )
 
 type VisitorInterface interface {
+  // Base methods.
   Accept(interface{}) string
   Visit(interface{}) string
+
+  // Node visitors.
   VisitAssignment(*nodes.Assignment) string
   VisitEqual(*nodes.Equal) string
   VisitNotEqual(*nodes.NotEqual) string
@@ -36,8 +39,14 @@ type VisitorInterface interface {
   VisitInsertStatement(*nodes.InsertStatement) string
   VisitUpdateStatement(*nodes.UpdateStatement) string
   VisitDeleteStatement(*nodes.DeleteStatement) string
+
+  // Base visitors.
   VisitString(interface{}) string
   VisitInteger(interface{}) string
   VisitFloat(interface{}) string
   VisitBool(interface{}) string
+
+  // SQL Helpers.
+  QuoteTableName(interface{}) string
+  QuoteColumnName(interface{}) string
 }
