@@ -76,8 +76,6 @@ sql := users.InnerJoin(orders).On(users("order_id").Eq(orders("id"))).ToSql()
 
 ### Insertions
 
-#### Example
-
 ```go
 users := codex.Table("users")
 
