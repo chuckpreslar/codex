@@ -26,7 +26,7 @@ func (mgmt *UpdateManager) Set(columns ...interface{}) *UpdateManager {
 func (mgmt *UpdateManager) InsertAssignments(values Values) *UpdateManager {
   assignments := []interface{}{}
   for column, value := range values {
-    assignments = append(assignments, &nodes.Assignment{column, value})
+    assignments = append(assignments, &nodes.Assignment{&nodes.UnqualifiedColumn{column}, value})
   }
 
   mgmt.Tree.Values = assignments
