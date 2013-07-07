@@ -32,6 +32,8 @@ sql := users.ToSql()
 
 Now that wasn't too bad, was it?
 
+### Selections
+
 #### Projections
 
 You can, of course, speed up your queries by only selecting the columns you need:
@@ -70,6 +72,22 @@ sql := users.InnerJoin(orders).On(users("order_id").Eq(orders("id"))).ToSql()
 
 // SELECT "users".* FROM "users" INNER JOIN "orders" ON "orders"."id" = "users"."order_id"
 
+```
+
+### Insertions
+
+#### Example
+
+```go
+users := codex.Table("users")
+
+sql := users.Insert("Jon", "Doe", "jon@example.com").Into("first_name", "last_name", "email").ToSql()
+
+// OR
+
+sql := users.Insert(codex.Values{ "first_name": "Jon", "last_name": "Doe", "email": "jon@example.com"}).ToSql()
+
+// INSERT INTO "users" ("first_name", "last_name", "email") VALUES ('Jon', 'Doe', 'jon@example.com')
 ```
 
 ## License
