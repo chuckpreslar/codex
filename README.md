@@ -36,8 +36,6 @@ Now that wasn't too bad, was it?
 
 #### Projections
 
-You can, of course, speed up your queries by only selecting the columns you need:
-
 ```go
 
 // ...
@@ -48,8 +46,6 @@ sql := users.Project("id", "email", "first_name", "last_name").ToSql()
 ```
 
 #### Filtering
-
-An example of how to search for records that meet a specified criteria:
 
 ```go
 
