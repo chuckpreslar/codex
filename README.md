@@ -93,6 +93,27 @@ sql := users.Insert(codex.Values{
 // INSERT INTO "users" ("first_name", "last_name", "email") VALUES ('Jon', 'Doe', 'jon@example.com')
 ```
 
+### Updates
+
+```go
+users := codex.Table("users")
+
+sql := users.Set("first_name", "last_name", "email").
+            To("Jon", "Doe", "jon@example.com").
+            Where(users("id").Eq(1)).ToSql()
+
+// OR
+
+sql := users.Set(codex.Values{
+                "first_name": "Jon",
+                "last_name": "Doe",
+                "email": "jon@example.com"
+            }).Where(users("id").Eq(1)).ToSql()
+
+// UPDATE "users" SET "first_name" = 'Jon', "last_name" = 'Doe', "email" = 'jon@example.com'
+// WHERE "users"."id" = 1
+```
+
 ## License
 
 > The MIT License (MIT)
