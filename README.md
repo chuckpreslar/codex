@@ -32,11 +32,9 @@ sql := users.ToSql()
 
 Now that wasn't too bad, was it?
 
-### Selections
+## Selections
 
 #### Projections
-
-You can, of course, speed up your queries by only selecting the columns you need:
 
 ```go
 
@@ -48,8 +46,6 @@ sql := users.Project("id", "email", "first_name", "last_name").ToSql()
 ```
 
 #### Filtering
-
-An example of how to search for records that meet a specified criteria:
 
 ```go
 
@@ -74,7 +70,7 @@ sql := users.InnerJoin(orders).On(users("order_id").Eq(orders("id"))).ToSql()
 
 ```
 
-### Insertions
+## Insertions
 
 ```go
 users := codex.Table("users")
@@ -94,7 +90,7 @@ sql := users.Insert(codex.Values{
 
 ```
 
-### Updates
+## Updates
 
 ```go
 users := codex.Table("users")
@@ -116,14 +112,14 @@ sql := users.Set(codex.Values{
 
 ```
 
-### Removals
+## Removals
 
 ```go
 users := codex.Table("users")
 
 sql := users.Delete(users("id").Eq(1)).ToSql()
 
-DELETE FROM "users" WHERE "users"."id" = 1
+// DELETE FROM "users" WHERE "users"."id" = 1
 
 ```
 
