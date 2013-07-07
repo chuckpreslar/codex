@@ -273,13 +273,13 @@ func (visitor *ToSqlVisitor) VisitInsertStatement(o *nodes.InsertStatement) stri
       if index != length {
         str = fmt.Sprintf("%v%v", str, COMMA)
       } else {
-        str = fmt.Sprintf("%v)", str)
+        str = fmt.Sprintf("%v)%v", str, SPACE)
       }
     }
   }
 
   if length := len(o.Values) - 1; 0 <= length {
-    str = fmt.Sprintf("%v VALUES (", str)
+    str = fmt.Sprintf("%vVALUES (", str)
     for index, value := range o.Values {
       str = fmt.Sprintf("%v%v", str, visitor.Visit(value))
       if index != length {
