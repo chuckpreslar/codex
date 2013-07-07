@@ -86,6 +86,8 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
     return visitor.VisitInsertStatement(o.(*nodes.InsertStatement))
   case *nodes.UpdateStatement:
     return visitor.VisitUpdateStatement(o.(*nodes.UpdateStatement))
+  case *nodes.DeleteStatement:
+    return visitor.VisitDeleteStatement(o.(*nodes.DeleteStatement))
   // Standard type visitors.
   case string:
     return visitor.VisitString(o)
@@ -329,6 +331,22 @@ func (visitor *ToSqlVisitor) VisitUpdateStatement(o *nodes.UpdateStatement) stri
       }
     }
   }
+
+  if length := len(o.Wheres) - 1; 0 <= length {
+    str = fmt.Sprintf("%vWHERE%v", str, SPACE)
+    for index, filter := range o.Wheres {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(filter))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, AND)
+      }
+    }
+  }
+
+  return str
+}
+
+func (visitor *ToSqlVisitor) VisitDeleteStatement(o *nodes.DeleteStatement) string {
+  str := fmt.Sprintf("DELETE FROM %v%v", visitor.Visit(o.Relation), SPACE)
 
   if length := len(o.Wheres) - 1; 0 <= length {
     str = fmt.Sprintf("%vWHERE%v", str, SPACE)

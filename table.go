@@ -54,6 +54,11 @@ func (accessor Accessor) Set(expr ...interface{}) *UpdateManager {
   return manager.Set(expr...)
 }
 
+func (accessor Accessor) Delete(expr interface{}) *DeleteManager {
+  statement := &nodes.DeleteStatement{accessor.Relation(), []interface{}{expr}}
+  return &DeleteManager{statement}
+}
+
 func (accessor Accessor) ToSql() string {
   return accessor.From(accessor.Relation()).ToSql()
 }
