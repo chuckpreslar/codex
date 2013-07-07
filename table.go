@@ -42,6 +42,12 @@ func (accessor Accessor) OuterJoin(expr interface{}) *SelectManager {
   return accessor.From(accessor.Relation()).OuterJoin(expr)
 }
 
+func (accessor Accessor) Insert(expr interface{}) *InsertManager {
+  statement := &nodes.InsertStatement{Relation: accessor.Relation()}
+  magager := &InsertManager{statement}
+  return magager.Insert(expr)
+}
+
 func (accessor Accessor) ToSql() string {
   return accessor.From(accessor.Relation()).ToSql()
 }

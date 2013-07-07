@@ -1,8 +1,8 @@
 package visitors
 
 import (
-  "fmt"
   "codex/tree/nodes"
+  "fmt"
   "strings"
 )
 
@@ -76,6 +76,8 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
     return visitor.VisitSelectCore(o.(*nodes.SelectCore))
   case *nodes.SelectStatement:
     return visitor.VisitSelectStatement(o.(*nodes.SelectStatement))
+  case *nodes.InsertStatement:
+    return visitor.VisitInsertStatement(o.(*nodes.InsertStatement))
   // Standard type visitors.
   case string:
     return visitor.VisitString(o)
@@ -249,6 +251,43 @@ func (visitor *ToSqlVisitor) VisitSelectStatement(o *nodes.SelectStatement) stri
 
   if nil != o.Offset {
     str = fmt.Sprintf("%v%v", str, visitor.Visit(o.Offset))
+  }
+
+  return str
+}
+
+func (visitor *ToSqlVisitor) VisitInsertStatement(o *nodes.InsertStatement) string {
+  str := fmt.Sprintf("INSERT INTO %v ", visitor.Visit(o.Relation))
+
+  if length := len(o.Columns) - 1; 0 <= length {
+    str = fmt.Sprintf("%v(", str)
+    for index, column := range o.Columns {
+
+      switch column.(type) {
+      case *nodes.Literal:
+        str = fmt.Sprintf("%v%v", str, visitor.Visit(column))
+      default:
+        str = fmt.Sprintf("%v%v", str, visitor.QuoteColumnName(column))
+      }
+
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      } else {
+        str = fmt.Sprintf("%v)", str)
+      }
+    }
+  }
+
+  if length := len(o.Values) - 1; 0 <= length {
+    str = fmt.Sprintf("%v VALUES (", str)
+    for index, value := range o.Values {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(value))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      } else {
+        str = fmt.Sprintf("%v)", str)
+      }
+    }
   }
 
   return str
