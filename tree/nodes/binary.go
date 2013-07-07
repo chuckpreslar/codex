@@ -10,3 +10,4 @@ type As Binary
 type Between Binary
 type InnerJoin Binary
 type OuterJoin Binary
+type Assignment Binary

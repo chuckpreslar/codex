@@ -29,6 +29,8 @@ func (visitor *ToSqlVisitor) Accept(o interface{}) string {
 func (visitor *ToSqlVisitor) Visit(o interface{}) string {
   switch o.(type) {
   // Comparison visitors.
+  case *nodes.Assignment:
+    return visitor.VisitAssignment(o.(*nodes.Assignment))
   case *nodes.Equal:
     return visitor.VisitEqual(o.(*nodes.Equal))
   case *nodes.NotEqual:
@@ -66,6 +68,8 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
     return visitor.VisitOuterJoin(o.(*nodes.OuterJoin))
   case *nodes.On:
     return visitor.VisitOn(o.(*nodes.On))
+  case *nodes.UnqualifiedColumn:
+    return visitor.VisitUnqualifiedColumn(o.(*nodes.UnqualifiedColumn))
   case *nodes.Limit:
     return visitor.VisitLimit(o.(*nodes.Limit))
   case *nodes.Offset:
@@ -80,6 +84,8 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
     return visitor.VisitValues(o.(*nodes.Values))
   case *nodes.InsertStatement:
     return visitor.VisitInsertStatement(o.(*nodes.InsertStatement))
+  case *nodes.UpdateStatement:
+    return visitor.VisitUpdateStatement(o.(*nodes.UpdateStatement))
   // Standard type visitors.
   case string:
     return visitor.VisitString(o)
@@ -92,6 +98,10 @@ func (visitor *ToSqlVisitor) Visit(o interface{}) string {
   default:
     panic(fmt.Sprintf("No visitor method for <%T>.", o))
   }
+}
+
+func (visitor *ToSqlVisitor) VisitAssignment(o *nodes.Assignment) string {
+  return fmt.Sprintf("%v = %v", visitor.Visit(o.Left), visitor.Visit(o.Right))
 }
 
 // Being comparison node visitors.
@@ -188,6 +198,10 @@ func (visitor *ToSqlVisitor) VisitOn(o *nodes.On) string {
   return fmt.Sprintf("ON %v", visitor.Visit(o.Expr))
 }
 
+func (visitor *ToSqlVisitor) VisitUnqualifiedColumn(o *nodes.UnqualifiedColumn) string {
+  return visitor.QuoteColumnName(o.Expr)
+}
+
 func (visitor *ToSqlVisitor) VisitLimit(o *nodes.Limit) string {
   return fmt.Sprintf("%v%v", LIMIT, visitor.Visit(o.Expr))
 }
@@ -276,7 +290,7 @@ func (visitor *ToSqlVisitor) VisitValues(o *nodes.Values) string {
 }
 
 func (visitor *ToSqlVisitor) VisitInsertStatement(o *nodes.InsertStatement) string {
-  str := fmt.Sprintf("INSERT INTO %v ", visitor.Visit(o.Relation))
+  str := fmt.Sprintf("INSERT INTO %v%v", visitor.Visit(o.Relation), SPACE)
 
   if length := len(o.Columns) - 1; 0 <= length {
     str = fmt.Sprintf("%v(", str)
@@ -298,6 +312,37 @@ func (visitor *ToSqlVisitor) VisitInsertStatement(o *nodes.InsertStatement) stri
   }
 
   str = fmt.Sprintf("%v%v", str, visitor.VisitValues(o.Values))
+  return str
+}
+
+func (visitor *ToSqlVisitor) VisitUpdateStatement(o *nodes.UpdateStatement) string {
+  // "UPDATE #{visit o.relation, a}",
+  // ("SET #{o.values.map { |value| visit value, a }.join ', '}" unless o.values.empty?),
+  // ("WHERE #{wheres.map { |x| visit x, a }.join ' AND '}" unless wheres.empty?),
+  str := fmt.Sprintf("UPDATE %v%v", visitor.Visit(o.Relation), SPACE)
+
+  if length := len(o.Values) - 1; 0 <= length {
+    str = fmt.Sprintf("%vSET%v", str, SPACE)
+    for index, assignment := range o.Values {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(assignment))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      } else {
+        str = fmt.Sprintf("%v%v", str, SPACE)
+      }
+    }
+  }
+
+  if length := len(o.Wheres) - 1; 0 <= length {
+    str = fmt.Sprintf("%vWHERE%v", str, SPACE)
+    for index, filter := range o.Wheres {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(filter))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, AND)
+      }
+    }
+  }
+
   return str
 }
 

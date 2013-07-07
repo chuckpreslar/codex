@@ -67,11 +67,6 @@ func (mgmt *SelectManager) OuterJoin(table interface{}) *SelectManager {
   return mgmt
 }
 
-func (mgmt *SelectManager) ToSql() string {
-  visitor := &visitors.ToSqlVisitor{}
-  return visitor.Accept(mgmt.Tree)
-}
-
 func (mgmt *SelectManager) On(expr interface{}) *SelectManager {
   joins := mgmt.Context.Source.Right
   last := joins[len(joins)-1]
@@ -85,4 +80,9 @@ func (mgmt *SelectManager) On(expr interface{}) *SelectManager {
   }
 
   return mgmt
+}
+
+func (mgmt *SelectManager) ToSql() string {
+  visitor := &visitors.ToSqlVisitor{}
+  return visitor.Accept(mgmt.Tree)
 }

@@ -11,3 +11,4 @@ type Limit Unary
 type Offset Unary
 type Group Unary
 type Having Unary
+type UnqualifiedColumn Unary

@@ -48,6 +48,12 @@ func (accessor Accessor) Insert(expr ...interface{}) *InsertManager {
   return magager.Insert(expr...)
 }
 
+func (accessor Accessor) Set(expr ...interface{}) *UpdateManager {
+  statement := &nodes.UpdateStatement{Relation: accessor.Relation()}
+  manager := &UpdateManager{statement}
+  return manager.Set(expr...)
+}
+
 func (accessor Accessor) ToSql() string {
   return accessor.From(accessor.Relation()).ToSql()
 }
