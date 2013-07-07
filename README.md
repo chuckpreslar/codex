@@ -1,6 +1,6 @@
 # codex
 
-Codex is **NOT** intended to be an ORM, but a relation algebra inspired by [Arel](http://www.github.com/rails/arel). Project is still under heavy development.
+Codex is **NOT** an ORM, but a relation algebra inspired by [Arel](http://www.github.com/rails/arel). Project is still under heavy development.
 
 ## Installation
 
