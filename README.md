@@ -32,7 +32,7 @@ sql := users.ToSql()
 
 Now that wasn't too bad, was it?
 
-### Selections
+## Selections
 
 #### Projections
 
@@ -70,7 +70,7 @@ sql := users.InnerJoin(orders).On(users("order_id").Eq(orders("id"))).ToSql()
 
 ```
 
-### Insertions
+## Insertions
 
 ```go
 users := codex.Table("users")
@@ -90,7 +90,7 @@ sql := users.Insert(codex.Values{
 
 ```
 
-### Updates
+## Updates
 
 ```go
 users := codex.Table("users")
@@ -112,7 +112,7 @@ sql := users.Set(codex.Values{
 
 ```
 
-### Removals
+## Removals
 
 ```go
 users := codex.Table("users")
