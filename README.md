@@ -91,6 +91,7 @@ sql := users.Insert(codex.Values{
             }).ToSql()
 
 // INSERT INTO "users" ("first_name", "last_name", "email") VALUES ('Jon', 'Doe', 'jon@example.com')
+
 ```
 
 ### Updates
@@ -112,6 +113,18 @@ sql := users.Set(codex.Values{
 
 // UPDATE "users" SET "first_name" = 'Jon', "last_name" = 'Doe', "email" = 'jon@example.com'
 // WHERE "users"."id" = 1
+
+```
+
+### Removals
+
+```go
+users := codex.Table("users")
+
+sql := users.Delete(users("id").Eq(1)).ToSql()
+
+DELETE FROM "users" WHERE "users"."id" = 1
+
 ```
 
 ## License
