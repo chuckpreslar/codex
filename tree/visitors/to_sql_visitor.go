@@ -260,15 +260,7 @@ func (visitor *ToSqlVisitor) VisitSelectStatement(o *nodes.SelectStatement) stri
 
 func (visitor *ToSqlVisitor) VisitValues(o *nodes.Values) string {
   str := ""
-  // def visit_Arel_Nodes_Values o, a
-  //   "VALUES (#{o.expressions.zip(o.columns).map { |value, attr|
-  //     if Nodes::SqlLiteral === value
-  //       visit value, a
-  //     else
-  //       quote(value, attr && column_for(attr))
-  //     end
-  //   }.join ', '})"
-  // end
+
   if length := len(o.Expressions) - 1; 0 <= length {
     str = fmt.Sprintf("%vVALUES (", str)
     for index, value := range o.Expressions {
