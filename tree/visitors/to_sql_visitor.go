@@ -316,9 +316,6 @@ func (visitor *ToSqlVisitor) VisitInsertStatement(o *nodes.InsertStatement) stri
 }
 
 func (visitor *ToSqlVisitor) VisitUpdateStatement(o *nodes.UpdateStatement) string {
-  // "UPDATE #{visit o.relation, a}",
-  // ("SET #{o.values.map { |value| visit value, a }.join ', '}" unless o.values.empty?),
-  // ("WHERE #{wheres.map { |x| visit x, a }.join ' AND '}" unless wheres.empty?),
   str := fmt.Sprintf("UPDATE %v%v", visitor.Visit(o.Relation), SPACE)
 
   if length := len(o.Values) - 1; 0 <= length {
