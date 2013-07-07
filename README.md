@@ -123,7 +123,7 @@ users := codex.Table("users")
 
 sql := users.Delete(users("id").Eq(1)).ToSql()
 
-DELETE FROM "users" WHERE "users"."id" = 1
+// DELETE FROM "users" WHERE "users"."id" = 1
 
 ```
 
