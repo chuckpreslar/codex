@@ -2,11 +2,11 @@ package codex
 
 import (
   "codex/tree/nodes"
-  "codex/tree/visitors"
 )
 
 type DeleteManager struct {
-  Tree *nodes.DeleteStatement
+  Tree   *nodes.DeleteStatement
+  Engine interface{}
 }
 
 func (mgmt *DeleteManager) Delete(expr interface{}) *DeleteManager {
@@ -15,6 +15,8 @@ func (mgmt *DeleteManager) Delete(expr interface{}) *DeleteManager {
 }
 
 func (mgmt *DeleteManager) ToSql() string {
-  visitor := &visitors.ToSqlVisitor{}
-  return visitor.Accept(mgmt.Tree)
+  if nil == mgmt.Engine {
+    mgmt.Engine = "to_sql"
+  }
+  return VISITORS[mgmt.Engine].Accept(mgmt.Tree)
 }

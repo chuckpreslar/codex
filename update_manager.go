@@ -2,11 +2,11 @@ package codex
 
 import (
   "codex/tree/nodes"
-  "codex/tree/visitors"
 )
 
 type UpdateManager struct {
-  Tree *nodes.UpdateStatement
+  Tree   *nodes.UpdateStatement
+  Engine interface{}
 }
 
 func (mgmt *UpdateManager) Set(columns ...interface{}) *UpdateManager {
@@ -58,6 +58,8 @@ func (mgmt *UpdateManager) Limit(expr interface{}) *UpdateManager {
 }
 
 func (mgmt *UpdateManager) ToSql() string {
-  visitor := &visitors.ToSqlVisitor{}
-  return visitor.Accept(mgmt.Tree)
+  if nil == mgmt.Engine {
+    mgmt.Engine = "to_sql"
+  }
+  return VISITORS[mgmt.Engine].Accept(mgmt.Tree)
 }

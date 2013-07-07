@@ -2,11 +2,11 @@ package codex
 
 import (
   "codex/tree/nodes"
-  "codex/tree/visitors"
 )
 
 type InsertManager struct {
-  Tree *nodes.InsertStatement
+  Tree   *nodes.InsertStatement
+  Engine interface{}
 }
 
 type Values map[interface{}]interface{}
@@ -66,6 +66,8 @@ func (mgmt *InsertManager) Into(columns ...interface{}) *InsertManager {
 }
 
 func (mgmt *InsertManager) ToSql() string {
-  visitor := &visitors.ToSqlVisitor{}
-  return visitor.Accept(mgmt.Tree)
+  if nil == mgmt.Engine {
+    mgmt.Engine = "to_sql"
+  }
+  return VISITORS[mgmt.Engine].Accept(mgmt.Tree)
 }

@@ -2,12 +2,12 @@ package codex
 
 import (
   "codex/tree/nodes"
-  "codex/tree/visitors"
 )
 
 type SelectManager struct {
   Tree    *nodes.SelectStatement
   Context *nodes.SelectCore
+  Engine  interface{}
 }
 
 func (mgmt *SelectManager) Project(projections ...interface{}) *SelectManager {
@@ -83,6 +83,8 @@ func (mgmt *SelectManager) On(expr interface{}) *SelectManager {
 }
 
 func (mgmt *SelectManager) ToSql() string {
-  visitor := &visitors.ToSqlVisitor{}
-  return visitor.Accept(mgmt.Tree)
+  if nil == mgmt.Engine {
+    mgmt.Engine = "to_sql"
+  }
+  return VISITORS[mgmt.Engine].Accept(mgmt.Tree)
 }

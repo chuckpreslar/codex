@@ -23,7 +23,7 @@ func (accessor Accessor) From(table *nodes.Relation) *SelectManager {
     []interface{}{}, []interface{}{},
   }
   statement.Cores = append(statement.Cores, core)
-  return &SelectManager{statement, core}
+  return &SelectManager{Tree: statement, Context: core}
 }
 
 func (accessor Accessor) Project(projections ...interface{}) *SelectManager {
@@ -44,19 +44,19 @@ func (accessor Accessor) OuterJoin(expr interface{}) *SelectManager {
 
 func (accessor Accessor) Insert(expr ...interface{}) *InsertManager {
   statement := &nodes.InsertStatement{Relation: accessor.Relation()}
-  magager := &InsertManager{statement}
+  magager := &InsertManager{Tree: statement}
   return magager.Insert(expr...)
 }
 
 func (accessor Accessor) Set(expr ...interface{}) *UpdateManager {
   statement := &nodes.UpdateStatement{Relation: accessor.Relation()}
-  manager := &UpdateManager{statement}
+  manager := &UpdateManager{Tree: statement}
   return manager.Set(expr...)
 }
 
 func (accessor Accessor) Delete(expr interface{}) *DeleteManager {
   statement := &nodes.DeleteStatement{accessor.Relation(), []interface{}{expr}}
-  return &DeleteManager{statement}
+  return &DeleteManager{Tree: statement}
 }
 
 func (accessor Accessor) ToSql() string {
