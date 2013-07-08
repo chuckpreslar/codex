@@ -1,7 +1,7 @@
 package codex
 
 import (
-  "codex/tree/nodes"
+  "github.com/chuckpreslar/codex/tree/nodes"
 )
 
 type DeleteManager struct {

@@ -1,7 +1,7 @@
 package nodes
 
 import (
-  "codex/tree/nodes"
+  "github.com/chuckpreslar/codex/tree/nodes"
   "testing"
 )
 

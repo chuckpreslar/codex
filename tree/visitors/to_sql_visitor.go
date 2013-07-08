@@ -1,7 +1,7 @@
 package visitors
 
 import (
-  "codex/tree/nodes"
+  "github.com/chuckpreslar/codex/tree/nodes"
   "fmt"
   "strings"
 )

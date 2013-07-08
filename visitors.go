@@ -1,7 +1,7 @@
 package codex
 
 import (
-  "codex/tree/visitors"
+  "github.com/chuckpreslar/codex/tree/visitors"
 )
 
 var VISITORS = map[interface{}]visitors.VisitorInterface{
