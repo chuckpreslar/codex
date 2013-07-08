@@ -1,4 +1,4 @@
-package codex
+package managers
 
 import (
   "github.com/chuckpreslar/codex/tree/visitors"
