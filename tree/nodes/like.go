@@ -1,6 +1,6 @@
 package nodes
 
-// LessThanOrEqual node struct
+// Like node is a Binary node struct
 type Like Binary
 
 // Returns a Grouping node with an expression containing a

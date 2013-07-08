@@ -1,6 +1,6 @@
 package nodes
 
-// Equal node struct
+// Unlike node is a Binary node struct
 type Unlike Binary
 
 // Returns a Grouping node with an expression containing a

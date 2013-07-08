@@ -1,6 +1,6 @@
 package nodes
 
-// GreaterThan node struct
+// GreaterThan node is a Binary node struct
 type GreaterThan Binary
 
 // Returns a Grouping node with an expression containing a

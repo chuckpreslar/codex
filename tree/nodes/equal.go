@@ -1,6 +1,6 @@
 package nodes
 
-// Equal node struct
+// Equal node is a Binary node struct
 type Equal Binary
 
 // Returns a Grouping node with an expression containing a

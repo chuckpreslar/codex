@@ -1,6 +1,6 @@
 package nodes
 
-// NotEqual node struct
+// NotEqual node is a Binary node struct
 type NotEqual Binary
 
 // Returns a Grouping node with an expression containing a

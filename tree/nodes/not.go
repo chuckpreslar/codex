@@ -1,5 +1,6 @@
 package nodes
 
+// Not node is a Unary node struct
 type Not Unary
 
 // Returns a Grouping node with an expression containing a

@@ -1,6 +1,6 @@
 package nodes
 
-// LessThanOrEqual node struct
+// LessThanOrEqual node is a Binary node struct
 type LessThanOrEqual Binary
 
 // Returns a Grouping node with an expression containing a
