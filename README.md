@@ -64,9 +64,9 @@ sql := users.Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).
 
 users := codex.Table("users")
 orders := codex.Table("orders")
-sql := users.InnerJoin(orders).On(users("order_id").Eq(orders("id"))).ToSql()
+sql := users.InnerJoin(orders).On(orders("user_id").Eq(user("id"))).ToSql()
 
-// SELECT "users".* FROM "users" INNER JOIN "orders" ON "orders"."id" = "users"."order_id"
+// SELECT "users".* FROM "users" INNER JOIN "orders" ON "orders"."user_id" = "users"."id"
 
 ```
 
