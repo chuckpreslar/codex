@@ -40,6 +40,13 @@ type VisitorInterface interface {
   VisitUpdateStatement(*nodes.UpdateStatement, VisitorInterface) string
   VisitDeleteStatement(*nodes.DeleteStatement, VisitorInterface) string
 
+  // SQL Functions.
+  VisitCount(*nodes.Count, VisitorInterface) string
+  VisitAverage(*nodes.Average, VisitorInterface) string
+  VisitSum(*nodes.Sum, VisitorInterface) string
+  VisitMaximum(*nodes.Maximum, VisitorInterface) string
+  VisitMinimum(*nodes.Minimum, VisitorInterface) string
+
   // Base visitors.
   VisitString(interface{}) string
   VisitInteger(interface{}) string

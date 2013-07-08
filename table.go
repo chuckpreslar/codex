@@ -6,8 +6,12 @@ import (
 )
 
 func Table(name string) managers.Accessor {
-  relation := &nodes.Relation{name, ""}
+  relation := new(nodes.Relation)
+  relation.Name = name
   return func(name string) *nodes.Attribute {
-    return &nodes.Attribute{name, relation}
+    attr := new(nodes.Attribute)
+    attr.Name = name
+    attr.Relation = relation
+    return attr
   }
 }

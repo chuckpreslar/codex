@@ -1,6 +1,7 @@
 package managers
 
 import (
+  "github.com/chuckpreslar/codex/factory"
   "github.com/chuckpreslar/codex/tree/nodes"
 )
 
@@ -12,18 +13,6 @@ func (accessor Accessor) Relation() *nodes.Relation {
 
 func (accessor Accessor) Name() string {
   return accessor("").Relation.Name
-}
-
-func (accessor Accessor) From(table *nodes.Relation) *SelectManager {
-  statement := &nodes.SelectStatement{
-    Cores: make([]*nodes.SelectCore, 0),
-  }
-  core := &nodes.SelectCore{table,
-    &nodes.JoinSource{table, []interface{}{}},
-    []interface{}{}, []interface{}{},
-  }
-  statement.Cores = append(statement.Cores, core)
-  return &SelectManager{Tree: statement, Context: core}
 }
 
 func (accessor Accessor) Project(projections ...interface{}) *SelectManager {
@@ -42,21 +31,32 @@ func (accessor Accessor) OuterJoin(expr interface{}) *SelectManager {
   return accessor.From(accessor.Relation()).OuterJoin(expr)
 }
 
+func (accessor Accessor) From(relation *nodes.Relation) *SelectManager {
+  mgmt := new(SelectManager)
+  mgmt.Tree = factory.SelectStatement(relation)
+  mgmt.Context = mgmt.Tree.Cores[0]
+  return mgmt
+}
+
 func (accessor Accessor) Insert(expr ...interface{}) *InsertManager {
-  statement := &nodes.InsertStatement{Relation: accessor.Relation()}
-  magager := &InsertManager{Tree: statement}
-  return magager.Insert(expr...)
+  stmt := factory.InsertStatement(accessor.Relation())
+  mgmt := new(InsertManager)
+  mgmt.Tree = stmt
+  return mgmt.Insert(expr...)
 }
 
 func (accessor Accessor) Set(expr ...interface{}) *UpdateManager {
-  statement := &nodes.UpdateStatement{Relation: accessor.Relation()}
-  manager := &UpdateManager{Tree: statement}
-  return manager.Set(expr...)
+  stmt := factory.UpdateStatement(accessor.Relation())
+  mgmt := new(UpdateManager)
+  mgmt.Tree = stmt
+  return mgmt.Set(expr...)
 }
 
 func (accessor Accessor) Delete(expr interface{}) *DeleteManager {
-  statement := &nodes.DeleteStatement{accessor.Relation(), []interface{}{expr}}
-  return &DeleteManager{Tree: statement}
+  stmt := factory.DeleteStatement(accessor.Relation())
+  mgmt := new(DeleteManager)
+  mgmt.Tree = stmt
+  return mgmt.Delete(expr)
 }
 
 func (accessor Accessor) ToSql() string {

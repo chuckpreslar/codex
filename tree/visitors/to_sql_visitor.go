@@ -1,8 +1,8 @@
 package visitors
 
 import (
-  "github.com/chuckpreslar/codex/tree/nodes"
   "fmt"
+  "github.com/chuckpreslar/codex/tree/nodes"
   "strings"
 )
 
@@ -88,6 +88,17 @@ func (sql *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string {
     return visitor.VisitUpdateStatement(o.(*nodes.UpdateStatement), visitor)
   case *nodes.DeleteStatement:
     return visitor.VisitDeleteStatement(o.(*nodes.DeleteStatement), visitor)
+  // SQL function visitors.
+  case *nodes.Count:
+    return visitor.VisitCount(o.(*nodes.Count), visitor)
+  case *nodes.Average:
+    return visitor.VisitAverage(o.(*nodes.Average), visitor)
+  case *nodes.Sum:
+    return visitor.VisitSum(o.(*nodes.Sum), visitor)
+  case *nodes.Maximum:
+    return visitor.VisitMaximum(o.(*nodes.Maximum), visitor)
+  case *nodes.Minimum:
+    return visitor.VisitMinimum(o.(*nodes.Minimum), visitor)
   // Standard type visitors.
   case string:
     return visitor.VisitString(o)
@@ -362,6 +373,130 @@ func (sql *ToSqlVisitor) VisitDeleteStatement(o *nodes.DeleteStatement, visitor 
 }
 
 // End SQL node visitors.
+
+// Begin SQL Function visitors.
+
+func (sql *ToSqlVisitor) VisitCount(o *nodes.Count, visitor VisitorInterface) string {
+  str := "COUNT("
+
+  if o.Distinct {
+    str = fmt.Sprintf("%vDISTINCT%v", str, SPACE)
+  }
+
+  if length := len(o.Expressions) - 1; 0 <= length {
+    for index, expression := range o.Expressions {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(expression, visitor))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+    str = fmt.Sprintf("%v)", str)
+  }
+
+  if nil != o.Alias {
+    str = fmt.Sprintf("%s AS %s", str, visitor.Visit(o.Alias, visitor))
+  }
+
+  return str
+}
+
+func (sql *ToSqlVisitor) VisitAverage(o *nodes.Average, visitor VisitorInterface) string {
+  str := "AVG("
+
+  if o.Distinct {
+    str = fmt.Sprintf("%vDISTINCT%v", str, SPACE)
+  }
+
+  if length := len(o.Expressions) - 1; 0 <= length {
+    for index, expression := range o.Expressions {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(expression, visitor))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+    str = fmt.Sprintf("%v)", str)
+  }
+
+  if nil != o.Alias {
+    str = fmt.Sprintf("%s AS %s", str, visitor.Visit(o.Alias, visitor))
+  }
+
+  return str
+}
+
+func (sql *ToSqlVisitor) VisitSum(o *nodes.Sum, visitor VisitorInterface) string {
+  str := "SUM("
+
+  if o.Distinct {
+    str = fmt.Sprintf("%vDISTINCT%v", str, SPACE)
+  }
+
+  if length := len(o.Expressions) - 1; 0 <= length {
+    for index, expression := range o.Expressions {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(expression, visitor))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+    str = fmt.Sprintf("%v)", str)
+  }
+
+  if nil != o.Alias {
+    str = fmt.Sprintf("%s AS %s", str, visitor.Visit(o.Alias, visitor))
+  }
+
+  return str
+}
+
+func (sql *ToSqlVisitor) VisitMaximum(o *nodes.Maximum, visitor VisitorInterface) string {
+  str := "MAX("
+
+  if o.Distinct {
+    str = fmt.Sprintf("%vDISTINCT%v", str, SPACE)
+  }
+
+  if length := len(o.Expressions) - 1; 0 <= length {
+    for index, expression := range o.Expressions {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(expression, visitor))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+    str = fmt.Sprintf("%v)", str)
+  }
+
+  if nil != o.Alias {
+    str = fmt.Sprintf("%s AS %s", str, visitor.Visit(o.Alias, visitor))
+  }
+
+  return str
+}
+
+func (sql *ToSqlVisitor) VisitMinimum(o *nodes.Minimum, visitor VisitorInterface) string {
+  str := "MIN("
+
+  if o.Distinct {
+    str = fmt.Sprintf("%vDISTINCT%v", str, SPACE)
+  }
+
+  if length := len(o.Expressions) - 1; 0 <= length {
+    for index, expression := range o.Expressions {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(expression, visitor))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+    str = fmt.Sprintf("%v)", str)
+  }
+
+  if nil != o.Alias {
+    str = fmt.Sprintf("%s AS %s", str, visitor.Visit(o.Alias, visitor))
+  }
+
+  return str
+}
+
+// End SQL Function visitors.
 
 // Begin standard type visitors.
 
