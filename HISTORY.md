@@ -3,6 +3,8 @@
 * Proper tests for ToSqlVisitor
 * Visitor's Accept now returns result, error after recovering from a potential panic from the visitors Visit method.
 * Apply check to all SelectCoreNodes's that belong to a SelectStatementNode to ensure a minimum of a STAR is present.
+* Update tree managers to return the same string, error combination the VisitorInterface returns.
+* Update README to reflect changes to VisitorInerfaces's Accept method and its' affects on tree managers.
 
 # v0.1.1 - 07.08.2013
 * Overhaul nodes package to allow for "factory" methods.

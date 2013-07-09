@@ -28,7 +28,7 @@ import (
 
 
 users := codex.Table("users")
-sql := users.ToSql()
+sql, err := users.ToSql()
 
 ```
 
@@ -43,7 +43,7 @@ Now that wasn't too bad, was it?
 // ...
 
 users := codex.Table("users")
-sql := users.Project("id", "email", "first_name", "last_name").ToSql()
+sql, err := users.Project("id", "email", "first_name", "last_name").ToSql()
 
 ```
 
@@ -54,7 +54,7 @@ sql := users.Project("id", "email", "first_name", "last_name").ToSql()
 // ...
 
 users := codex.Table("users")
-sql := users.Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).ToSql()
+sql, err := users.Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).ToSql()
 
 ```
 
@@ -66,7 +66,7 @@ sql := users.Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).
 
 users := codex.Table("users")
 orders := codex.Table("orders")
-sql := users.InnerJoin(orders).On(orders("user_id").Eq(user("id"))).ToSql()
+sql, err := users.InnerJoin(orders).On(orders("user_id").Eq(user("id"))).ToSql()
 
 // SELECT "users".* FROM "users" INNER JOIN "orders" ON "orders"."user_id" = "users"."id"
 
@@ -77,12 +77,12 @@ sql := users.InnerJoin(orders).On(orders("user_id").Eq(user("id"))).ToSql()
 ```go
 users := codex.Table("users")
 
-sql := users.Insert("Jon", "Doe", "jon@example.com").
+sql, err := users.Insert("Jon", "Doe", "jon@example.com").
             Into("first_name", "last_name", "email").ToSql()
 
 // OR
 
-sql := users.Insert(codex.Values{
+sql, err := users.Insert(codex.Values{
                 "first_name": "Jon",
                 "last_name": "Doe",
                 "email": "jon@example.com"
@@ -97,13 +97,13 @@ sql := users.Insert(codex.Values{
 ```go
 users := codex.Table("users")
 
-sql := users.Set("first_name", "last_name", "email").
+sql, err := users.Set("first_name", "last_name", "email").
             To("Jon", "Doe", "jon@example.com").
             Where(users("id").Eq(1)).ToSql()
 
 // OR
 
-sql := users.Set(codex.Values{
+sql, err := users.Set(codex.Values{
                 "first_name": "Jon",
                 "last_name": "Doe",
                 "email": "jon@example.com"
@@ -119,7 +119,7 @@ sql := users.Set(codex.Values{
 ```go
 users := codex.Table("users")
 
-sql := users.Delete(users("id").Eq(1)).ToSql()
+sql, err := users.Delete(users("id").Eq(1)).ToSql()
 
 // DELETE FROM "users" WHERE "users"."id" = 1
 

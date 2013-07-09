@@ -81,7 +81,7 @@ func (mgmt *SelectManager) SetEngine(engine interface{}) *SelectManager {
   return mgmt
 }
 
-func (mgmt *SelectManager) ToSql() string {
+func (mgmt *SelectManager) ToSql() (string, error) {
   for _, core := range mgmt.Tree.Cores {
     if 0 == len(core.Projections) {
       core.Projections = append(core.Projections, nodes.Attribute(nodes.Star(), core.Relation))
