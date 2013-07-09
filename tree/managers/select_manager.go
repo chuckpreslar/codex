@@ -82,8 +82,13 @@ func (mgmt *SelectManager) SetEngine(engine interface{}) *SelectManager {
 }
 
 func (mgmt *SelectManager) ToSql() string {
+  if 0 == len(mgmt.Context.Projections) {
+    mgmt.Context.Projections = append(mgmt.Context.Projections, nodes.Star())
+  }
+
   if nil == mgmt.Engine {
     mgmt.Engine = "to_sql"
   }
+
   return VISITORS[mgmt.Engine].Accept(mgmt.Tree)
 }

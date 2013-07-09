@@ -12,6 +12,8 @@ type OffsetNode UnaryNode            // Offset node is a Unary node struct
 type GroupNode UnaryNode             // Group node is a Unary node struct
 type HavingNode UnaryNode            // Having node is a Unary node struct
 type UnqualifiedColumnNode UnaryNode // UnqualifiedColumn node is a Unary node struct
+type ColumnNode UnaryNode            // Column node is a Unary node struct
+type StarNode UnaryNode              // Star node is a Unary node struct
 
 func Literal(expr interface{}) *LiteralNode {
   literal := new(LiteralNode)
@@ -53,4 +55,14 @@ func UnqualifiedColumn(expr interface{}) *UnqualifiedColumnNode {
   column := new(UnqualifiedColumnNode)
   column.Expr = expr
   return column
+}
+
+func Column(expr interface{}) *ColumnNode {
+  column := new(ColumnNode)
+  column.Expr = expr
+  return column
+}
+
+func Star() *StarNode {
+  return new(StarNode)
 }

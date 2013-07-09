@@ -2,7 +2,7 @@ package nodes
 
 // Attribute struct.
 type AttributeNode struct {
-  Name     string        // Name of the Attribute.
+  Name     interface{}   // Name of the Attribute.
   Relation *RelationNode // Relation the attribute belongs to.
 }
 
@@ -66,7 +66,7 @@ func (attr *AttributeNode) And(other interface{}) *GroupingNode {
   return Grouping(And(attr, other))
 }
 
-func Attribute(name string, relation *RelationNode) *AttributeNode {
+func Attribute(name interface{}, relation *RelationNode) *AttributeNode {
   attr := new(AttributeNode)
   attr.Name = name
   attr.Relation = relation

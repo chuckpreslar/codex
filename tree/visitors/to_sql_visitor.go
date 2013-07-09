@@ -68,6 +68,10 @@ func (sql *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string {
     return visitor.VisitOuterJoin(o.(*nodes.OuterJoinNode), visitor)
   case *nodes.OnNode:
     return visitor.VisitOn(o.(*nodes.OnNode), visitor)
+  case *nodes.ColumnNode:
+    return visitor.VisitColumn(o.(*nodes.ColumnNode), visitor)
+  case *nodes.StarNode:
+    return visitor.VisitStar(o.(*nodes.StarNode), visitor)
   case *nodes.UnqualifiedColumnNode:
     return visitor.VisitUnqualifiedColumn(o.(*nodes.UnqualifiedColumnNode), visitor)
   case *nodes.LimitNode:
@@ -180,7 +184,7 @@ func (sql *ToSqlVisitor) VisitRelation(o *nodes.RelationNode, visitor VisitorInt
 }
 
 func (sql *ToSqlVisitor) VisitAttribute(o *nodes.AttributeNode, visitor VisitorInterface) string {
-  return fmt.Sprintf("%v.%v", visitor.Visit(o.Relation, visitor), visitor.QuoteColumnName(o.Name))
+  return fmt.Sprintf("%v.%v", visitor.Visit(o.Relation, visitor), visitor.Visit(o.Name, visitor))
 }
 
 func (sql *ToSqlVisitor) VisitGrouping(o *nodes.GroupingNode, visitor VisitorInterface) string {
@@ -209,6 +213,14 @@ func (sql *ToSqlVisitor) VisitOuterJoin(o *nodes.OuterJoinNode, visitor VisitorI
 
 func (sql *ToSqlVisitor) VisitOn(o *nodes.OnNode, visitor VisitorInterface) string {
   return fmt.Sprintf("ON %v", visitor.Visit(o.Expr, visitor))
+}
+
+func (sql *ToSqlVisitor) VisitColumn(o *nodes.ColumnNode, visitor VisitorInterface) string {
+  return visitor.QuoteColumnName(o.Expr)
+}
+
+func (sql *ToSqlVisitor) VisitStar(o *nodes.StarNode, visitor VisitorInterface) string {
+  return STAR
 }
 
 func (sql *ToSqlVisitor) VisitUnqualifiedColumn(o *nodes.UnqualifiedColumnNode, visitor VisitorInterface) string {
@@ -248,8 +260,6 @@ func (sql *ToSqlVisitor) VisitSelectCore(o *nodes.SelectCoreNode, visitor Visito
         str = fmt.Sprintf("%v%v", str, COMMA)
       }
     }
-  } else {
-    str = fmt.Sprintf("%v%v.%v", str, visitor.Visit(o.Relation, visitor), STAR)
   }
 
   str = fmt.Sprintf("%v%v%v", str, FROM, visitor.Visit(o.Source, visitor))
