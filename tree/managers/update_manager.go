@@ -60,7 +60,7 @@ func (mgmt *UpdateManager) SetEngine(engine interface{}) *UpdateManager {
   return mgmt
 }
 
-func (mgmt *UpdateManager) ToSql() string {
+func (mgmt *UpdateManager) ToSql() (string, error) {
   if nil == mgmt.Engine {
     mgmt.Engine = "to_sql"
   }
