@@ -16,7 +16,6 @@ func TestUpdateManager(t *testing.T) {
 
   // The following receiver methods should exist.
   _ = mgr.Set(1)
-  _ = mgr.InsertAssignments(managers.Values{"test": "test"})
   _ = mgr.To(1)
   _ = mgr.Where(1)
   _ = mgr.Limit(1)
