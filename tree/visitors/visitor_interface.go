@@ -25,6 +25,8 @@ type VisitorInterface interface {
   VisitAttribute(*nodes.AttributeNode, VisitorInterface) string
   VisitGrouping(*nodes.GroupingNode, VisitorInterface) string
   VisitNot(*nodes.NotNode, VisitorInterface) string
+  VisitColumn(*nodes.ColumnNode, VisitorInterface) string
+  VisitStar(*nodes.StarNode, VisitorInterface) string
   VisitLiteral(*nodes.LiteralNode, VisitorInterface) string
   VisitInnerJoin(*nodes.InnerJoinNode, VisitorInterface) string
   VisitOuterJoin(*nodes.OuterJoinNode, VisitorInterface) string

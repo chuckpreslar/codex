@@ -4,7 +4,7 @@ import (
   "github.com/chuckpreslar/codex/tree/nodes"
 )
 
-type Accessor func(string) *nodes.AttributeNode
+type Accessor func(interface{}) *nodes.AttributeNode
 
 func (accessor Accessor) Relation() *nodes.RelationNode {
   return accessor("").Relation
