@@ -6,11 +6,14 @@ import (
 )
 
 func TestAnd(t *testing.T) {
-  left, right := 1, 2
-  and := &nodes.And{left, right}
-  if left != and.Left {
-    t.Errorf("Expect Left And leaf to equal %v, got %v.", left, and.Left)
-  } else if right != and.Right {
-    t.Errorf("Expect Right And leaf to equal %v, got %v.", right, and.Right)
-  }
+  and := nodes.And(1, 2)
+
+  // The following struct members should exist.
+  _ = and.Left
+  _ = and.Right
+
+  // The following receiver methods should exist.
+  _ = and.Or(1)
+  _ = and.And(1)
+  _ = and.Not()
 }

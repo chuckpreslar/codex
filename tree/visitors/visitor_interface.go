@@ -10,42 +10,42 @@ type VisitorInterface interface {
   Visit(interface{}, VisitorInterface) string
 
   // Node visitors.
-  VisitAssignment(*nodes.Assignment, VisitorInterface) string
-  VisitEqual(*nodes.Equal, VisitorInterface) string
-  VisitNotEqual(*nodes.NotEqual, VisitorInterface) string
-  VisitGreaterThan(*nodes.GreaterThan, VisitorInterface) string
-  VisitGreaterThanOrEqual(*nodes.GreaterThanOrEqual, VisitorInterface) string
-  VisitLessThan(*nodes.LessThan, VisitorInterface) string
-  VisitLessThanOrEqual(*nodes.LessThanOrEqual, VisitorInterface) string
-  VisitLike(*nodes.Like, VisitorInterface) string
-  VisitUnlike(*nodes.Unlike, VisitorInterface) string
-  VisitOr(*nodes.Or, VisitorInterface) string
-  VisitAnd(*nodes.And, VisitorInterface) string
-  VisitRelation(*nodes.Relation, VisitorInterface) string
-  VisitAttribute(*nodes.Attribute, VisitorInterface) string
-  VisitGrouping(*nodes.Grouping, VisitorInterface) string
-  VisitNot(*nodes.Not, VisitorInterface) string
-  VisitLiteral(*nodes.Literal, VisitorInterface) string
-  VisitInnerJoin(*nodes.InnerJoin, VisitorInterface) string
-  VisitOuterJoin(*nodes.OuterJoin, VisitorInterface) string
-  VisitOn(*nodes.On, VisitorInterface) string
-  VisitUnqualifiedColumn(*nodes.UnqualifiedColumn, VisitorInterface) string
-  VisitLimit(*nodes.Limit, VisitorInterface) string
-  VisitOffset(*nodes.Offset, VisitorInterface) string
-  VisitJoinSource(*nodes.JoinSource, VisitorInterface) string
-  VisitSelectCore(*nodes.SelectCore, VisitorInterface) string
-  VisitSelectStatement(*nodes.SelectStatement, VisitorInterface) string
-  VisitValues(*nodes.Values, VisitorInterface) string
-  VisitInsertStatement(*nodes.InsertStatement, VisitorInterface) string
-  VisitUpdateStatement(*nodes.UpdateStatement, VisitorInterface) string
-  VisitDeleteStatement(*nodes.DeleteStatement, VisitorInterface) string
+  VisitAssignment(*nodes.AssignmentNode, VisitorInterface) string
+  VisitEqual(*nodes.EqualNode, VisitorInterface) string
+  VisitNotEqual(*nodes.NotEqualNode, VisitorInterface) string
+  VisitGreaterThan(*nodes.GreaterThanNode, VisitorInterface) string
+  VisitGreaterThanOrEqual(*nodes.GreaterThanOrEqualNode, VisitorInterface) string
+  VisitLessThan(*nodes.LessThanNode, VisitorInterface) string
+  VisitLessThanOrEqual(*nodes.LessThanOrEqualNode, VisitorInterface) string
+  VisitLike(*nodes.LikeNode, VisitorInterface) string
+  VisitUnlike(*nodes.UnlikeNode, VisitorInterface) string
+  VisitOr(*nodes.OrNode, VisitorInterface) string
+  VisitAnd(*nodes.AndNode, VisitorInterface) string
+  VisitRelation(*nodes.RelationNode, VisitorInterface) string
+  VisitAttribute(*nodes.AttributeNode, VisitorInterface) string
+  VisitGrouping(*nodes.GroupingNode, VisitorInterface) string
+  VisitNot(*nodes.NotNode, VisitorInterface) string
+  VisitLiteral(*nodes.LiteralNode, VisitorInterface) string
+  VisitInnerJoin(*nodes.InnerJoinNode, VisitorInterface) string
+  VisitOuterJoin(*nodes.OuterJoinNode, VisitorInterface) string
+  VisitOn(*nodes.OnNode, VisitorInterface) string
+  VisitUnqualifiedColumn(*nodes.UnqualifiedColumnNode, VisitorInterface) string
+  VisitLimit(*nodes.LimitNode, VisitorInterface) string
+  VisitOffset(*nodes.OffsetNode, VisitorInterface) string
+  VisitJoinSource(*nodes.JoinSourceNode, VisitorInterface) string
+  VisitSelectCore(*nodes.SelectCoreNode, VisitorInterface) string
+  VisitSelectStatement(*nodes.SelectStatementNode, VisitorInterface) string
+  VisitValues(*nodes.ValuesNode, VisitorInterface) string
+  VisitInsertStatement(*nodes.InsertStatementNode, VisitorInterface) string
+  VisitUpdateStatement(*nodes.UpdateStatementNode, VisitorInterface) string
+  VisitDeleteStatement(*nodes.DeleteStatementNode, VisitorInterface) string
 
   // SQL Functions.
-  VisitCount(*nodes.Count, VisitorInterface) string
-  VisitAverage(*nodes.Average, VisitorInterface) string
-  VisitSum(*nodes.Sum, VisitorInterface) string
-  VisitMaximum(*nodes.Maximum, VisitorInterface) string
-  VisitMinimum(*nodes.Minimum, VisitorInterface) string
+  VisitCount(*nodes.CountNode, VisitorInterface) string
+  VisitAverage(*nodes.AverageNode, VisitorInterface) string
+  VisitSum(*nodes.SumNode, VisitorInterface) string
+  VisitMaximum(*nodes.MaximumNode, VisitorInterface) string
+  VisitMinimum(*nodes.MinimumNode, VisitorInterface) string
 
   // Base visitors.
   VisitString(interface{}) string

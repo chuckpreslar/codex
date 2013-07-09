@@ -1,22 +1,29 @@
 package nodes
 
 // Or node is a Binary node struct
-type Or Binary
+type OrNode BinaryNode
 
 // Returns a Grouping node with an expression containing a
 // reference to an Or node of the Or and other.
-func (or *Or) Or(other interface{}) *Grouping {
-  return &Grouping{&Or{or, other}}
+func (or *OrNode) Or(other interface{}) *GroupingNode {
+  return Grouping(Or(or, other))
 }
 
 // Returns a Grouping node with an expression containing a
 // reference to an And node of the Or and other.
-func (or *Or) And(other interface{}) *Grouping {
-  return &Grouping{&And{or, other}}
+func (or *OrNode) And(other interface{}) *GroupingNode {
+  return Grouping(And(or, other))
 }
 
 // Returns an Not node with and expression containing the
 // Or node.
-func (or *Or) Not() *Not {
-  return &Not{or}
+func (or *OrNode) Not() *NotNode {
+  return Not(or)
+}
+
+func Or(left, right interface{}) *OrNode {
+  or := new(OrNode)
+  or.Left = left
+  or.Right = right
+  return or
 }

@@ -1,22 +1,29 @@
 package nodes
 
 // GreaterThanOrEqual node is a Binary node struct
-type GreaterThanOrEqual Binary
+type GreaterThanOrEqualNode BinaryNode
 
 // Returns a Grouping node with an expression containing a
 // reference to an Or node of the GreaterThanOrEqual and other.
-func (gte *GreaterThanOrEqual) Or(other interface{}) *Grouping {
-  return &Grouping{&Or{gte, other}}
+func (gte *GreaterThanOrEqualNode) Or(other interface{}) *GroupingNode {
+  return Grouping(Or(gte, other))
 }
 
 // Returns a Grouping node with an expression containing a
 // reference to an And node of the GreaterThanOrEqual and other.
-func (gte *GreaterThanOrEqual) And(other interface{}) *Grouping {
-  return &Grouping{&And{gte, other}}
+func (gte *GreaterThanOrEqualNode) And(other interface{}) *GroupingNode {
+  return Grouping(And(gte, other))
 }
 
 // Returns an Not node with and expression containing the
 // GreaterThanOrEqual node.
-func (gte *GreaterThanOrEqual) Not() *Not {
-  return &Not{gte}
+func (gte *GreaterThanOrEqualNode) Not() *NotNode {
+  return Not(gte)
+}
+
+func GreaterThanOrEqual(left, right interface{}) *GreaterThanOrEqualNode {
+  gte := new(GreaterThanOrEqualNode)
+  gte.Left = left
+  gte.Right = right
+  return gte
 }

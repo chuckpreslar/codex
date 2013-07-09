@@ -1,63 +1,69 @@
 package nodes
 
-type Count Function
+type CountNode FunctionNode
 
 // Returns and Equal node containing a reference to the
 // function and other
-func (count *Count) Eq(other interface{}) *Equal {
-  return &Equal{count, other}
+func (count *CountNode) Eq(other interface{}) *EqualNode {
+  return Equal(count, other)
 }
 
 // Returns and NotEqual node containing a reference to the
 // function and other
-func (count *Count) Neq(other interface{}) *NotEqual {
-  return &NotEqual{count, other}
+func (count *CountNode) Neq(other interface{}) *NotEqualNode {
+  return NotEqual(count, other)
 }
 
 // Returns and GreaterThan node containing a reference to the
 // function and other
-func (count *Count) Gt(other interface{}) *GreaterThan {
-  return &GreaterThan{count, other}
+func (count *CountNode) Gt(other interface{}) *GreaterThanNode {
+  return GreaterThan(count, other)
 }
 
 // Returns and GreaterThanOrEqual node containing a reference to the
 // function and other
-func (count *Count) Gte(other interface{}) *GreaterThanOrEqual {
-  return &GreaterThanOrEqual{count, other}
+func (count *CountNode) Gte(other interface{}) *GreaterThanOrEqualNode {
+  return GreaterThanOrEqual(count, other)
 }
 
 // Returns and LessThan node containing a reference to the
 // function and other
-func (count *Count) Lt(other interface{}) *LessThan {
-  return &LessThan{count, other}
+func (count *CountNode) Lt(other interface{}) *LessThanNode {
+  return LessThan(count, other)
 }
 
 // Returns and LessThanOrEqual node containing a reference to the
 // function and other
-func (count *Count) Lte(other interface{}) *LessThanOrEqual {
-  return &LessThanOrEqual{count, other}
+func (count *CountNode) Lte(other interface{}) *LessThanOrEqualNode {
+  return LessThanOrEqual(count, other)
 }
 
 // Returns and Like node containing a reference to the
 // function and other
-func (count *Count) Like(other interface{}) *Like {
-  return &Like{count, other}
+func (count *CountNode) Like(other interface{}) *LikeNode {
+  return Like(count, other)
 }
 
 // Returns and Unlike node containing a reference to the
 // function and other
-func (count *Count) Unlike(other interface{}) *Unlike {
-  return &Unlike{count, other}
+func (count *CountNode) Unlike(other interface{}) *UnlikeNode {
+  return Unlike(count, other)
 }
 
 // Returns and Or node containing a reference to the
 // function and other
-func (count *Count) Or(other interface{}) *Grouping {
-  return &Grouping{&Or{count, other}}
+func (count *CountNode) Or(other interface{}) *GroupingNode {
+  return Grouping(Or(count, other))
 }
 
 // Returns and And node containing a reference to the
 // function and other
-func (count *Count) And(other interface{}) *Grouping {
-  return &Grouping{&And{count, other}}
+func (count *CountNode) And(other interface{}) *GroupingNode {
+  return Grouping(And(count, other))
+}
+
+func Count(expressions ...interface{}) *CountNode {
+  count := new(CountNode)
+  count.Expressions = expressions
+  return count
 }

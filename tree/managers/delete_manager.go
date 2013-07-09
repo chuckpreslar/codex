@@ -5,7 +5,7 @@ import (
 )
 
 type DeleteManager struct {
-  Tree   *nodes.DeleteStatement
+  Tree   *nodes.DeleteStatementNode
   Engine interface{}
 }
 

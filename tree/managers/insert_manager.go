@@ -1,12 +1,11 @@
 package managers
 
 import (
-  "github.com/chuckpreslar/codex/factory"
   "github.com/chuckpreslar/codex/tree/nodes"
 )
 
 type InsertManager struct {
-  Tree   *nodes.InsertStatement
+  Tree   *nodes.InsertStatementNode
   Engine interface{}
 }
 
@@ -37,7 +36,7 @@ func (mgmt *InsertManager) Insert(values ...interface{}) *InsertManager {
     return mgmt.InsertValues(value.(Values))
   default:
     if nil == mgmt.Tree.Values {
-      mgmt.Tree.Values = factory.Values()
+      mgmt.Tree.Values = nodes.Values()
     }
     mgmt.Tree.Values.Expressions = append([]interface{}{}, values...)
   }
@@ -46,7 +45,7 @@ func (mgmt *InsertManager) Insert(values ...interface{}) *InsertManager {
 
 func (mgmt *InsertManager) InsertValues(values Values) *InsertManager {
   if nil == mgmt.Tree.Values {
-    mgmt.Tree.Values = factory.Values()
+    mgmt.Tree.Values = nodes.Values()
   }
   mgmt.Tree.Values.Expressions = append([]interface{}{}, values.Values()...)
   mgmt.Tree.Values.Columns = append([]interface{}{}, values.Columns()...)
@@ -56,7 +55,7 @@ func (mgmt *InsertManager) InsertValues(values Values) *InsertManager {
 
 func (mgmt *InsertManager) Into(columns ...interface{}) *InsertManager {
   if nil == mgmt.Tree.Values {
-    mgmt.Tree.Values = factory.Values()
+    mgmt.Tree.Values = nodes.Values()
   }
   mgmt.Tree.Values.Columns = append([]interface{}{}, columns...)
   mgmt.Tree.Columns = append([]interface{}{}, columns...)

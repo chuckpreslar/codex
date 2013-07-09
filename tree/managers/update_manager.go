@@ -1,12 +1,11 @@
 package managers
 
 import (
-  "github.com/chuckpreslar/codex/factory"
   "github.com/chuckpreslar/codex/tree/nodes"
 )
 
 type UpdateManager struct {
-  Tree   *nodes.UpdateStatement
+  Tree   *nodes.UpdateStatementNode
   Engine interface{}
 }
 
@@ -18,7 +17,7 @@ func (mgmt *UpdateManager) Set(columns ...interface{}) *UpdateManager {
   default:
     mgmt.Tree.Values = []interface{}{}
     for _, column := range columns {
-      mgmt.Tree.Values = append(mgmt.Tree.Values, factory.UnqualifiedColumn(column))
+      mgmt.Tree.Values = append(mgmt.Tree.Values, nodes.UnqualifiedColumn(column))
     }
   }
   return mgmt
@@ -27,8 +26,8 @@ func (mgmt *UpdateManager) Set(columns ...interface{}) *UpdateManager {
 func (mgmt *UpdateManager) InsertAssignments(values Values) *UpdateManager {
   assignments := []interface{}{}
   for column, value := range values {
-    ucol := factory.UnqualifiedColumn(column)
-    assignment := factory.Assignment(ucol, value)
+    ucol := nodes.UnqualifiedColumn(column)
+    assignment := nodes.Assignment(ucol, value)
     assignments = append(assignments, assignment)
   }
 
@@ -40,7 +39,7 @@ func (mgmt *UpdateManager) To(values ...interface{}) *UpdateManager {
   for index, value := range values {
     if index < len(mgmt.Tree.Values) {
       column := mgmt.Tree.Values[index]
-      mgmt.Tree.Values[index] = factory.Assignment(column, value)
+      mgmt.Tree.Values[index] = nodes.Assignment(column, value)
     }
   }
   return mgmt
@@ -52,7 +51,7 @@ func (mgmt *UpdateManager) Where(expr interface{}) *UpdateManager {
 }
 
 func (mgmt *UpdateManager) Limit(expr interface{}) *UpdateManager {
-  mgmt.Tree.Limit = factory.Limit(expr)
+  mgmt.Tree.Limit = nodes.Limit(expr)
   return mgmt
 }
 
