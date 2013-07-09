@@ -2,6 +2,8 @@
 
 Codex is **NOT** an ORM, but a relation algebra inspired by [Arel](http://www.github.com/rails/arel). Project is still under heavy development.
 
+[![Build Status](https://drone.io/github.com/chuckpreslar/codex/status.png)](https://drone.io/github.com/chuckpreslar/codex/latest)
+
 ## Installation
 
 With Google's [Go](http://www.golang.org) installed on your machine:
