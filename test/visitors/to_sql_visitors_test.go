@@ -273,12 +273,65 @@ func TestSelectCoreExtensive(t *testing.T) {
   }
 }
 
-func TestSeletStatement(t *testing.T) {
+func TestSelectStatement(t *testing.T) {
   relation := nodes.Relation("table")
   stmt := nodes.SelectStatement(relation)
   expected := `SELECT  FROM "table"`
   if got, _ := sql.Accept(stmt); expected != got {
-    t.Errorf("TestSeletStatement was expected to return %s, got %s", expected, got)
+    t.Errorf("TestSelectStatement was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestInsertStatement(t *testing.T) {
+  relation := nodes.Relation("table")
+  stmt := nodes.InsertStatement(relation)
+  expected := `INSERT INTO "table" `
+  if got, _ := sql.Accept(stmt); expected != got {
+    t.Errorf("TestInsertStatement was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestUpdateStatement(t *testing.T) {
+  relation := nodes.Relation("table")
+  stmt := nodes.UpdateStatement(relation)
+  expected := `UPDATE "table" `
+  if got, _ := sql.Accept(stmt); expected != got {
+    t.Errorf("TestUpdateStatement was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestDeleteStatement(t *testing.T) {
+  relation := nodes.Relation("table")
+  stmt := nodes.DeleteStatement(relation)
+  expected := `DELETE FROM "table" `
+  if got, _ := sql.Accept(stmt); expected != got {
+    t.Errorf("TestDeleteStatement was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestAssignment(t *testing.T) {
+  assignment := nodes.Assignment(1, 2)
+  expected := "1 = 2"
+  if got, _ := sql.Accept(assignment); expected != got {
+    t.Errorf("TestAssignment was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestLiteral(t *testing.T) {
+  number := nodes.Literal(1)
+  str := nodes.Literal("1")
+  n, _ := sql.Accept(number)
+  s, _ := sql.Accept(str)
+  if n != s {
+    t.Errorf("TestLiteral was expected to return the same result, got %s and %s", n, s)
+  }
+}
+
+func TestUnqualifiedColumn(t *testing.T) {
+  column := nodes.UnqualifiedColumn("column")
+  expected := `"column"`
+  if got, _ := sql.Accept(column); expected != got {
+    t.Errorf("TestUnqualifiedColumn was expected to return %s, got %s", expected, got)
   }
 }
 
