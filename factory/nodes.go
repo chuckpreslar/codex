@@ -87,18 +87,18 @@ func Between(left, right interface{}) *nodes.Between {
 }
 
 // Creates a new InnerJoin node returning it's pointer.
-func InnerJoin(left, right interface{}) *nodes.InnerJoin {
+func InnerJoin(relation *nodes.Relation) *nodes.InnerJoin {
   join := new(nodes.InnerJoin)
-  join.Left = left
-  join.Right = right
+  join.Left = relation
+  join.Right = make([]interface{}, 0)
   return join
 }
 
 // Creates a new OuterJoin node returning it's pointer.
-func OuterJoin(left, right interface{}) *nodes.OuterJoin {
+func OuterJoin(relation *nodes.Relation) *nodes.OuterJoin {
   join := new(nodes.OuterJoin)
-  join.Left = left
-  join.Right = right
+  join.Left = relation
+  join.Right = make([]interface{}, 0)
   return join
 }
 
@@ -221,6 +221,14 @@ func UnqualifiedColumn(expr interface{}) *nodes.UnqualifiedColumn {
   column := new(nodes.UnqualifiedColumn)
   column.Expr = expr
   return column
+}
+
+// Creates a new Values node returning it's pointer.
+func Values() *nodes.Values {
+  values := new(nodes.Values)
+  values.Columns = make([]interface{}, 0)
+  values.Expressions = make([]interface{}, 0)
+  return values
 }
 
 // Creates a new JoinSource node returning it's pointer.
