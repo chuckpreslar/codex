@@ -1,11 +1,12 @@
 package nodes
 
-// Values is a specific Binary node.
+// ValuesNode is a specific BinaryNode.
 type ValuesNode struct {
   Expressions []interface{} // Array of expressions/nodes, normally assignments.
   Columns     []interface{} // Array of columns the expressions effect.
 }
 
+// ValuesNode factory method.
 func Values() *ValuesNode {
   values := new(ValuesNode)
   values.Expressions = make([]interface{}, 0)

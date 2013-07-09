@@ -1,6 +1,6 @@
 package nodes
 
-// Not node is a Unary node struct
+// NotNode is a UnaryNode struct
 type NotNode UnaryNode
 
 // Returns a Grouping node with an expression containing a
@@ -21,6 +21,7 @@ func (not *NotNode) Not() *NotNode {
   return Not(not)
 }
 
+// NotNode factory method.
 func Not(expr interface{}) *NotNode {
   not := new(NotNode)
   not.Expr = expr

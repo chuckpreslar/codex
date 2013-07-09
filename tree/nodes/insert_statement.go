@@ -7,6 +7,7 @@ type InsertStatementNode struct {
   Values   *ValuesNode   // Pointer to the Values for insertion.
 }
 
+// InsertStatementNode factory method.
 func InsertStatement(relation *RelationNode) *InsertStatementNode {
   stmt := new(InsertStatementNode)
   stmt.Relation = relation

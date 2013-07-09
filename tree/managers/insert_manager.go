@@ -64,7 +64,10 @@ func (mgmt *InsertManager) Into(columns ...interface{}) *InsertManager {
 }
 
 func (mgmt *InsertManager) SetEngine(engine interface{}) *InsertManager {
-  mgmt.Engine = engine
+  if _, ok := VISITORS[engine]; ok {
+    mgmt.Engine = engine
+  }
+
   return mgmt
 }
 
@@ -73,4 +76,10 @@ func (mgmt *InsertManager) ToSql() (string, error) {
     mgmt.Engine = "to_sql"
   }
   return VISITORS[mgmt.Engine].Accept(mgmt.Tree)
+}
+
+func Insertion(relation *nodes.RelationNode) *InsertManager {
+  insertion := new(InsertManager)
+  insertion.Tree = nodes.InsertStatement(relation)
+  return insertion
 }

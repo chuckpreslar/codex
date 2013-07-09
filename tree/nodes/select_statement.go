@@ -7,6 +7,7 @@ type SelectStatementNode struct {
   Offset *OffsetNode       // Potential Offset node for skipping records.
 }
 
+// SelectStatementNode factory method.
 func SelectStatement(relation *RelationNode) *SelectStatementNode {
   stmt := new(SelectStatementNode)
   stmt.Cores = []*SelectCoreNode{SelectCore(relation)}

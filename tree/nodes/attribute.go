@@ -1,6 +1,6 @@
 package nodes
 
-// Attribute struct.
+// AttributeNode is a specific Binary node
 type AttributeNode struct {
   Name     interface{}   // Name of the Attribute.
   Relation *RelationNode // Relation the attribute belongs to.
@@ -66,6 +66,7 @@ func (attr *AttributeNode) And(other interface{}) *GroupingNode {
   return Grouping(And(attr, other))
 }
 
+// AttributeNode factory method.
 func Attribute(name interface{}, relation *RelationNode) *AttributeNode {
   attr := new(AttributeNode)
   attr.Name = name

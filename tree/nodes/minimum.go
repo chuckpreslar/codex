@@ -1,5 +1,6 @@
 package nodes
 
+// MinimumNode is a FunctionNode struct
 type MinimumNode FunctionNode
 
 // Returns and Equal node containing a reference to the
@@ -62,6 +63,7 @@ func (min *MinimumNode) And(other interface{}) *GroupingNode {
   return Grouping(And(min, other))
 }
 
+// MinimumNode factory method.
 func Minimum(expressions ...interface{}) *MinimumNode {
   min := new(MinimumNode)
   min.Expressions = expressions
