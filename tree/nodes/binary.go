@@ -6,12 +6,13 @@ type BinaryNode struct {
   Right interface{} // Binary nodes right leaf.
 }
 
-type AsNode BinaryNode         // As node is a Binary node struct
-type BetweenNode BinaryNode    // Between node is a Binary node struct
-type InnerJoinNode BinaryNode  // InnerJoin node is a Binary node struct
-type OuterJoinNode BinaryNode  // OuterJoin node is a Binary node struct
-type AssignmentNode BinaryNode // Assignment node is a Binary node struct
+type AsNode BinaryNode         // AsNode is a BinaryNode struct
+type BetweenNode BinaryNode    // BetweenNode is a BinaryNode struct
+type InnerJoinNode BinaryNode  // InnerJoinNode is a BinaryNode struct
+type OuterJoinNode BinaryNode  // OuterJoinNode is a BinaryNode struct
+type AssignmentNode BinaryNode // AssignmentNode is a BinaryNode struct
 
+// AsNode factory method.
 func As(left, right interface{}) *AsNode {
   as := new(AsNode)
   as.Left = left
@@ -19,6 +20,7 @@ func As(left, right interface{}) *AsNode {
   return as
 }
 
+// BetweenNode factory method.
 func Between(left, right interface{}) *BetweenNode {
   between := new(BetweenNode)
   between.Left = left
@@ -26,6 +28,7 @@ func Between(left, right interface{}) *BetweenNode {
   return between
 }
 
+// InnerJoinNode factory method.
 func InnerJoin(left, right interface{}) *InnerJoinNode {
   join := new(InnerJoinNode)
   join.Left = left
@@ -33,6 +36,7 @@ func InnerJoin(left, right interface{}) *InnerJoinNode {
   return join
 }
 
+// OuterJoinNode factory method.
 func OuterJoin(left, right interface{}) *OuterJoinNode {
   join := new(OuterJoinNode)
   join.Left = left
@@ -40,6 +44,7 @@ func OuterJoin(left, right interface{}) *OuterJoinNode {
   return join
 }
 
+// AssignmentNode factory method.
 func Assignment(left, right interface{}) *AssignmentNode {
   assignment := new(AssignmentNode)
   assignment.Left = left

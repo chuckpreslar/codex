@@ -1,6 +1,6 @@
 package nodes
 
-// Equal node is a Binary node struct
+// EqualNode is a BinaryNode struct
 type EqualNode BinaryNode
 
 // Returns a Grouping node with an expression containing a
@@ -21,6 +21,7 @@ func (eq *EqualNode) Not() *NotNode {
   return Not(eq)
 }
 
+// Equal factory method.
 func Equal(left, right interface{}) *EqualNode {
   eq := new(EqualNode)
   eq.Left = left

@@ -1,6 +1,6 @@
 package nodes
 
-// NotEqual node is a Binary node struct
+// NotEqualNode is a BinaryNode struct
 type NotEqualNode BinaryNode
 
 // Returns a Grouping node with an expression containing a
@@ -21,6 +21,7 @@ func (neq *NotEqualNode) Not() *NotNode {
   return Not(neq)
 }
 
+// NotEqualNode factory method.
 func NotEqual(left, right interface{}) *NotEqualNode {
   neq := new(NotEqualNode)
   neq.Left = left

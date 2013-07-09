@@ -1,6 +1,6 @@
 package nodes
 
-// And node is a Binary node struct
+// AndNode is a BinaryNode struct
 type AndNode BinaryNode
 
 // Returns a Grouping node with an expression containing a

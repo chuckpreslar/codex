@@ -1,6 +1,6 @@
 package nodes
 
-// Like node is a Binary node struct
+// LikeNode is a BinaryNode struct
 type LikeNode BinaryNode
 
 // Returns a Grouping node with an expression containing a
@@ -21,6 +21,7 @@ func (like *LikeNode) Not() *NotNode {
   return Not(like)
 }
 
+// LikeNode factory method.
 func Like(left, right interface{}) *LikeNode {
   like := new(LikeNode)
   like.Left = left

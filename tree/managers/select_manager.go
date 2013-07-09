@@ -15,7 +15,6 @@ func (mgmt *SelectManager) Project(projections ...interface{}) *SelectManager {
     switch projection.(type) {
     case string:
       projection = nodes.Literal(projection)
-    default:
     }
     mgmt.Context.Projections = append(mgmt.Context.Projections, projection)
   }
@@ -28,7 +27,7 @@ func (mgmt *SelectManager) Where(expr interface{}) *SelectManager {
 }
 
 func (mgmt *SelectManager) Offset(skip int) *SelectManager {
-  mgmt.Tree.Offset.Expr = nodes.Offset(skip)
+  mgmt.Tree.Offset = nodes.Offset(skip)
   return mgmt
 }
 
@@ -59,6 +58,11 @@ func (mgmt *SelectManager) OuterJoin(table interface{}) *SelectManager {
 
 func (mgmt *SelectManager) On(expr interface{}) *SelectManager {
   joins := mgmt.Context.Source.Right
+
+  if 0 == len(joins) {
+    return mgmt
+  }
+
   last := joins[len(joins)-1]
 
   switch last.(type) {
@@ -72,7 +76,10 @@ func (mgmt *SelectManager) On(expr interface{}) *SelectManager {
 }
 
 func (mgmt *SelectManager) SetEngine(engine interface{}) *SelectManager {
-  mgmt.Engine = engine
+  if _, ok := VISITORS[engine]; ok {
+    mgmt.Engine = engine
+  }
+
   return mgmt
 }
 
@@ -88,4 +95,11 @@ func (mgmt *SelectManager) ToSql() (string, error) {
   }
 
   return VISITORS[mgmt.Engine].Accept(mgmt.Tree)
+}
+
+func Selection(relation *nodes.RelationNode) *SelectManager {
+  selection := new(SelectManager)
+  selection.Tree = nodes.SelectStatement(relation)
+  selection.Context = selection.Tree.Cores[0]
+  return selection
 }

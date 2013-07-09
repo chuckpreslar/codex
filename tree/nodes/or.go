@@ -1,6 +1,6 @@
 package nodes
 
-// Or node is a Binary node struct
+// OrNode is a BinaryNode struct
 type OrNode BinaryNode
 
 // Returns a Grouping node with an expression containing a
@@ -21,6 +21,7 @@ func (or *OrNode) Not() *NotNode {
   return Not(or)
 }
 
+// OrNode factory method.
 func Or(left, right interface{}) *OrNode {
   or := new(OrNode)
   or.Left = left

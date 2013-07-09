@@ -7,6 +7,7 @@
 * Update README to reflect changes to VisitorInerfaces's Accept method and its' affects on tree managers.
 * Remove all panics to allow for visitor to return any errors.
 * Add DEBUG variable to visitor for debugging information.
+* Add tests and factory methods for all managers.
 
 # v0.1.1 - 07.08.2013
 * Overhaul nodes package to allow for "factory" methods.

@@ -1,6 +1,6 @@
 package nodes
 
-// LessThanOrEqual node is a Binary node struct
+// LessThanOrEqualNode is a BinaryNode struct
 type LessThanOrEqualNode BinaryNode
 
 // Returns a Grouping node with an expression containing a
@@ -21,6 +21,7 @@ func (lte *LessThanOrEqualNode) Not() *NotNode {
   return Not(lte)
 }
 
+// LessThanOrEqualNode factory method.
 func LessThanOrEqual(left, right interface{}) *LessThanOrEqualNode {
   lte := new(LessThanOrEqualNode)
   lte.Left = left

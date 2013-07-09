@@ -6,6 +6,7 @@ type DeleteStatementNode struct {
   Wheres   []interface{} // Wheres is an array of expressions/nodes.
 }
 
+// DeleteStatementNode factory method.
 func DeleteStatement(relation *RelationNode) *DeleteStatementNode {
   stmt := new(DeleteStatementNode)
   stmt.Relation = relation

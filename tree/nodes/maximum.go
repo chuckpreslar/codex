@@ -1,5 +1,6 @@
 package nodes
 
+// MaximumNode is a FunctionNode struct
 type MaximumNode FunctionNode
 
 // Returns and Equal node containing a reference to the
@@ -62,6 +63,7 @@ func (max *MaximumNode) And(other interface{}) *GroupingNode {
   return Grouping(And(max, other))
 }
 
+// MaximumNode factory method.
 func Maximum(expressions ...interface{}) *MaximumNode {
   max := new(MaximumNode)
   max.Expressions = expressions

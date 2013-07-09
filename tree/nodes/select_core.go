@@ -1,6 +1,6 @@
 package nodes
 
-// SelectCore is a Nary node, normally contained in a SelectStatement node.
+// SelectCoreNode is a Nary node, normally contained in a SelectStatement node.
 type SelectCoreNode struct {
   Relation    *RelationNode   // Pointer to the relation the SelectCore is acting on.
   Source      *JoinSourceNode // JoinSouce for joining other SQL tables.
@@ -8,6 +8,7 @@ type SelectCoreNode struct {
   Wheres      []interface{}   // Wheres is an array of filters for the acting on the SelectCore.
 }
 
+// SelectCoreNode factory method.
 func SelectCore(relation *RelationNode) *SelectCoreNode {
   core := new(SelectCoreNode)
   core.Source = JoinSource(relation)

@@ -1,5 +1,6 @@
 package nodes
 
+// AverageNode is a FunctionNode struct
 type AverageNode FunctionNode
 
 // Returns and Equal node containing a reference to the
@@ -62,6 +63,7 @@ func (avg *AverageNode) And(other interface{}) *GroupingNode {
   return Grouping(And(avg, other))
 }
 
+// AverageNode factory method.
 func Average(expressions ...interface{}) *AverageNode {
   avg := new(AverageNode)
   avg.Expressions = expressions
