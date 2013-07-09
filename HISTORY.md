@@ -1,3 +1,9 @@
+# v0.1.2 - 07.09.2013
+* Proper tests for Nodes
+* Proper tests for ToSqlVisitor
+* Visitor's Accept now returns result, error after recovering from a potential panic from the visitors Visit method.
+* Apply check to all SelectCoreNodes's that belong to a SelectStatementNode to ensure a minimum of a STAR is present.
+
 # v0.1.1 - 07.08.2013
 * Overhaul nodes package to allow for "factory" methods.
 * Add Nodes and visitors for SQL Functions Average, Sum, Minimum, Maximum and Count.

@@ -6,7 +6,7 @@ import (
 
 type VisitorInterface interface {
   // Base methods.
-  Accept(interface{}) string
+  Accept(interface{}) (string, error)
   Visit(interface{}, VisitorInterface) string
 
   // Node visitors.

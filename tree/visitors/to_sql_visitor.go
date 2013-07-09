@@ -1,6 +1,7 @@
 package visitors
 
 import (
+  "errors"
   "fmt"
   "github.com/chuckpreslar/codex/tree/nodes"
   "strings"
@@ -22,8 +23,16 @@ const (
 
 type ToSqlVisitor struct{}
 
-func (sql *ToSqlVisitor) Accept(o interface{}) string {
-  return sql.Visit(o, sql)
+func (sql *ToSqlVisitor) Accept(o interface{}) (result string, err error) {
+  defer func() {
+    if r := recover(); r != nil {
+      err = errors.New(fmt.Sprintf("%v", r))
+    }
+  }()
+
+  result = sql.Visit(o, sql)
+
+  return
 }
 
 func (sql *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string {
