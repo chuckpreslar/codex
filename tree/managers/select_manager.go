@@ -43,8 +43,6 @@ func (mgmt *SelectManager) InnerJoin(table interface{}) *SelectManager {
     mgmt.Context.Source.Right = append(mgmt.Context.Source.Right, nodes.InnerJoin(table.(Accessor).Relation(), nil))
   case *nodes.RelationNode:
     mgmt.Context.Source.Right = append(mgmt.Context.Source.Right, nodes.InnerJoin(table.(*nodes.RelationNode), nil))
-  default:
-    panic("Cannot join unknown type.")
   }
   return mgmt
 }
@@ -55,8 +53,6 @@ func (mgmt *SelectManager) OuterJoin(table interface{}) *SelectManager {
     mgmt.Context.Source.Right = append(mgmt.Context.Source.Right, nodes.OuterJoin(table.(Accessor).Relation(), nil))
   case *nodes.RelationNode:
     mgmt.Context.Source.Right = append(mgmt.Context.Source.Right, nodes.OuterJoin(table.(*nodes.RelationNode), nil))
-  default:
-    panic("Cannot join unknown type.")
   }
   return mgmt
 }
@@ -70,7 +66,6 @@ func (mgmt *SelectManager) On(expr interface{}) *SelectManager {
     last.(*nodes.InnerJoinNode).Right = nodes.On(expr)
   case *nodes.OuterJoinNode:
     last.(*nodes.OuterJoinNode).Right = nodes.On(expr)
-  default:
   }
 
   return mgmt
