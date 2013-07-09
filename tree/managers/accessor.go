@@ -58,6 +58,6 @@ func (accessor Accessor) Delete(expr interface{}) *DeleteManager {
   return mgmt.Delete(expr)
 }
 
-func (accessor Accessor) ToSql() string {
+func (accessor Accessor) ToSql() (string, error) {
   return accessor.From(accessor.Relation()).ToSql()
 }

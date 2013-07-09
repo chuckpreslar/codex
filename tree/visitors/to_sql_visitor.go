@@ -1,10 +1,13 @@
 package visitors
 
 import (
+  "errors"
   "fmt"
   "github.com/chuckpreslar/codex/tree/nodes"
   "strings"
 )
+
+var DEBUG = false
 
 const (
   SPACE = ` `
@@ -22,11 +25,24 @@ const (
 
 type ToSqlVisitor struct{}
 
-func (sql *ToSqlVisitor) Accept(o interface{}) string {
-  return sql.Visit(o, sql)
+func (sql *ToSqlVisitor) Accept(o interface{}) (result string, err error) {
+  defer func() {
+    if r := recover(); r != nil {
+      err = errors.New(fmt.Sprintf("%v", r))
+    }
+  }()
+
+  result = sql.Visit(o, sql)
+
+  return
 }
 
 func (sql *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string {
+
+  if DEBUG {
+    fmt.Printf("DEBUG: Visiting %T\n", o)
+  }
+
   switch o.(type) {
   // Comparison visitors.
   case *nodes.AssignmentNode:

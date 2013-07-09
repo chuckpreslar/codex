@@ -68,7 +68,7 @@ func (mgmt *InsertManager) SetEngine(engine interface{}) *InsertManager {
   return mgmt
 }
 
-func (mgmt *InsertManager) ToSql() string {
+func (mgmt *InsertManager) ToSql() (string, error) {
   if nil == mgmt.Engine {
     mgmt.Engine = "to_sql"
   }
