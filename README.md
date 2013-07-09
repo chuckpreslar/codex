@@ -29,7 +29,6 @@ import (
 
 users := codex.Table("users")
 sql, err := users.ToSql()
-
 ```
 
 Now that wasn't too bad, was it?
@@ -39,29 +38,24 @@ Now that wasn't too bad, was it?
 #### Projections
 
 ```go
-
 // ...
 
 users := codex.Table("users")
 sql, err := users.Project("id", "email", "first_name", "last_name").ToSql()
-
 ```
 
 #### Filtering
 
 ```go
-
 // ...
 
 users := codex.Table("users")
 sql, err := users.Where(users("id").Eq(1).Or(users("email").Eq("test@example.com"))).ToSql()
-
 ```
 
 #### Joins
 
 ```go
-
 // ...
 
 users := codex.Table("users")
@@ -69,26 +63,22 @@ orders := codex.Table("orders")
 sql, err := users.InnerJoin(orders).On(orders("user_id").Eq(users("id"))).ToSql()
 
 // SELECT "users".* FROM "users" INNER JOIN "orders" ON "orders"."user_id" = "users"."id"
-
 ```
 
 ## Insertions
 
 ```go
-
 // ...
 
 sql, err := users.Insert("Jon", "Doe", "jon@example.com").
     Into("first_name", "last_name", "email").ToSql()
 
 // INSERT INTO "users" ("first_name", "last_name", "email") VALUES ('Jon', 'Doe', 'jon@example.com')
-
 ```
 
 ## Modifications
 
 ```go
-
 // ...
 
 sql, err := users.Set("first_name", "last_name", "email").
@@ -97,18 +87,16 @@ sql, err := users.Set("first_name", "last_name", "email").
 
 // UPDATE "users" SET "first_name" = 'Jon', "last_name" = 'Doe', "email" = 'jon@example.com'
 // WHERE "users"."id" = 1
-
 ```
 
 ## Deletions
 
 ```go
-users := codex.Table("users")
+// ...
 
 sql, err := users.Delete(users("id").Eq(1)).ToSql()
 
 // DELETE FROM "users" WHERE "users"."id" = 1
-
 ```
 
 ## License
