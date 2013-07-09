@@ -7,6 +7,8 @@ import (
   "strings"
 )
 
+var DEBUG = false
+
 const (
   SPACE = ` `
   COMMA = `, `
@@ -36,6 +38,11 @@ func (sql *ToSqlVisitor) Accept(o interface{}) (result string, err error) {
 }
 
 func (sql *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string {
+
+  if DEBUG {
+    fmt.Printf("DEBUG: Visiting %T\n", o)
+  }
+
   switch o.(type) {
   // Comparison visitors.
   case *nodes.AssignmentNode:
