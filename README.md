@@ -66,7 +66,7 @@ sql, err := users.Where(users("id").Eq(1).Or(users("email").Eq("test@example.com
 
 users := codex.Table("users")
 orders := codex.Table("orders")
-sql, err := users.InnerJoin(orders).On(orders("user_id").Eq(user("id"))).ToSql()
+sql, err := users.InnerJoin(orders).On(orders("user_id").Eq(users("id"))).ToSql()
 
 // SELECT "users".* FROM "users" INNER JOIN "orders" ON "orders"."user_id" = "users"."id"
 
@@ -75,30 +75,32 @@ sql, err := users.InnerJoin(orders).On(orders("user_id").Eq(user("id"))).ToSql()
 ## Insertions
 
 ```go
-users := codex.Table("users")
+
+// ...
 
 sql, err := users.Insert("Jon", "Doe", "jon@example.com").
-            Into("first_name", "last_name", "email").ToSql()
+    Into("first_name", "last_name", "email").ToSql()
 
 // INSERT INTO "users" ("first_name", "last_name", "email") VALUES ('Jon', 'Doe', 'jon@example.com')
 
 ```
 
-## Updates
+## Modifications
 
 ```go
-users := codex.Table("users")
+
+// ...
 
 sql, err := users.Set("first_name", "last_name", "email").
-            To("Jon", "Doe", "jon@example.com").
-            Where(users("id").Eq(1)).ToSql()
+    To("Jon", "Doe", "jon@example.com").
+    Where(users("id").Eq(1)).ToSql()
 
 // UPDATE "users" SET "first_name" = 'Jon', "last_name" = 'Doe', "email" = 'jon@example.com'
 // WHERE "users"."id" = 1
 
 ```
 
-## Removals
+## Deletions
 
 ```go
 users := codex.Table("users")
