@@ -1,8 +1,18 @@
 package nodes
 
-type SelectCore struct {
-  Relation    *Relation
-  Source      *JoinSource
-  Projections []interface{}
-  Wheres      []interface{}
+// SelectCore is a Nary node, normally contained in a SelectStatement node.
+type SelectCoreNode struct {
+  Relation    *RelationNode   // Pointer to the relation the SelectCore is acting on.
+  Source      *JoinSourceNode // JoinSouce for joining other SQL tables.
+  Projections []interface{}   // Projections is an array, normally columns found on the SQL table.
+  Wheres      []interface{}   // Wheres is an array of filters for the acting on the SelectCore.
+}
+
+func SelectCore(relation *RelationNode) *SelectCoreNode {
+  core := new(SelectCoreNode)
+  core.Source = JoinSource(relation)
+  core.Relation = relation
+  core.Wheres = make([]interface{}, 0)
+  core.Projections = make([]interface{}, 0)
+  return core
 }

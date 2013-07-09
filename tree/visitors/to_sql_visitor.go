@@ -1,8 +1,8 @@
 package visitors
 
 import (
-  "github.com/chuckpreslar/codex/tree/nodes"
   "fmt"
+  "github.com/chuckpreslar/codex/tree/nodes"
   "strings"
 )
 
@@ -29,65 +29,76 @@ func (sql *ToSqlVisitor) Accept(o interface{}) string {
 func (sql *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string {
   switch o.(type) {
   // Comparison visitors.
-  case *nodes.Assignment:
-    return visitor.VisitAssignment(o.(*nodes.Assignment), visitor)
-  case *nodes.Equal:
-    return visitor.VisitEqual(o.(*nodes.Equal), visitor)
-  case *nodes.NotEqual:
-    return visitor.VisitNotEqual(o.(*nodes.NotEqual), visitor)
-  case *nodes.GreaterThan:
-    return visitor.VisitGreaterThan(o.(*nodes.GreaterThan), visitor)
-  case *nodes.GreaterThanOrEqual:
-    return visitor.VisitGreaterThanOrEqual(o.(*nodes.GreaterThanOrEqual), visitor)
-  case *nodes.LessThan:
-    return visitor.VisitLessThan(o.(*nodes.LessThan), visitor)
-  case *nodes.LessThanOrEqual:
-    return visitor.VisitLessThanOrEqual(o.(*nodes.LessThanOrEqual), visitor)
-  case *nodes.Like:
-    return visitor.VisitLike(o.(*nodes.Like), visitor)
-  case *nodes.Unlike:
-    return visitor.VisitUnlike(o.(*nodes.Unlike), visitor)
-  case *nodes.Or:
-    return visitor.VisitOr(o.(*nodes.Or), visitor)
-  case *nodes.And:
-    return visitor.VisitAnd(o.(*nodes.And), visitor)
+  case *nodes.AssignmentNode:
+    return visitor.VisitAssignment(o.(*nodes.AssignmentNode), visitor)
+  case *nodes.EqualNode:
+    return visitor.VisitEqual(o.(*nodes.EqualNode), visitor)
+  case *nodes.NotEqualNode:
+    return visitor.VisitNotEqual(o.(*nodes.NotEqualNode), visitor)
+  case *nodes.GreaterThanNode:
+    return visitor.VisitGreaterThan(o.(*nodes.GreaterThanNode), visitor)
+  case *nodes.GreaterThanOrEqualNode:
+    return visitor.VisitGreaterThanOrEqual(o.(*nodes.GreaterThanOrEqualNode), visitor)
+  case *nodes.LessThanNode:
+    return visitor.VisitLessThan(o.(*nodes.LessThanNode), visitor)
+  case *nodes.LessThanOrEqualNode:
+    return visitor.VisitLessThanOrEqual(o.(*nodes.LessThanOrEqualNode), visitor)
+  case *nodes.LikeNode:
+    return visitor.VisitLike(o.(*nodes.LikeNode), visitor)
+  case *nodes.UnlikeNode:
+    return visitor.VisitUnlike(o.(*nodes.UnlikeNode), visitor)
+  case *nodes.OrNode:
+    return visitor.VisitOr(o.(*nodes.OrNode), visitor)
+  case *nodes.AndNode:
+    return visitor.VisitAnd(o.(*nodes.AndNode), visitor)
   // Begin SQL node visitors.
-  case *nodes.Relation:
-    return visitor.VisitRelation(o.(*nodes.Relation), visitor)
-  case *nodes.Attribute:
-    return visitor.VisitAttribute(o.(*nodes.Attribute), visitor)
-  case *nodes.Grouping:
-    return visitor.VisitGrouping(o.(*nodes.Grouping), visitor)
-  case *nodes.Not:
-    return visitor.VisitNot(o.(*nodes.Not), visitor)
-  case *nodes.Literal:
-    return visitor.VisitLiteral(o.(*nodes.Literal), visitor)
-  case *nodes.InnerJoin:
-    return visitor.VisitInnerJoin(o.(*nodes.InnerJoin), visitor)
-  case *nodes.OuterJoin:
-    return visitor.VisitOuterJoin(o.(*nodes.OuterJoin), visitor)
-  case *nodes.On:
-    return visitor.VisitOn(o.(*nodes.On), visitor)
-  case *nodes.UnqualifiedColumn:
-    return visitor.VisitUnqualifiedColumn(o.(*nodes.UnqualifiedColumn), visitor)
-  case *nodes.Limit:
-    return visitor.VisitLimit(o.(*nodes.Limit), visitor)
-  case *nodes.Offset:
-    return visitor.VisitOffset(o.(*nodes.Offset), visitor)
-  case *nodes.JoinSource:
-    return visitor.VisitJoinSource(o.(*nodes.JoinSource), visitor)
-  case *nodes.SelectCore:
-    return visitor.VisitSelectCore(o.(*nodes.SelectCore), visitor)
-  case *nodes.SelectStatement:
-    return visitor.VisitSelectStatement(o.(*nodes.SelectStatement), visitor)
-  case *nodes.Values:
-    return visitor.VisitValues(o.(*nodes.Values), visitor)
-  case *nodes.InsertStatement:
-    return visitor.VisitInsertStatement(o.(*nodes.InsertStatement), visitor)
-  case *nodes.UpdateStatement:
-    return visitor.VisitUpdateStatement(o.(*nodes.UpdateStatement), visitor)
-  case *nodes.DeleteStatement:
-    return visitor.VisitDeleteStatement(o.(*nodes.DeleteStatement), visitor)
+  case *nodes.RelationNode:
+    return visitor.VisitRelation(o.(*nodes.RelationNode), visitor)
+  case *nodes.AttributeNode:
+    return visitor.VisitAttribute(o.(*nodes.AttributeNode), visitor)
+  case *nodes.GroupingNode:
+    return visitor.VisitGrouping(o.(*nodes.GroupingNode), visitor)
+  case *nodes.NotNode:
+    return visitor.VisitNot(o.(*nodes.NotNode), visitor)
+  case *nodes.LiteralNode:
+    return visitor.VisitLiteral(o.(*nodes.LiteralNode), visitor)
+  case *nodes.InnerJoinNode:
+    return visitor.VisitInnerJoin(o.(*nodes.InnerJoinNode), visitor)
+  case *nodes.OuterJoinNode:
+    return visitor.VisitOuterJoin(o.(*nodes.OuterJoinNode), visitor)
+  case *nodes.OnNode:
+    return visitor.VisitOn(o.(*nodes.OnNode), visitor)
+  case *nodes.UnqualifiedColumnNode:
+    return visitor.VisitUnqualifiedColumn(o.(*nodes.UnqualifiedColumnNode), visitor)
+  case *nodes.LimitNode:
+    return visitor.VisitLimit(o.(*nodes.LimitNode), visitor)
+  case *nodes.OffsetNode:
+    return visitor.VisitOffset(o.(*nodes.OffsetNode), visitor)
+  case *nodes.JoinSourceNode:
+    return visitor.VisitJoinSource(o.(*nodes.JoinSourceNode), visitor)
+  case *nodes.SelectCoreNode:
+    return visitor.VisitSelectCore(o.(*nodes.SelectCoreNode), visitor)
+  case *nodes.SelectStatementNode:
+    return visitor.VisitSelectStatement(o.(*nodes.SelectStatementNode), visitor)
+  case *nodes.ValuesNode:
+    return visitor.VisitValues(o.(*nodes.ValuesNode), visitor)
+  case *nodes.InsertStatementNode:
+    return visitor.VisitInsertStatement(o.(*nodes.InsertStatementNode), visitor)
+  case *nodes.UpdateStatementNode:
+    return visitor.VisitUpdateStatement(o.(*nodes.UpdateStatementNode), visitor)
+  case *nodes.DeleteStatementNode:
+    return visitor.VisitDeleteStatement(o.(*nodes.DeleteStatementNode), visitor)
+  // SQL function visitors.
+  case *nodes.CountNode:
+    return visitor.VisitCount(o.(*nodes.CountNode), visitor)
+  case *nodes.AverageNode:
+    return visitor.VisitAverage(o.(*nodes.AverageNode), visitor)
+  case *nodes.SumNode:
+    return visitor.VisitSum(o.(*nodes.SumNode), visitor)
+  case *nodes.MaximumNode:
+    return visitor.VisitMaximum(o.(*nodes.MaximumNode), visitor)
+  case *nodes.MinimumNode:
+    return visitor.VisitMinimum(o.(*nodes.MinimumNode), visitor)
   // Standard type visitors.
   case string:
     return visitor.VisitString(o)
@@ -102,13 +113,13 @@ func (sql *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string {
   }
 }
 
-func (sql *ToSqlVisitor) VisitAssignment(o *nodes.Assignment, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitAssignment(o *nodes.AssignmentNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v = %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
 // Being comparison node visitors.
 
-func (sql *ToSqlVisitor) VisitEqual(o *nodes.Equal, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitEqual(o *nodes.EqualNode, visitor VisitorInterface) string {
   if nil == o.Right {
     return fmt.Sprintf("%v IS NULL", visitor.Visit(o.Left, visitor))
   }
@@ -116,7 +127,7 @@ func (sql *ToSqlVisitor) VisitEqual(o *nodes.Equal, visitor VisitorInterface) st
   return fmt.Sprintf("%v = %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitNotEqual(o *nodes.NotEqual, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitNotEqual(o *nodes.NotEqualNode, visitor VisitorInterface) string {
   if nil == o.Right {
     return fmt.Sprintf("%v IS NOT NULL", visitor.Visit(o.Left, visitor))
   }
@@ -124,35 +135,35 @@ func (sql *ToSqlVisitor) VisitNotEqual(o *nodes.NotEqual, visitor VisitorInterfa
   return fmt.Sprintf("%v != %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitGreaterThan(o *nodes.GreaterThan, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitGreaterThan(o *nodes.GreaterThanNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v > %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitGreaterThanOrEqual(o *nodes.GreaterThanOrEqual, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitGreaterThanOrEqual(o *nodes.GreaterThanOrEqualNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v >= %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitLessThan(o *nodes.LessThan, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitLessThan(o *nodes.LessThanNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v < %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitLessThanOrEqual(o *nodes.LessThanOrEqual, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitLessThanOrEqual(o *nodes.LessThanOrEqualNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v <= %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitLike(o *nodes.Like, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitLike(o *nodes.LikeNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v LIKE %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitUnlike(o *nodes.Unlike, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitUnlike(o *nodes.UnlikeNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v NOT LIKE %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitOr(o *nodes.Or, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitOr(o *nodes.OrNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v OR %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitAnd(o *nodes.And, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitAnd(o *nodes.AndNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v AND %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
@@ -160,7 +171,7 @@ func (sql *ToSqlVisitor) VisitAnd(o *nodes.And, visitor VisitorInterface) string
 
 // Begin SQL node visitors.
 
-func (sql *ToSqlVisitor) VisitRelation(o *nodes.Relation, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitRelation(o *nodes.RelationNode, visitor VisitorInterface) string {
   if 0 < len(o.Alias) {
     return visitor.QuoteTableName(o.Alias)
   }
@@ -168,23 +179,23 @@ func (sql *ToSqlVisitor) VisitRelation(o *nodes.Relation, visitor VisitorInterfa
   return visitor.QuoteTableName(o.Name)
 }
 
-func (sql *ToSqlVisitor) VisitAttribute(o *nodes.Attribute, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitAttribute(o *nodes.AttributeNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v.%v", visitor.Visit(o.Relation, visitor), visitor.QuoteColumnName(o.Name))
 }
 
-func (sql *ToSqlVisitor) VisitGrouping(o *nodes.Grouping, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitGrouping(o *nodes.GroupingNode, visitor VisitorInterface) string {
   return fmt.Sprintf("(%v)", visitor.Visit(o.Expr, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitNot(o *nodes.Not, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitNot(o *nodes.NotNode, visitor VisitorInterface) string {
   return fmt.Sprintf("NOT (%v)", visitor.Visit(o.Expr, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitLiteral(o *nodes.Literal, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitLiteral(o *nodes.LiteralNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v", o.Expr)
 }
 
-func (sql *ToSqlVisitor) VisitInnerJoin(o *nodes.InnerJoin, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitInnerJoin(o *nodes.InnerJoinNode, visitor VisitorInterface) string {
   str := fmt.Sprintf("INNER JOIN %v", visitor.Visit(o.Left, visitor))
   if nil != o.Right {
     str = fmt.Sprintf("%v%v%v", str, SPACE, visitor.Visit(o.Right, visitor))
@@ -192,27 +203,27 @@ func (sql *ToSqlVisitor) VisitInnerJoin(o *nodes.InnerJoin, visitor VisitorInter
   return str
 }
 
-func (sql *ToSqlVisitor) VisitOuterJoin(o *nodes.OuterJoin, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitOuterJoin(o *nodes.OuterJoinNode, visitor VisitorInterface) string {
   return fmt.Sprintf("LEFT OUTER JOIN %v %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitOn(o *nodes.On, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitOn(o *nodes.OnNode, visitor VisitorInterface) string {
   return fmt.Sprintf("ON %v", visitor.Visit(o.Expr, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitUnqualifiedColumn(o *nodes.UnqualifiedColumn, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitUnqualifiedColumn(o *nodes.UnqualifiedColumnNode, visitor VisitorInterface) string {
   return visitor.QuoteColumnName(o.Expr)
 }
 
-func (sql *ToSqlVisitor) VisitLimit(o *nodes.Limit, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitLimit(o *nodes.LimitNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v%v", LIMIT, visitor.Visit(o.Expr, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitOffset(o *nodes.Offset, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitOffset(o *nodes.OffsetNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v%v", OFFSET, visitor.Visit(o.Expr, visitor))
 }
 
-func (sql *ToSqlVisitor) VisitJoinSource(o *nodes.JoinSource, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitJoinSource(o *nodes.JoinSourceNode, visitor VisitorInterface) string {
   str := fmt.Sprintf("%v", visitor.Visit(o.Left, visitor))
   if length := len(o.Right) - 1; 0 <= length {
     str = fmt.Sprintf("%v%v", str, SPACE)
@@ -226,7 +237,7 @@ func (sql *ToSqlVisitor) VisitJoinSource(o *nodes.JoinSource, visitor VisitorInt
   return strings.Trim(str, " ")
 }
 
-func (sql *ToSqlVisitor) VisitSelectCore(o *nodes.SelectCore, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitSelectCore(o *nodes.SelectCoreNode, visitor VisitorInterface) string {
   str := fmt.Sprintf("%v", SELECT)
 
   if length := len(o.Projections) - 1; 0 <= length {
@@ -256,7 +267,7 @@ func (sql *ToSqlVisitor) VisitSelectCore(o *nodes.SelectCore, visitor VisitorInt
   return strings.Trim(str, " ")
 }
 
-func (sql *ToSqlVisitor) VisitSelectStatement(o *nodes.SelectStatement, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitSelectStatement(o *nodes.SelectStatementNode, visitor VisitorInterface) string {
   str := ""
 
   for _, core := range o.Cores {
@@ -274,7 +285,7 @@ func (sql *ToSqlVisitor) VisitSelectStatement(o *nodes.SelectStatement, visitor 
   return str
 }
 
-func (sql *ToSqlVisitor) VisitValues(o *nodes.Values, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitValues(o *nodes.ValuesNode, visitor VisitorInterface) string {
   str := ""
 
   if length := len(o.Expressions) - 1; 0 <= length {
@@ -291,7 +302,7 @@ func (sql *ToSqlVisitor) VisitValues(o *nodes.Values, visitor VisitorInterface) 
   return str
 }
 
-func (sql *ToSqlVisitor) VisitInsertStatement(o *nodes.InsertStatement, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitInsertStatement(o *nodes.InsertStatementNode, visitor VisitorInterface) string {
   str := fmt.Sprintf("INSERT INTO %v%v", visitor.Visit(o.Relation, visitor), SPACE)
 
   if length := len(o.Columns) - 1; 0 <= length {
@@ -299,7 +310,7 @@ func (sql *ToSqlVisitor) VisitInsertStatement(o *nodes.InsertStatement, visitor 
     for index, column := range o.Columns {
 
       switch column.(type) {
-      case *nodes.Literal:
+      case *nodes.LiteralNode:
         str = fmt.Sprintf("%v%v", str, visitor.Visit(column, visitor))
       default:
         str = fmt.Sprintf("%v%v", str, visitor.QuoteColumnName(column))
@@ -317,7 +328,7 @@ func (sql *ToSqlVisitor) VisitInsertStatement(o *nodes.InsertStatement, visitor 
   return str
 }
 
-func (sql *ToSqlVisitor) VisitUpdateStatement(o *nodes.UpdateStatement, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitUpdateStatement(o *nodes.UpdateStatementNode, visitor VisitorInterface) string {
   str := fmt.Sprintf("UPDATE %v%v", visitor.Visit(o.Relation, visitor), SPACE)
 
   if length := len(o.Values) - 1; 0 <= length {
@@ -345,7 +356,7 @@ func (sql *ToSqlVisitor) VisitUpdateStatement(o *nodes.UpdateStatement, visitor 
   return str
 }
 
-func (sql *ToSqlVisitor) VisitDeleteStatement(o *nodes.DeleteStatement, visitor VisitorInterface) string {
+func (sql *ToSqlVisitor) VisitDeleteStatement(o *nodes.DeleteStatementNode, visitor VisitorInterface) string {
   str := fmt.Sprintf("DELETE FROM %v%v", visitor.Visit(o.Relation, visitor), SPACE)
 
   if length := len(o.Wheres) - 1; 0 <= length {
@@ -362,6 +373,130 @@ func (sql *ToSqlVisitor) VisitDeleteStatement(o *nodes.DeleteStatement, visitor 
 }
 
 // End SQL node visitors.
+
+// Begin SQL Function visitors.
+
+func (sql *ToSqlVisitor) VisitCount(o *nodes.CountNode, visitor VisitorInterface) string {
+  str := "COUNT("
+
+  if o.Distinct {
+    str = fmt.Sprintf("%vDISTINCT%v", str, SPACE)
+  }
+
+  if length := len(o.Expressions) - 1; 0 <= length {
+    for index, expression := range o.Expressions {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(expression, visitor))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+    str = fmt.Sprintf("%v)", str)
+  }
+
+  if nil != o.Alias {
+    str = fmt.Sprintf("%s AS %s", str, visitor.Visit(o.Alias, visitor))
+  }
+
+  return str
+}
+
+func (sql *ToSqlVisitor) VisitAverage(o *nodes.AverageNode, visitor VisitorInterface) string {
+  str := "AVG("
+
+  if o.Distinct {
+    str = fmt.Sprintf("%vDISTINCT%v", str, SPACE)
+  }
+
+  if length := len(o.Expressions) - 1; 0 <= length {
+    for index, expression := range o.Expressions {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(expression, visitor))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+    str = fmt.Sprintf("%v)", str)
+  }
+
+  if nil != o.Alias {
+    str = fmt.Sprintf("%s AS %s", str, visitor.Visit(o.Alias, visitor))
+  }
+
+  return str
+}
+
+func (sql *ToSqlVisitor) VisitSum(o *nodes.SumNode, visitor VisitorInterface) string {
+  str := "SUM("
+
+  if o.Distinct {
+    str = fmt.Sprintf("%vDISTINCT%v", str, SPACE)
+  }
+
+  if length := len(o.Expressions) - 1; 0 <= length {
+    for index, expression := range o.Expressions {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(expression, visitor))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+    str = fmt.Sprintf("%v)", str)
+  }
+
+  if nil != o.Alias {
+    str = fmt.Sprintf("%s AS %s", str, visitor.Visit(o.Alias, visitor))
+  }
+
+  return str
+}
+
+func (sql *ToSqlVisitor) VisitMaximum(o *nodes.MaximumNode, visitor VisitorInterface) string {
+  str := "MAX("
+
+  if o.Distinct {
+    str = fmt.Sprintf("%vDISTINCT%v", str, SPACE)
+  }
+
+  if length := len(o.Expressions) - 1; 0 <= length {
+    for index, expression := range o.Expressions {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(expression, visitor))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+    str = fmt.Sprintf("%v)", str)
+  }
+
+  if nil != o.Alias {
+    str = fmt.Sprintf("%s AS %s", str, visitor.Visit(o.Alias, visitor))
+  }
+
+  return str
+}
+
+func (sql *ToSqlVisitor) VisitMinimum(o *nodes.MinimumNode, visitor VisitorInterface) string {
+  str := "MIN("
+
+  if o.Distinct {
+    str = fmt.Sprintf("%vDISTINCT%v", str, SPACE)
+  }
+
+  if length := len(o.Expressions) - 1; 0 <= length {
+    for index, expression := range o.Expressions {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(expression, visitor))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+    str = fmt.Sprintf("%v)", str)
+  }
+
+  if nil != o.Alias {
+    str = fmt.Sprintf("%s AS %s", str, visitor.Visit(o.Alias, visitor))
+  }
+
+  return str
+}
+
+// End SQL Function visitors.
 
 // Begin standard type visitors.
 

@@ -1,21 +1,28 @@
 package nodes
 
-type Not Unary
+// Not node is a Unary node struct
+type NotNode UnaryNode
 
 // Returns a Grouping node with an expression containing a
 // reference to an Or node of the Not and other.
-func (not *Not) Or(other interface{}) *Grouping {
-  return &Grouping{&Or{not, other}}
+func (not *NotNode) Or(other interface{}) *GroupingNode {
+  return Grouping(Or(not, other))
 }
 
 // Returns a Grouping node with an expression containing a
 // reference to an And node of the Not and other.
-func (not *Not) And(other interface{}) *Grouping {
-  return &Grouping{&And{not, other}}
+func (not *NotNode) And(other interface{}) *GroupingNode {
+  return Grouping(And(not, other))
 }
 
 // Returns an Not node with and expression containing the
 // Not node.
-func (not *Not) Not() *Not {
-  return &Not{not}
+func (not *NotNode) Not() *NotNode {
+  return Not(not)
+}
+
+func Not(expr interface{}) *NotNode {
+  not := new(NotNode)
+  not.Expr = expr
+  return not
 }
