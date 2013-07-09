@@ -21,6 +21,7 @@ func (grouping *GroupingNode) Not() *NotNode {
   return Not(grouping)
 }
 
+// GroupingNode factory method.
 func Grouping(expr interface{}) *GroupingNode {
   grouping := new(GroupingNode)
   grouping.Expr = expr

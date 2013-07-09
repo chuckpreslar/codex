@@ -1,5 +1,6 @@
 package nodes
 
+// SumNode is a FunctionNode struct
 type SumNode FunctionNode
 
 // Returns and Equal node containing a reference to the
@@ -62,6 +63,7 @@ func (sum *SumNode) And(other interface{}) *GroupingNode {
   return Grouping(And(sum, other))
 }
 
+// SumNode factory method.
 func Sum(expressions ...interface{}) *SumNode {
   sum := new(SumNode)
   sum.Expressions = expressions

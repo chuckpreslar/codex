@@ -1,6 +1,6 @@
 package nodes
 
-// GreaterThanOrEqual node is a Binary node struct
+// GreaterThanOrEqualNode is a BinaryNode struct
 type GreaterThanOrEqualNode BinaryNode
 
 // Returns a Grouping node with an expression containing a
@@ -21,6 +21,7 @@ func (gte *GreaterThanOrEqualNode) Not() *NotNode {
   return Not(gte)
 }
 
+// GreaterThanOrEqualNode factory method.
 func GreaterThanOrEqual(left, right interface{}) *GreaterThanOrEqualNode {
   gte := new(GreaterThanOrEqualNode)
   gte.Left = left

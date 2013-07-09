@@ -8,6 +8,7 @@ type UpdateStatementNode struct {
   Limit    *LimitNode    // Potential Limit node for limiting the number of rows effected.
 }
 
+// UpdateStatementNode factory method.
 func UpdateStatement(relation *RelationNode) *UpdateStatementNode {
   stmt := new(UpdateStatementNode)
   stmt.Relation = relation

@@ -1,5 +1,6 @@
 package nodes
 
+// CountNode is a FunctionNode struct
 type CountNode FunctionNode
 
 // Returns and Equal node containing a reference to the
@@ -62,6 +63,7 @@ func (count *CountNode) And(other interface{}) *GroupingNode {
   return Grouping(And(count, other))
 }
 
+// CountNode factory method.
 func Count(expressions ...interface{}) *CountNode {
   count := new(CountNode)
   count.Expressions = expressions

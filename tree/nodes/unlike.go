@@ -1,6 +1,6 @@
 package nodes
 
-// Unlike node is a Binary node struct
+// UnlikeNode is a BinaryNode struct
 type UnlikeNode BinaryNode
 
 // Returns a Grouping node with an expression containing a
@@ -21,6 +21,7 @@ func (unlike *UnlikeNode) Not() *NotNode {
   return Not(unlike)
 }
 
+// UnlikeNode factory method.
 func Unlike(left, right interface{}) *UnlikeNode {
   unlike := new(UnlikeNode)
   unlike.Left = left
