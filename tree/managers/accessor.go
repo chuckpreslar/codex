@@ -31,31 +31,19 @@ func (accessor Accessor) OuterJoin(expr interface{}) *SelectManager {
 }
 
 func (accessor Accessor) From(relation *nodes.RelationNode) *SelectManager {
-  mgmt := new(SelectManager)
-  mgmt.Tree = nodes.SelectStatement(relation)
-  mgmt.Context = mgmt.Tree.Cores[0]
-  return mgmt
+  return Selection(relation)
 }
 
 func (accessor Accessor) Insert(expr ...interface{}) *InsertManager {
-  stmt := nodes.InsertStatement(accessor.Relation())
-  mgmt := new(InsertManager)
-  mgmt.Tree = stmt
-  return mgmt.Insert(expr...)
+  return Insertion(accessor.Relation()).Insert(expr...)
 }
 
 func (accessor Accessor) Set(expr ...interface{}) *UpdateManager {
-  stmt := nodes.UpdateStatement(accessor.Relation())
-  mgmt := new(UpdateManager)
-  mgmt.Tree = stmt
-  return mgmt.Set(expr...)
+  return Modification(accessor.Relation()).Set(expr...)
 }
 
 func (accessor Accessor) Delete(expr interface{}) *DeleteManager {
-  stmt := nodes.DeleteStatement(accessor.Relation())
-  mgmt := new(DeleteManager)
-  mgmt.Tree = stmt
-  return mgmt.Delete(expr)
+  return Deletion(accessor.Relation()).Delete(expr)
 }
 
 func (accessor Accessor) ToSql() (string, error) {

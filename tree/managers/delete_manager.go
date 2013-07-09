@@ -15,7 +15,10 @@ func (mgmt *DeleteManager) Delete(expr interface{}) *DeleteManager {
 }
 
 func (mgmt *DeleteManager) SetEngine(engine interface{}) *DeleteManager {
-  mgmt.Engine = engine
+  if _, ok := VISITORS[engine]; ok {
+    mgmt.Engine = engine
+  }
+
   return mgmt
 }
 
@@ -23,5 +26,12 @@ func (mgmt *DeleteManager) ToSql() (string, error) {
   if nil == mgmt.Engine {
     mgmt.Engine = "to_sql"
   }
+
   return VISITORS[mgmt.Engine].Accept(mgmt.Tree)
+}
+
+func Deletion(relation *nodes.RelationNode) *DeleteManager {
+  deletion := new(DeleteManager)
+  deletion.Tree = nodes.DeleteStatement(relation)
+  return deletion
 }

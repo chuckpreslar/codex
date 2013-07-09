@@ -56,7 +56,10 @@ func (mgmt *UpdateManager) Limit(expr interface{}) *UpdateManager {
 }
 
 func (mgmt *UpdateManager) SetEngine(engine interface{}) *UpdateManager {
-  mgmt.Engine = engine
+  if _, ok := VISITORS[engine]; ok {
+    mgmt.Engine = engine
+  }
+
   return mgmt
 }
 
@@ -65,4 +68,10 @@ func (mgmt *UpdateManager) ToSql() (string, error) {
     mgmt.Engine = "to_sql"
   }
   return VISITORS[mgmt.Engine].Accept(mgmt.Tree)
+}
+
+func Modification(relation *nodes.RelationNode) *UpdateManager {
+  modification := new(UpdateManager)
+  modification.Tree = nodes.UpdateStatement(relation)
+  return modification
 }
