@@ -6,7 +6,7 @@ import (
   "testing"
 )
 
-var sql = new(visitors.ToSqlVisitor)
+var sql = &visitors.ToSqlVisitor{}
 
 func TestAccept(t *testing.T) {
   got, err := sql.Accept(nil)
