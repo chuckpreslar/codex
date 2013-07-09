@@ -82,8 +82,10 @@ func (mgmt *SelectManager) SetEngine(engine interface{}) *SelectManager {
 }
 
 func (mgmt *SelectManager) ToSql() string {
-  if 0 == len(mgmt.Context.Projections) {
-    mgmt.Context.Projections = append(mgmt.Context.Projections, nodes.Star())
+  for _, core := range mgmt.Tree.Cores {
+    if 0 == len(core.Projections) {
+      core.Projections = append(core.Projections, nodes.Attribute(nodes.Star(), core.Relation))
+    }
   }
 
   if nil == mgmt.Engine {
