@@ -4,12 +4,16 @@ import (
   "github.com/chuckpreslar/codex/tree/nodes"
 )
 
+// SelectManager manages a tree that compiles to a SQL select statement.
 type SelectManager struct {
-  Tree    *nodes.SelectStatementNode
-  Context *nodes.SelectCoreNode
-  Engine  interface{}
+  Tree    *nodes.SelectStatementNode // The AST for the SQL SELECT statement.
+  Context *nodes.SelectCoreNode      // Reference to the Core the manager is curretly operating on.
+  Engine  interface{}                // The SQL Engine.
 }
 
+// Appends a projection to the current Context's Projections slice,
+// typically an AttributeNode or string.  If a string is provided, it is
+// inserted as a LiteralNode.
 func (mgmt *SelectManager) Project(projections ...interface{}) *SelectManager {
   for _, projection := range projections {
     switch projection.(type) {
@@ -21,21 +25,26 @@ func (mgmt *SelectManager) Project(projections ...interface{}) *SelectManager {
   return mgmt
 }
 
+// Appends an expression to the current Context's Wheres slice,
+// typically a comparison, i.e. 1 = 1
 func (mgmt *SelectManager) Where(expr interface{}) *SelectManager {
   mgmt.Context.Wheres = append(mgmt.Context.Wheres, expr)
   return mgmt
 }
 
+// Sets the Tree's Offset to the given integer.
 func (mgmt *SelectManager) Offset(skip int) *SelectManager {
   mgmt.Tree.Offset = nodes.Offset(skip)
   return mgmt
 }
 
+// Sets the Tree's Limit to the given integer.
 func (mgmt *SelectManager) Limit(take int) *SelectManager {
   mgmt.Tree.Limit = nodes.Limit(take)
   return mgmt
 }
 
+// Appends a new InnerJoin to the current Context's SourceNode.
 func (mgmt *SelectManager) InnerJoin(table interface{}) *SelectManager {
   switch table.(type) {
   case Accessor:
@@ -46,6 +55,7 @@ func (mgmt *SelectManager) InnerJoin(table interface{}) *SelectManager {
   return mgmt
 }
 
+// Appends a new InnerJoin to the current Context's SourceNode.
 func (mgmt *SelectManager) OuterJoin(table interface{}) *SelectManager {
   switch table.(type) {
   case Accessor:
@@ -56,6 +66,8 @@ func (mgmt *SelectManager) OuterJoin(table interface{}) *SelectManager {
   return mgmt
 }
 
+// Sets the last stored Join's Right leaf to a OnNode containing the
+// given expression.
 func (mgmt *SelectManager) On(expr interface{}) *SelectManager {
   joins := mgmt.Context.Source.Right
 
@@ -75,14 +87,15 @@ func (mgmt *SelectManager) On(expr interface{}) *SelectManager {
   return mgmt
 }
 
+// Sets the SQL Enginge.
 func (mgmt *SelectManager) SetEngine(engine interface{}) *SelectManager {
   if _, ok := VISITORS[engine]; ok {
     mgmt.Engine = engine
   }
-
   return mgmt
 }
 
+// Calls a visitor's Accept method based on the manager's SQL Engine.
 func (mgmt *SelectManager) ToSql() (string, error) {
   for _, core := range mgmt.Tree.Cores {
     if 0 == len(core.Projections) {
@@ -97,6 +110,7 @@ func (mgmt *SelectManager) ToSql() (string, error) {
   return VISITORS[mgmt.Engine].Accept(mgmt.Tree)
 }
 
+// SelectManager factory method.
 func Selection(relation *nodes.RelationNode) *SelectManager {
   selection := new(SelectManager)
   selection.Tree = nodes.SelectStatement(relation)
