@@ -1,11 +1,11 @@
-package codex
+package managers
 
 import (
   "github.com/chuckpreslar/codex/tree/nodes"
 )
 
 type DeleteManager struct {
-  Tree   *nodes.DeleteStatement
+  Tree   *nodes.DeleteStatementNode
   Engine interface{}
 }
 

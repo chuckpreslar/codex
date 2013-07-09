@@ -1,12 +1,12 @@
-package codex
+package managers
 
 import (
   "github.com/chuckpreslar/codex/tree/nodes"
 )
 
 type SelectManager struct {
-  Tree    *nodes.SelectStatement
-  Context *nodes.SelectCore
+  Tree    *nodes.SelectStatementNode
+  Context *nodes.SelectCoreNode
   Engine  interface{}
 }
 
@@ -14,7 +14,7 @@ func (mgmt *SelectManager) Project(projections ...interface{}) *SelectManager {
   for _, projection := range projections {
     switch projection.(type) {
     case string:
-      projection = &nodes.Literal{projection}
+      projection = nodes.Literal(projection)
     default:
     }
     mgmt.Context.Projections = append(mgmt.Context.Projections, projection)
@@ -28,27 +28,21 @@ func (mgmt *SelectManager) Where(expr interface{}) *SelectManager {
 }
 
 func (mgmt *SelectManager) Offset(skip int) *SelectManager {
-  if nil == mgmt.Tree.Offset {
-    mgmt.Tree.Offset = &nodes.Offset{}
-  }
-  mgmt.Tree.Offset.Expr = skip
+  mgmt.Tree.Offset.Expr = nodes.Offset(skip)
   return mgmt
 }
 
 func (mgmt *SelectManager) Limit(take int) *SelectManager {
-  if nil == mgmt.Tree.Limit {
-    mgmt.Tree.Limit = &nodes.Limit{}
-  }
-  mgmt.Tree.Limit.Expr = take
+  mgmt.Tree.Limit = nodes.Limit(take)
   return mgmt
 }
 
 func (mgmt *SelectManager) InnerJoin(table interface{}) *SelectManager {
   switch table.(type) {
   case Accessor:
-    mgmt.Context.Source.Right = append(mgmt.Context.Source.Right, &nodes.InnerJoin{table.(Accessor).Relation(), nil})
-  case *nodes.Relation:
-    mgmt.Context.Source.Right = append(mgmt.Context.Source.Right, &nodes.InnerJoin{table, nil})
+    mgmt.Context.Source.Right = append(mgmt.Context.Source.Right, nodes.InnerJoin(table.(Accessor).Relation(), nil))
+  case *nodes.RelationNode:
+    mgmt.Context.Source.Right = append(mgmt.Context.Source.Right, nodes.InnerJoin(table.(*nodes.RelationNode), nil))
   default:
     panic("Cannot join unknown type.")
   }
@@ -58,9 +52,9 @@ func (mgmt *SelectManager) InnerJoin(table interface{}) *SelectManager {
 func (mgmt *SelectManager) OuterJoin(table interface{}) *SelectManager {
   switch table.(type) {
   case Accessor:
-    mgmt.Context.Source.Right = append(mgmt.Context.Source.Right, &nodes.OuterJoin{table.(Accessor).Relation(), nil})
-  case *nodes.Relation:
-    mgmt.Context.Source.Right = append(mgmt.Context.Source.Right, &nodes.OuterJoin{table, nil})
+    mgmt.Context.Source.Right = append(mgmt.Context.Source.Right, nodes.OuterJoin(table.(Accessor).Relation(), nil))
+  case *nodes.RelationNode:
+    mgmt.Context.Source.Right = append(mgmt.Context.Source.Right, nodes.OuterJoin(table.(*nodes.RelationNode), nil))
   default:
     panic("Cannot join unknown type.")
   }
@@ -72,10 +66,10 @@ func (mgmt *SelectManager) On(expr interface{}) *SelectManager {
   last := joins[len(joins)-1]
 
   switch last.(type) {
-  case *nodes.InnerJoin:
-    last.(*nodes.InnerJoin).Right = &nodes.On{expr}
-  case *nodes.OuterJoin:
-    last.(*nodes.OuterJoin).Right = &nodes.On{expr}
+  case *nodes.InnerJoinNode:
+    last.(*nodes.InnerJoinNode).Right = nodes.On(expr)
+  case *nodes.OuterJoinNode:
+    last.(*nodes.OuterJoinNode).Right = nodes.On(expr)
   default:
   }
 

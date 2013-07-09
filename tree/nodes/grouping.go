@@ -1,15 +1,28 @@
 package nodes
 
-type Grouping Unary
+// Grouping node is a Unary node struct
+type GroupingNode UnaryNode
 
-func (grouping *Grouping) Or(other interface{}) *Grouping {
-  return &Grouping{&Or{grouping, other}}
+// Returns a Grouping node with an expression containing a
+// reference to an Or node of the Grouping and other.
+func (grouping *GroupingNode) Or(other interface{}) *GroupingNode {
+  return Grouping(Or(grouping, other))
 }
 
-func (grouping *Grouping) And(other interface{}) *Grouping {
-  return &Grouping{&And{grouping, other}}
+// Returns a Grouping node with an expression containing a
+// reference to an And node of the Grouping and other.
+func (grouping *GroupingNode) And(other interface{}) *GroupingNode {
+  return Grouping(And(grouping, other))
 }
 
-func (grouping *Grouping) Not() *Not {
-  return &Not{grouping}
+// Returns an Not node with and expression containing the
+// Grouping node.
+func (grouping *GroupingNode) Not() *NotNode {
+  return Not(grouping)
+}
+
+func Grouping(expr interface{}) *GroupingNode {
+  grouping := new(GroupingNode)
+  grouping.Expr = expr
+  return grouping
 }
