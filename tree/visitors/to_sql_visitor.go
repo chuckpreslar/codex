@@ -143,11 +143,63 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
   }
 }
 
+// Begin Unary node visitors.
+
+func (self *ToSqlVisitor) VisitGrouping(o *nodes.GroupingNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("(%v)", visitor.Visit(o.Expr, visitor))
+}
+
+func (self *ToSqlVisitor) VisitNot(o *nodes.NotNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("NOT (%v)", visitor.Visit(o.Expr, visitor))
+}
+
+func (self *ToSqlVisitor) VisitLiteral(o *nodes.LiteralNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("%v", o.Expr)
+}
+
+func (self *ToSqlVisitor) VisitOn(o *nodes.OnNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("ON %v", visitor.Visit(o.Expr, visitor))
+}
+
+func (self *ToSqlVisitor) VisitColumn(o *nodes.ColumnNode, visitor VisitorInterface) string {
+  return visitor.QuoteColumnName(o.Expr)
+}
+
+func (self *ToSqlVisitor) VisitStar(o *nodes.StarNode, visitor VisitorInterface) string {
+  return STAR
+}
+
+func (self *ToSqlVisitor) VisitUnqualifiedColumn(o *nodes.UnqualifiedColumnNode, visitor VisitorInterface) string {
+  return visitor.QuoteColumnName(o.Expr)
+}
+
+func (self *ToSqlVisitor) VisitLimit(o *nodes.LimitNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("LIMIT %v", visitor.Visit(o.Expr, visitor))
+}
+
+func (self *ToSqlVisitor) VisitOffset(o *nodes.OffsetNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("OFFSET %v", visitor.Visit(o.Expr, visitor))
+}
+
+func (self *ToSqlVisitor) VisitHaving(o *nodes.HavingNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("HAVING %v", visitor.Visit(o.Expr, visitor))
+}
+
+func (self *ToSqlVisitor) VisitAscending(o *nodes.AscendingNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("%v ASC", visitor.Visit(o.Expr, visitor))
+}
+
+func (self *ToSqlVisitor) VisitDescending(o *nodes.DescendingNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("%v DESC", visitor.Visit(o.Expr, visitor))
+}
+
+// End Unary node visitors.
+
+// Begin Binary node visitors.
+
 func (self *ToSqlVisitor) VisitAssignment(o *nodes.AssignmentNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v = %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
-
-// Being comparison node visitors.
 
 func (self *ToSqlVisitor) VisitEqual(o *nodes.EqualNode, visitor VisitorInterface) string {
   if nil == o.Right {
@@ -197,10 +249,6 @@ func (self *ToSqlVisitor) VisitAnd(o *nodes.AndNode, visitor VisitorInterface) s
   return fmt.Sprintf("%v AND %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
-// End comparison node visitors.
-
-// Begin SQL node visitors.
-
 func (self *ToSqlVisitor) VisitRelation(o *nodes.RelationNode, visitor VisitorInterface) string {
   if 0 < len(o.Alias) {
     return visitor.QuoteTableName(o.Alias)
@@ -213,18 +261,6 @@ func (self *ToSqlVisitor) VisitAttribute(o *nodes.AttributeNode, visitor Visitor
   return fmt.Sprintf("%v.%v", visitor.Visit(o.Relation, visitor), visitor.Visit(o.Name, visitor))
 }
 
-func (self *ToSqlVisitor) VisitGrouping(o *nodes.GroupingNode, visitor VisitorInterface) string {
-  return fmt.Sprintf("(%v)", visitor.Visit(o.Expr, visitor))
-}
-
-func (self *ToSqlVisitor) VisitNot(o *nodes.NotNode, visitor VisitorInterface) string {
-  return fmt.Sprintf("NOT (%v)", visitor.Visit(o.Expr, visitor))
-}
-
-func (self *ToSqlVisitor) VisitLiteral(o *nodes.LiteralNode, visitor VisitorInterface) string {
-  return fmt.Sprintf("%v", o.Expr)
-}
-
 func (self *ToSqlVisitor) VisitInnerJoin(o *nodes.InnerJoinNode, visitor VisitorInterface) string {
   str := fmt.Sprintf("INNER JOIN %v", visitor.Visit(o.Left, visitor))
   if nil != o.Right {
@@ -235,42 +271,6 @@ func (self *ToSqlVisitor) VisitInnerJoin(o *nodes.InnerJoinNode, visitor Visitor
 
 func (self *ToSqlVisitor) VisitOuterJoin(o *nodes.OuterJoinNode, visitor VisitorInterface) string {
   return fmt.Sprintf("LEFT OUTER JOIN %v %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
-}
-
-func (self *ToSqlVisitor) VisitOn(o *nodes.OnNode, visitor VisitorInterface) string {
-  return fmt.Sprintf("ON %v", visitor.Visit(o.Expr, visitor))
-}
-
-func (self *ToSqlVisitor) VisitColumn(o *nodes.ColumnNode, visitor VisitorInterface) string {
-  return visitor.QuoteColumnName(o.Expr)
-}
-
-func (self *ToSqlVisitor) VisitStar(o *nodes.StarNode, visitor VisitorInterface) string {
-  return STAR
-}
-
-func (self *ToSqlVisitor) VisitUnqualifiedColumn(o *nodes.UnqualifiedColumnNode, visitor VisitorInterface) string {
-  return visitor.QuoteColumnName(o.Expr)
-}
-
-func (self *ToSqlVisitor) VisitLimit(o *nodes.LimitNode, visitor VisitorInterface) string {
-  return fmt.Sprintf("LIMIT %v", visitor.Visit(o.Expr, visitor))
-}
-
-func (self *ToSqlVisitor) VisitOffset(o *nodes.OffsetNode, visitor VisitorInterface) string {
-  return fmt.Sprintf("OFFSET %v", visitor.Visit(o.Expr, visitor))
-}
-
-func (self *ToSqlVisitor) VisitHaving(o *nodes.HavingNode, visitor VisitorInterface) string {
-  return fmt.Sprintf("HAVING %v", visitor.Visit(o.Expr, visitor))
-}
-
-func (self *ToSqlVisitor) VisitAscending(o *nodes.AscendingNode, visitor VisitorInterface) string {
-  return fmt.Sprintf("%v ASC", visitor.Visit(o.Expr, visitor))
-}
-
-func (self *ToSqlVisitor) VisitDescending(o *nodes.DescendingNode, visitor VisitorInterface) string {
-  return fmt.Sprintf("%v DESC", visitor.Visit(o.Expr, visitor))
 }
 
 func (self *ToSqlVisitor) VisitJoinSource(o *nodes.JoinSourceNode, visitor VisitorInterface) string {
@@ -286,6 +286,27 @@ func (self *ToSqlVisitor) VisitJoinSource(o *nodes.JoinSourceNode, visitor Visit
   }
   return strings.Trim(str, " ")
 }
+
+func (self *ToSqlVisitor) VisitValues(o *nodes.ValuesNode, visitor VisitorInterface) string {
+  str := ""
+
+  if length := len(o.Expressions) - 1; 0 <= length {
+    str = fmt.Sprintf("%vVALUES (", str)
+    for index, value := range o.Expressions {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(value, visitor))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+    str = fmt.Sprintf("%v)", str)
+  }
+
+  return str
+}
+
+// End Binary node visitors.
+
+// Begin Nary node visitors.
 
 func (self *ToSqlVisitor) VisitSelectCore(o *nodes.SelectCoreNode, visitor VisitorInterface) string {
   str := fmt.Sprintf("SELECT")
@@ -354,23 +375,6 @@ func (self *ToSqlVisitor) VisitSelectStatement(o *nodes.SelectStatementNode, vis
 
   if nil != o.Offset {
     str = fmt.Sprintf("%v%v%v", str, SPACE, visitor.Visit(o.Offset, visitor))
-  }
-
-  return str
-}
-
-func (self *ToSqlVisitor) VisitValues(o *nodes.ValuesNode, visitor VisitorInterface) string {
-  str := ""
-
-  if length := len(o.Expressions) - 1; 0 <= length {
-    str = fmt.Sprintf("%vVALUES (", str)
-    for index, value := range o.Expressions {
-      str = fmt.Sprintf("%v%v", str, visitor.Visit(value, visitor))
-      if index != length {
-        str = fmt.Sprintf("%v%v", str, COMMA)
-      }
-    }
-    str = fmt.Sprintf("%v)", str)
   }
 
   return str
@@ -446,9 +450,11 @@ func (self *ToSqlVisitor) VisitDeleteStatement(o *nodes.DeleteStatementNode, vis
   return str
 }
 
-// End SQL node visitors.
+// End Nary node visitors.
 
-// Begin SQL Function visitors.
+// Begin Function node visitors.
+
+// End Function node visitors.
 
 func (self *ToSqlVisitor) VisitCount(o *nodes.CountNode, visitor VisitorInterface) string {
   str := "COUNT("
@@ -570,9 +576,7 @@ func (self *ToSqlVisitor) VisitMinimum(o *nodes.MinimumNode, visitor VisitorInte
   return str
 }
 
-// End SQL Function visitors.
-
-// Begin standard type visitors.
+// Begin Base visitors.
 
 func (self *ToSqlVisitor) VisitString(o interface{}) string {
   return fmt.Sprintf(`'%s'`, o)
@@ -590,9 +594,9 @@ func (self *ToSqlVisitor) VisitBool(o interface{}) string {
   return fmt.Sprintf(`'%t'`, o)
 }
 
-// End standard Type visitors.
+// End Base visitors.
 
-// Begin helper visitors.
+// Begin Helpers.
 
 func (self *ToSqlVisitor) QuoteTableName(o interface{}) string {
   return fmt.Sprintf(`"%v"`, o)
@@ -602,4 +606,4 @@ func (self *ToSqlVisitor) QuoteColumnName(o interface{}) string {
   return fmt.Sprintf(`"%v"`, o)
 }
 
-// End helper visitors.
+// End Helpers.
