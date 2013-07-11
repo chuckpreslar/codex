@@ -23,4 +23,6 @@ func TestAttribute(t *testing.T) {
   _ = attr.Lte(1)
   _ = attr.Like(1)
   _ = attr.Unlike(1)
+  _ = attr.Asc()
+  _ = attr.Desc()
 }

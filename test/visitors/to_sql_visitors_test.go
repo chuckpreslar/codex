@@ -236,6 +236,22 @@ func TestOn(t *testing.T) {
   }
 }
 
+func TestAscending(t *testing.T) {
+  asc := nodes.Ascending(1)
+  expected := "1 ASC"
+  if got, _ := sql.Accept(asc); expected != got {
+    t.Errorf("TestAscending was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestDescending(t *testing.T) {
+  asc := nodes.Descending(1)
+  expected := "1 DESC"
+  if got, _ := sql.Accept(asc); expected != got {
+    t.Errorf("TestDescending was expected to return %s, got %s", expected, got)
+  }
+}
+
 func TestInnerJoin(t *testing.T) {
   join := nodes.InnerJoin(1, nil)
   expected := "INNER JOIN 1"
