@@ -87,6 +87,13 @@ func (mgmt *SelectManager) On(expr interface{}) *SelectManager {
   return mgmt
 }
 
+// Appends an expression to the current Context's Orders slice,
+// typically an attribute.
+func (mgmt *SelectManager) Order(expr interface{}) *SelectManager {
+  mgmt.Tree.Orders = append(mgmt.Tree.Orders, expr)
+  return mgmt
+}
+
 // Sets the SQL Enginge.
 func (mgmt *SelectManager) SetEngine(engine interface{}) *SelectManager {
   if _, ok := VISITORS[engine]; ok {

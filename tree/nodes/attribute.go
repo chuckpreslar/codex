@@ -66,6 +66,18 @@ func (attr *AttributeNode) And(other interface{}) *GroupingNode {
   return Grouping(And(attr, other))
 }
 
+// Returns and Ascending node containing a reference to the
+// attribute
+func (attr *AttributeNode) Asc() *AscendingNode {
+  return Ascending(attr)
+}
+
+// Returns and Descending node containing a reference to the
+// attribute
+func (attr *AttributeNode) Desc() *DescendingNode {
+  return Descending(attr)
+}
+
 // AttributeNode factory method.
 func Attribute(name interface{}, relation *RelationNode) *AttributeNode {
   attr := new(AttributeNode)

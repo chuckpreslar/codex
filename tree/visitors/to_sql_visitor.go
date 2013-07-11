@@ -15,12 +15,13 @@ const (
   STAR  = `*`
 
   // Keywords
-  SELECT = ` SELECT `
-  FROM   = ` FROM `
-  WHERE  = ` WHERE `
-  LIMIT  = ` LIMIT `
-  OFFSET = ` OFFSET `
-  AND    = ` AND `
+  SELECT   = ` SELECT `
+  FROM     = ` FROM `
+  WHERE    = ` WHERE `
+  ORDER_BY = ` ORDER BY `
+  LIMIT    = ` LIMIT `
+  OFFSET   = ` OFFSET `
+  AND      = ` AND `
 )
 
 type ToSqlVisitor struct{}
@@ -94,6 +95,10 @@ func (sql *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string {
     return visitor.VisitLimit(o.(*nodes.LimitNode), visitor)
   case *nodes.OffsetNode:
     return visitor.VisitOffset(o.(*nodes.OffsetNode), visitor)
+  case *nodes.AscendingNode:
+    return visitor.VisitAscending(o.(*nodes.AscendingNode), visitor)
+  case *nodes.DescendingNode:
+    return visitor.VisitDescending(o.(*nodes.DescendingNode), visitor)
   case *nodes.JoinSourceNode:
     return visitor.VisitJoinSource(o.(*nodes.JoinSourceNode), visitor)
   case *nodes.SelectCoreNode:
@@ -251,6 +256,14 @@ func (sql *ToSqlVisitor) VisitOffset(o *nodes.OffsetNode, visitor VisitorInterfa
   return fmt.Sprintf("%v%v", OFFSET, visitor.Visit(o.Expr, visitor))
 }
 
+func (sql *ToSqlVisitor) VisitAscending(o *nodes.AscendingNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("%v ASC", visitor.Visit(o.Expr, visitor))
+}
+
+func (sql *ToSqlVisitor) VisitDescending(o *nodes.DescendingNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("%v DESC", visitor.Visit(o.Expr, visitor))
+}
+
 func (sql *ToSqlVisitor) VisitJoinSource(o *nodes.JoinSourceNode, visitor VisitorInterface) string {
   str := fmt.Sprintf("%v", visitor.Visit(o.Left, visitor))
   if length := len(o.Right) - 1; 0 <= length {
@@ -298,6 +311,16 @@ func (sql *ToSqlVisitor) VisitSelectStatement(o *nodes.SelectStatementNode, visi
 
   for _, core := range o.Cores {
     str = fmt.Sprintf("%v%v", str, visitor.Visit(core, visitor))
+  }
+
+  if length := len(o.Orders) - 1; 0 <= length {
+    str = fmt.Sprintf("%v%v", str, ORDER_BY)
+    for index, order := range o.Orders {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(order, visitor))
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
   }
 
   if nil != o.Limit {
