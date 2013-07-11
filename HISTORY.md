@@ -1,3 +1,8 @@
+# v0.2.2 - 07.11.2013
+* Implement Having and Group By for Select Managers.
+* Consistent naming convention for receivers.
+* Consistent returns from factory methods.
+
 # v0.2.1 - 07.10.2013
 * Select Statement ordering with Ascending and Descending nodes.
 

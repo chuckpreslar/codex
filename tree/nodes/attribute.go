@@ -8,80 +8,80 @@ type AttributeNode struct {
 
 // Returns and Equal node containing a reference to the
 // attribute and other
-func (attr *AttributeNode) Eq(other interface{}) *EqualNode {
-  return Equal(attr, other)
+func (self *AttributeNode) Eq(other interface{}) *EqualNode {
+  return Equal(self, other)
 }
 
 // Returns and NotEqual node containing a reference to the
 // attribute and other
-func (attr *AttributeNode) Neq(other interface{}) *NotEqualNode {
-  return NotEqual(attr, other)
+func (self *AttributeNode) Neq(other interface{}) *NotEqualNode {
+  return NotEqual(self, other)
 }
 
 // Returns and GreaterThan node containing a reference to the
 // attribute and other
-func (attr *AttributeNode) Gt(other interface{}) *GreaterThanNode {
-  return GreaterThan(attr, other)
+func (self *AttributeNode) Gt(other interface{}) *GreaterThanNode {
+  return GreaterThan(self, other)
 }
 
 // Returns and GreaterThanOrEqual node containing a reference to the
 // attribute and other
-func (attr *AttributeNode) Gte(other interface{}) *GreaterThanOrEqualNode {
-  return GreaterThanOrEqual(attr, other)
+func (self *AttributeNode) Gte(other interface{}) *GreaterThanOrEqualNode {
+  return GreaterThanOrEqual(self, other)
 }
 
 // Returns and LessThan node containing a reference to the
 // attribute and other
-func (attr *AttributeNode) Lt(other interface{}) *LessThanNode {
-  return LessThan(attr, other)
+func (self *AttributeNode) Lt(other interface{}) *LessThanNode {
+  return LessThan(self, other)
 }
 
 // Returns and LessThanOrEqual node containing a reference to the
 // attribute and other
-func (attr *AttributeNode) Lte(other interface{}) *LessThanOrEqualNode {
-  return LessThanOrEqual(attr, other)
+func (self *AttributeNode) Lte(other interface{}) *LessThanOrEqualNode {
+  return LessThanOrEqual(self, other)
 }
 
 // Returns and Like node containing a reference to the
 // attribute and other
-func (attr *AttributeNode) Like(other interface{}) *LikeNode {
-  return Like(attr, other)
+func (self *AttributeNode) Like(other interface{}) *LikeNode {
+  return Like(self, other)
 }
 
 // Returns and Unlike node containing a reference to the
 // attribute and other
-func (attr *AttributeNode) Unlike(other interface{}) *UnlikeNode {
-  return Unlike(attr, other)
+func (self *AttributeNode) Unlike(other interface{}) *UnlikeNode {
+  return Unlike(self, other)
 }
 
 // Returns and Or node containing a reference to the
 // attribute and other
-func (attr *AttributeNode) Or(other interface{}) *GroupingNode {
-  return Grouping(Or(attr, other))
+func (self *AttributeNode) Or(other interface{}) *GroupingNode {
+  return Grouping(Or(self, other))
 }
 
 // Returns and And node containing a reference to the
 // attribute and other
-func (attr *AttributeNode) And(other interface{}) *GroupingNode {
-  return Grouping(And(attr, other))
+func (self *AttributeNode) And(other interface{}) *GroupingNode {
+  return Grouping(And(self, other))
 }
 
 // Returns and Ascending node containing a reference to the
 // attribute
-func (attr *AttributeNode) Asc() *AscendingNode {
-  return Ascending(attr)
+func (self *AttributeNode) Asc() *AscendingNode {
+  return Ascending(self)
 }
 
 // Returns and Descending node containing a reference to the
 // attribute
-func (attr *AttributeNode) Desc() *DescendingNode {
-  return Descending(attr)
+func (self *AttributeNode) Desc() *DescendingNode {
+  return Descending(self)
 }
 
 // AttributeNode factory method.
-func Attribute(name interface{}, relation *RelationNode) *AttributeNode {
-  attr := new(AttributeNode)
-  attr.Name = name
-  attr.Relation = relation
-  return attr
+func Attribute(name interface{}, relation *RelationNode) (attribute *AttributeNode) {
+  attribute = new(AttributeNode)
+  attribute.Name = name
+  attribute.Relation = relation
+  return
 }

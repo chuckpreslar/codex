@@ -11,30 +11,30 @@ type DeleteManager struct {
 }
 
 // Appends the expression to the Trees Wheres slice.
-func (mgmt *DeleteManager) Delete(expr interface{}) *DeleteManager {
-  mgmt.Tree.Wheres = append(mgmt.Tree.Wheres, expr)
-  return mgmt
+func (self *DeleteManager) Delete(expr interface{}) *DeleteManager {
+  self.Tree.Wheres = append(self.Tree.Wheres, expr)
+  return self
 }
 
 // Sets the SQL Enginge.
-func (mgmt *DeleteManager) SetEngine(engine interface{}) *DeleteManager {
+func (self *DeleteManager) SetEngine(engine interface{}) *DeleteManager {
   if _, ok := VISITORS[engine]; ok {
-    mgmt.Engine = engine
+    self.Engine = engine
   }
-  return mgmt
+  return self
 }
 
 // Calls a visitor's Accept method based on the manager's SQL Engine.
-func (mgmt *DeleteManager) ToSql() (string, error) {
-  if nil == mgmt.Engine {
-    mgmt.Engine = "to_sql"
+func (self *DeleteManager) ToSql() (string, error) {
+  if nil == self.Engine {
+    self.Engine = "to_sql"
   }
-  return VISITORS[mgmt.Engine].Accept(mgmt.Tree)
+  return VISITORS[self.Engine].Accept(self.Tree)
 }
 
 // DeleteManager factory methods.
-func Deletion(relation *nodes.RelationNode) *DeleteManager {
-  deletion := new(DeleteManager)
+func Deletion(relation *nodes.RelationNode) (deletion *DeleteManager) {
+  deletion = new(DeleteManager)
   deletion.Tree = nodes.DeleteStatement(relation)
-  return deletion
+  return
 }

@@ -7,8 +7,8 @@ type DeleteStatementNode struct {
 }
 
 // DeleteStatementNode factory method.
-func DeleteStatement(relation *RelationNode) *DeleteStatementNode {
-  stmt := new(DeleteStatementNode)
-  stmt.Relation = relation
-  return stmt
+func DeleteStatement(relation *RelationNode) (statement *DeleteStatementNode) {
+  statement = new(DeleteStatementNode)
+  statement.Relation = relation
+  return
 }

@@ -8,8 +8,8 @@ type FunctionNode struct {
 }
 
 // FunctionNode factory method.
-func Function(expressions ...interface{}) *FunctionNode {
-  function := new(FunctionNode)
+func Function(expressions ...interface{}) (function *FunctionNode) {
+  function = new(FunctionNode)
   function.Expressions = expressions
-  return function
+  return
 }

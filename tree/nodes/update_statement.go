@@ -9,10 +9,10 @@ type UpdateStatementNode struct {
 }
 
 // UpdateStatementNode factory method.
-func UpdateStatement(relation *RelationNode) *UpdateStatementNode {
-  stmt := new(UpdateStatementNode)
-  stmt.Relation = relation
-  stmt.Values = make([]interface{}, 0)
-  stmt.Wheres = make([]interface{}, 0)
-  return stmt
+func UpdateStatement(relation *RelationNode) (statement *UpdateStatementNode) {
+  statement = new(UpdateStatementNode)
+  statement.Relation = relation
+  statement.Values = make([]interface{}, 0)
+  statement.Wheres = make([]interface{}, 0)
+  return
 }

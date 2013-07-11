@@ -12,57 +12,57 @@ type UpdateManager struct {
 
 // Set appends to the trees Values slice a list of UnqualifiedColumnNodes
 // which are to be modified in the query.
-func (mgmt *UpdateManager) Set(columns ...interface{}) *UpdateManager {
+func (self *UpdateManager) Set(columns ...interface{}) *UpdateManager {
   for _, column := range columns {
-    mgmt.Tree.Values = append(mgmt.Tree.Values, nodes.UnqualifiedColumn(column))
+    self.Tree.Values = append(self.Tree.Values, nodes.UnqualifiedColumn(column))
   }
-  return mgmt
+  return self
 }
 
 // To alters the trees Values slice to be an AssignmentNode, containing the
 // column from Set at the same index of the value.
-func (mgmt *UpdateManager) To(values ...interface{}) *UpdateManager {
+func (self *UpdateManager) To(values ...interface{}) *UpdateManager {
   for index, value := range values {
-    if index < len(mgmt.Tree.Values) {
-      column := mgmt.Tree.Values[index]
-      mgmt.Tree.Values[index] = nodes.Assignment(column, value)
+    if index < len(self.Tree.Values) {
+      column := self.Tree.Values[index]
+      self.Tree.Values[index] = nodes.Assignment(column, value)
     }
   }
-  return mgmt
+  return self
 }
 
 // Appends an expression to the current tree's Wheres slice,
 // typically a comparison, i.e. 1 = 1
-func (mgmt *UpdateManager) Where(expr interface{}) *UpdateManager {
-  mgmt.Tree.Wheres = append(mgmt.Tree.Wheres, expr)
-  return mgmt
+func (self *UpdateManager) Where(expr interface{}) *UpdateManager {
+  self.Tree.Wheres = append(self.Tree.Wheres, expr)
+  return self
 }
 
 // Sets the Tree's Limit to the given integer.
-func (mgmt *UpdateManager) Limit(expr interface{}) *UpdateManager {
-  mgmt.Tree.Limit = nodes.Limit(expr)
-  return mgmt
+func (self *UpdateManager) Limit(expr interface{}) *UpdateManager {
+  self.Tree.Limit = nodes.Limit(expr)
+  return self
 }
 
 // Sets the SQL Enginge.
-func (mgmt *UpdateManager) SetEngine(engine interface{}) *UpdateManager {
+func (self *UpdateManager) SetEngine(engine interface{}) *UpdateManager {
   if _, ok := VISITORS[engine]; ok {
-    mgmt.Engine = engine
+    self.Engine = engine
   }
-  return mgmt
+  return self
 }
 
 // Calls a visitor's Accept method based on the manager's SQL Engine.
-func (mgmt *UpdateManager) ToSql() (string, error) {
-  if nil == mgmt.Engine {
-    mgmt.Engine = "to_sql"
+func (self *UpdateManager) ToSql() (string, error) {
+  if nil == self.Engine {
+    self.Engine = "to_sql"
   }
-  return VISITORS[mgmt.Engine].Accept(mgmt.Tree)
+  return VISITORS[self.Engine].Accept(self.Tree)
 }
 
 // UpdateManager factory method.
-func Modification(relation *nodes.RelationNode) *UpdateManager {
-  modification := new(UpdateManager)
+func Modification(relation *nodes.RelationNode) (modification *UpdateManager) {
+  modification = new(UpdateManager)
   modification.Tree = nodes.UpdateStatement(relation)
-  return modification
+  return
 }
