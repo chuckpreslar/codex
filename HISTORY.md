@@ -1,3 +1,6 @@
+# v0.2.1 - 07.10.2013
+* Select Statement ordering with Ascending and Descending nodes.
+
 # v0.1.2 - 07.09.2013
 * Proper tests for Nodes
 * Proper tests for ToSqlVisitor
