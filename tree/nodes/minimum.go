@@ -5,67 +5,67 @@ type MinimumNode FunctionNode
 
 // Returns and Equal node containing a reference to the
 // function and other
-func (min *MinimumNode) Eq(other interface{}) *EqualNode {
-  return Equal(min, other)
+func (self *MinimumNode) Eq(other interface{}) *EqualNode {
+  return Equal(self, other)
 }
 
 // Returns and NotEqual node containing a reference to the
 // function and other
-func (min *MinimumNode) Neq(other interface{}) *NotEqualNode {
-  return NotEqual(min, other)
+func (self *MinimumNode) Neq(other interface{}) *NotEqualNode {
+  return NotEqual(self, other)
 }
 
 // Returns and GreaterThan node containing a reference to the
 // function and other
-func (min *MinimumNode) Gt(other interface{}) *GreaterThanNode {
-  return GreaterThan(min, other)
+func (self *MinimumNode) Gt(other interface{}) *GreaterThanNode {
+  return GreaterThan(self, other)
 }
 
 // Returns and GreaterThanOrEqual node containing a reference to the
 // function and other
-func (min *MinimumNode) Gte(other interface{}) *GreaterThanOrEqualNode {
-  return GreaterThanOrEqual(min, other)
+func (self *MinimumNode) Gte(other interface{}) *GreaterThanOrEqualNode {
+  return GreaterThanOrEqual(self, other)
 }
 
 // Returns and LessThan node containing a reference to the
 // function and other
-func (min *MinimumNode) Lt(other interface{}) *LessThanNode {
-  return LessThan(min, other)
+func (self *MinimumNode) Lt(other interface{}) *LessThanNode {
+  return LessThan(self, other)
 }
 
 // Returns and LessThanOrEqual node containing a reference to the
 // function and other
-func (min *MinimumNode) Lte(other interface{}) *LessThanOrEqualNode {
-  return LessThanOrEqual(min, other)
+func (self *MinimumNode) Lte(other interface{}) *LessThanOrEqualNode {
+  return LessThanOrEqual(self, other)
 }
 
 // Returns and Like node containing a reference to the
 // function and other
-func (min *MinimumNode) Like(other interface{}) *LikeNode {
-  return Like(min, other)
+func (self *MinimumNode) Like(other interface{}) *LikeNode {
+  return Like(self, other)
 }
 
 // Returns and Unlike node containing a reference to the
 // function and other
-func (min *MinimumNode) Unlike(other interface{}) *UnlikeNode {
-  return Unlike(min, other)
+func (self *MinimumNode) Unlike(other interface{}) *UnlikeNode {
+  return Unlike(self, other)
 }
 
 // Returns and Or node containing a reference to the
 // function and other
-func (min *MinimumNode) Or(other interface{}) *GroupingNode {
-  return Grouping(Or(min, other))
+func (self *MinimumNode) Or(other interface{}) *GroupingNode {
+  return Grouping(Or(self, other))
 }
 
 // Returns and And node containing a reference to the
 // function and other
-func (min *MinimumNode) And(other interface{}) *GroupingNode {
-  return Grouping(And(min, other))
+func (self *MinimumNode) And(other interface{}) *GroupingNode {
+  return Grouping(And(self, other))
 }
 
 // MinimumNode factory method.
-func Minimum(expressions ...interface{}) *MinimumNode {
-  min := new(MinimumNode)
-  min.Expressions = expressions
-  return min
+func Minimum(expressions ...interface{}) (minimum *MinimumNode) {
+  minimum = new(MinimumNode)
+  minimum.Expressions = expressions
+  return
 }

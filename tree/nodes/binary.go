@@ -13,41 +13,41 @@ type OuterJoinNode BinaryNode  // OuterJoinNode is a BinaryNode struct
 type AssignmentNode BinaryNode // AssignmentNode is a BinaryNode struct
 
 // AsNode factory method.
-func As(left, right interface{}) *AsNode {
-  as := new(AsNode)
+func As(left, right interface{}) (as *AsNode) {
+  as = new(AsNode)
   as.Left = left
   as.Right = right
-  return as
+  return
 }
 
 // BetweenNode factory method.
-func Between(left, right interface{}) *BetweenNode {
-  between := new(BetweenNode)
+func Between(left, right interface{}) (between *BetweenNode) {
+  between = new(BetweenNode)
   between.Left = left
   between.Right = right
-  return between
+  return
 }
 
 // InnerJoinNode factory method.
-func InnerJoin(left, right interface{}) *InnerJoinNode {
-  join := new(InnerJoinNode)
+func InnerJoin(left, right interface{}) (join *InnerJoinNode) {
+  join = new(InnerJoinNode)
   join.Left = left
   join.Right = right
-  return join
+  return
 }
 
 // OuterJoinNode factory method.
-func OuterJoin(left, right interface{}) *OuterJoinNode {
-  join := new(OuterJoinNode)
+func OuterJoin(left, right interface{}) (join *OuterJoinNode) {
+  join = new(OuterJoinNode)
   join.Left = left
   join.Right = right
-  return join
+  return
 }
 
 // AssignmentNode factory method.
-func Assignment(left, right interface{}) *AssignmentNode {
-  assignment := new(AssignmentNode)
+func Assignment(left, right interface{}) (assignment *AssignmentNode) {
+  assignment = new(AssignmentNode)
   assignment.Left = left
   assignment.Right = right
-  return assignment
+  return
 }

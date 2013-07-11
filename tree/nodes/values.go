@@ -7,9 +7,9 @@ type ValuesNode struct {
 }
 
 // ValuesNode factory method.
-func Values() *ValuesNode {
-  values := new(ValuesNode)
+func Values() (values *ValuesNode) {
+  values = new(ValuesNode)
   values.Expressions = make([]interface{}, 0)
   values.Columns = make([]interface{}, 0)
-  return values
+  return
 }

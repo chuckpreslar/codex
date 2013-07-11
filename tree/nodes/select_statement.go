@@ -9,9 +9,9 @@ type SelectStatementNode struct {
 }
 
 // SelectStatementNode factory method.
-func SelectStatement(relation *RelationNode) *SelectStatementNode {
-  stmt := new(SelectStatementNode)
-  stmt.Orders = make([]interface{}, 0)
-  stmt.Cores = []*SelectCoreNode{SelectCore(relation)}
-  return stmt
+func SelectStatement(relation *RelationNode) (statement *SelectStatementNode) {
+  statement = new(SelectStatementNode)
+  statement.Orders = make([]interface{}, 0)
+  statement.Cores = []*SelectCoreNode{SelectCore(relation)}
+  return
 }
