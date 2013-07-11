@@ -15,12 +15,10 @@ const (
   STAR  = `*`
 
   // Keywords
-  SELECT   = ` SELECT `
   FROM     = ` FROM `
   WHERE    = ` WHERE `
   ORDER_BY = ` ORDER BY `
-  LIMIT    = ` LIMIT `
-  OFFSET   = ` OFFSET `
+  GROUP_BY = ` GROUP BY `
   AND      = ` AND `
 )
 
@@ -95,6 +93,8 @@ func (sql *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string {
     return visitor.VisitLimit(o.(*nodes.LimitNode), visitor)
   case *nodes.OffsetNode:
     return visitor.VisitOffset(o.(*nodes.OffsetNode), visitor)
+  case *nodes.HavingNode:
+    return visitor.VisitHaving(o.(*nodes.HavingNode), visitor)
   case *nodes.AscendingNode:
     return visitor.VisitAscending(o.(*nodes.AscendingNode), visitor)
   case *nodes.DescendingNode:
@@ -249,11 +249,15 @@ func (sql *ToSqlVisitor) VisitUnqualifiedColumn(o *nodes.UnqualifiedColumnNode, 
 }
 
 func (sql *ToSqlVisitor) VisitLimit(o *nodes.LimitNode, visitor VisitorInterface) string {
-  return fmt.Sprintf("%v%v", LIMIT, visitor.Visit(o.Expr, visitor))
+  return fmt.Sprintf("LIMIT %v", visitor.Visit(o.Expr, visitor))
 }
 
 func (sql *ToSqlVisitor) VisitOffset(o *nodes.OffsetNode, visitor VisitorInterface) string {
-  return fmt.Sprintf("%v%v", OFFSET, visitor.Visit(o.Expr, visitor))
+  return fmt.Sprintf("OFFSET %v", visitor.Visit(o.Expr, visitor))
+}
+
+func (sql *ToSqlVisitor) VisitHaving(o *nodes.HavingNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("HAVING %v", visitor.Visit(o.Expr, visitor))
 }
 
 func (sql *ToSqlVisitor) VisitAscending(o *nodes.AscendingNode, visitor VisitorInterface) string {
@@ -279,9 +283,10 @@ func (sql *ToSqlVisitor) VisitJoinSource(o *nodes.JoinSourceNode, visitor Visito
 }
 
 func (sql *ToSqlVisitor) VisitSelectCore(o *nodes.SelectCoreNode, visitor VisitorInterface) string {
-  str := fmt.Sprintf("%v", SELECT)
+  str := fmt.Sprintf("SELECT")
 
   if length := len(o.Projections) - 1; 0 <= length {
+    str = fmt.Sprintf("%v%v", str, SPACE)
     for index, projection := range o.Projections {
       str = fmt.Sprintf("%v%v", str, visitor.Visit(projection, visitor))
 
@@ -301,6 +306,21 @@ func (sql *ToSqlVisitor) VisitSelectCore(o *nodes.SelectCoreNode, visitor Visito
         str = fmt.Sprintf("%v%v", str, AND)
       }
     }
+  }
+
+  if length := len(o.Groups) - 1; 0 <= length {
+    str = fmt.Sprintf("%v%v", str, GROUP_BY)
+    for index, group := range o.Groups {
+      str = fmt.Sprintf("%v%v", str, visitor.Visit(group, visitor))
+
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+    }
+  }
+
+  if nil != o.Having {
+    str = fmt.Sprintf("%v %v", str, visitor.Visit(o.Having, visitor))
   }
 
   return strings.Trim(str, " ")
@@ -324,11 +344,11 @@ func (sql *ToSqlVisitor) VisitSelectStatement(o *nodes.SelectStatementNode, visi
   }
 
   if nil != o.Limit {
-    str = fmt.Sprintf("%v%v", str, visitor.Visit(o.Limit, visitor))
+    str = fmt.Sprintf("%v%v%v", str, SPACE, visitor.Visit(o.Limit, visitor))
   }
 
   if nil != o.Offset {
-    str = fmt.Sprintf("%v%v", str, visitor.Visit(o.Offset, visitor))
+    str = fmt.Sprintf("%v%v%v", str, SPACE, visitor.Visit(o.Offset, visitor))
   }
 
   return str

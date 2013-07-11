@@ -34,6 +34,7 @@ type VisitorInterface interface {
   VisitUnqualifiedColumn(*nodes.UnqualifiedColumnNode, VisitorInterface) string
   VisitLimit(*nodes.LimitNode, VisitorInterface) string
   VisitOffset(*nodes.OffsetNode, VisitorInterface) string
+  VisitHaving(*nodes.HavingNode, VisitorInterface) string
   VisitAscending(*nodes.AscendingNode, VisitorInterface) string
   VisitDescending(*nodes.DescendingNode, VisitorInterface) string
   VisitJoinSource(*nodes.JoinSourceNode, VisitorInterface) string

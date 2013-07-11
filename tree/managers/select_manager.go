@@ -94,6 +94,25 @@ func (mgmt *SelectManager) Order(expr interface{}) *SelectManager {
   return mgmt
 }
 
+// Appends a node to the current Context's Groups slice,
+// typically an attribute or column.
+func (mgmt *SelectManager) Group(groupings ...interface{}) *SelectManager {
+  for _, group := range groupings {
+    switch group.(type) {
+    case string:
+      group = nodes.Literal(group)
+    }
+    mgmt.Context.Groups = append(mgmt.Context.Groups, group)
+  }
+  return mgmt
+}
+
+// Sets the Context's Having member to the given expression.
+func (mgmt *SelectManager) Having(expr interface{}) *SelectManager {
+  mgmt.Context.Having = nodes.Having(expr)
+  return mgmt
+}
+
 // Sets the SQL Enginge.
 func (mgmt *SelectManager) SetEngine(engine interface{}) *SelectManager {
   if _, ok := VISITORS[engine]; ok {

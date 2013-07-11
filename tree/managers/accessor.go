@@ -42,6 +42,16 @@ func (accessor Accessor) Order(expr interface{}) *SelectManager {
   return accessor.From(accessor.Relation()).Order(expr)
 }
 
+// Returns a pointer to a SelectManager with an initial Grouping.
+func (accessor Accessor) Group(groupings ...interface{}) *SelectManager {
+  return accessor.From(accessor.Relation()).Group(groupings...)
+}
+
+// Returns a pointer to a SelectManager with an initial Having.
+func (accessor Accessor) Having(expr interface{}) *SelectManager {
+  return accessor.From(accessor.Relation()).Having(expr)
+}
+
 // Returns a pointer to a SelectManager with for the given RelationNode.
 func (accessor Accessor) From(relation *nodes.RelationNode) *SelectManager {
   return Selection(relation)
