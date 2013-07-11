@@ -23,6 +23,7 @@ func TestSelectManager(t *testing.T) {
   _ = mgr.InnerJoin(1)
   _ = mgr.OuterJoin(1)
   _ = mgr.On(1)
+  _ = mgr.Order(1)
   _ = mgr.SetEngine(1)
   _, _ = mgr.ToSql()
 }

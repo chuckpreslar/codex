@@ -37,6 +37,11 @@ func (accessor Accessor) OuterJoin(expr interface{}) *SelectManager {
   return accessor.From(accessor.Relation()).OuterJoin(expr)
 }
 
+// Returns a pointer to a SelectManager with an initial Ordering.
+func (accessor Accessor) Order(expr interface{}) *SelectManager {
+  return accessor.From(accessor.Relation()).Order(expr)
+}
+
 // Returns a pointer to a SelectManager with for the given RelationNode.
 func (accessor Accessor) From(relation *nodes.RelationNode) *SelectManager {
   return Selection(relation)
