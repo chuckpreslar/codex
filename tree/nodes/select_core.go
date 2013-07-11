@@ -6,6 +6,8 @@ type SelectCoreNode struct {
   Source      *JoinSourceNode // JoinSouce for joining other SQL tables.
   Projections []interface{}   // Projections is an array, normally columns found on the SQL table.
   Wheres      []interface{}   // Wheres is an array of filters for the acting on the SelectCore.
+  Groups      []interface{}   // GROUP BY nodes.
+  Having      interface{}     // HAVING expression.
 }
 
 // SelectCoreNode factory method.
@@ -15,5 +17,6 @@ func SelectCore(relation *RelationNode) *SelectCoreNode {
   core.Relation = relation
   core.Wheres = make([]interface{}, 0)
   core.Projections = make([]interface{}, 0)
+  core.Groups = make([]interface{}, 0)
   return core
 }

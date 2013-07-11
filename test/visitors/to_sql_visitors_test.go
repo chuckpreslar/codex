@@ -214,7 +214,7 @@ func TestExtensiveFunction(t *testing.T) {
 
 func TestLimit(t *testing.T) {
   limit := nodes.Limit(1)
-  expected := " LIMIT 1"
+  expected := "LIMIT 1"
   if got, _ := sql.Accept(limit); expected != got {
     t.Errorf("TestLimit was expected to return %s, got %s", expected, got)
   }
@@ -222,9 +222,17 @@ func TestLimit(t *testing.T) {
 
 func TestOffset(t *testing.T) {
   offset := nodes.Offset(1)
-  expected := " OFFSET 1"
+  expected := "OFFSET 1"
   if got, _ := sql.Accept(offset); expected != got {
     t.Errorf("TestOffset was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestHaving(t *testing.T) {
+  having := nodes.Having(1)
+  expected := "HAVING 1"
+  if got, _ := sql.Accept(having); expected != got {
+    t.Errorf("TestHaving was expected to return %s, got %s", expected, got)
   }
 }
 
@@ -271,7 +279,7 @@ func TestOuterJoin(t *testing.T) {
 func TestSelectCore(t *testing.T) {
   relation := nodes.Relation("table")
   core := nodes.SelectCore(relation)
-  expected := `SELECT  FROM "table"`
+  expected := `SELECT FROM "table"`
   if got, _ := sql.Accept(core); expected != got {
     t.Errorf("TestSelectCore was expected to return %s, got %s", expected, got)
   }
@@ -292,7 +300,7 @@ func TestSelectCoreExtensive(t *testing.T) {
 func TestSelectStatement(t *testing.T) {
   relation := nodes.Relation("table")
   stmt := nodes.SelectStatement(relation)
-  expected := `SELECT  FROM "table"`
+  expected := `SELECT FROM "table"`
   if got, _ := sql.Accept(stmt); expected != got {
     t.Errorf("TestSelectStatement was expected to return %s, got %s", expected, got)
   }
