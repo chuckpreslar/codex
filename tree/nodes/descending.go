@@ -1,5 +1,6 @@
 package nodes
 
+// DescendingNode is a UnaryNode struct
 type DescendingNode UnaryNode
 
 // Returns a Grouping node with an expression containing a

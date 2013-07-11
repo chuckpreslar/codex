@@ -1,5 +1,6 @@
 package nodes
 
+// AscendingNode is a UnaryNode struct
 type AscendingNode UnaryNode
 
 // Returns a Grouping node with an expression containing a
