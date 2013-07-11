@@ -7,9 +7,9 @@ type JoinSourceNode struct {
 }
 
 // JoinSourceNode factory method.
-func JoinSource(relation *RelationNode) *JoinSourceNode {
-  source := new(JoinSourceNode)
+func JoinSource(relation *RelationNode) (source *JoinSourceNode) {
+  source = new(JoinSourceNode)
   source.Left = relation
   source.Right = make([]interface{}, 0)
-  return source
+  return
 }

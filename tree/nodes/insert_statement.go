@@ -8,10 +8,10 @@ type InsertStatementNode struct {
 }
 
 // InsertStatementNode factory method.
-func InsertStatement(relation *RelationNode) *InsertStatementNode {
-  stmt := new(InsertStatementNode)
-  stmt.Relation = relation
-  stmt.Columns = make([]interface{}, 0)
-  stmt.Values = Values()
-  return stmt
+func InsertStatement(relation *RelationNode) (statement *InsertStatementNode) {
+  statement = new(InsertStatementNode)
+  statement.Relation = relation
+  statement.Columns = make([]interface{}, 0)
+  statement.Values = Values()
+  return
 }

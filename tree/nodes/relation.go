@@ -7,8 +7,8 @@ type RelationNode struct {
 }
 
 // RelationNode factory method.
-func Relation(name string) *RelationNode {
-  relation := new(RelationNode)
+func Relation(name string) (relation *RelationNode) {
+  relation = new(RelationNode)
   relation.Name = name
-  return relation
+  return
 }

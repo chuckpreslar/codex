@@ -11,36 +11,36 @@ type InsertManager struct {
 }
 
 // Appends the values to the trees Values node
-func (mgmt *InsertManager) Insert(values ...interface{}) *InsertManager {
-  mgmt.Tree.Values.Expressions = append([]interface{}{}, values...)
-  return mgmt
+func (self *InsertManager) Insert(values ...interface{}) *InsertManager {
+  self.Tree.Values.Expressions = append([]interface{}{}, values...)
+  return self
 }
 
 // Appends the columns to the trees Columns slice and Values node.
-func (mgmt *InsertManager) Into(columns ...interface{}) *InsertManager {
-  mgmt.Tree.Values.Columns = append([]interface{}{}, columns...)
-  mgmt.Tree.Columns = append([]interface{}{}, columns...)
-  return mgmt
+func (self *InsertManager) Into(columns ...interface{}) *InsertManager {
+  self.Tree.Values.Columns = append([]interface{}{}, columns...)
+  self.Tree.Columns = append([]interface{}{}, columns...)
+  return self
 }
 
 // Sets the SQL Enginge.
-func (mgmt *InsertManager) SetEngine(engine interface{}) *InsertManager {
+func (self *InsertManager) SetEngine(engine interface{}) *InsertManager {
   if _, ok := VISITORS[engine]; ok {
-    mgmt.Engine = engine
+    self.Engine = engine
   }
-  return mgmt
+  return self
 }
 
 // Calls a visitor's Accept method based on the manager's SQL Engine.
-func (mgmt *InsertManager) ToSql() (string, error) {
-  if nil == mgmt.Engine {
-    mgmt.Engine = "to_sql"
+func (self *InsertManager) ToSql() (string, error) {
+  if nil == self.Engine {
+    self.Engine = "to_sql"
   }
-  return VISITORS[mgmt.Engine].Accept(mgmt.Tree)
+  return VISITORS[self.Engine].Accept(self.Tree)
 }
 
-func Insertion(relation *nodes.RelationNode) *InsertManager {
-  insertion := new(InsertManager)
+func Insertion(relation *nodes.RelationNode) (insertion *InsertManager) {
+  insertion = new(InsertManager)
   insertion.Tree = nodes.InsertStatement(relation)
-  return insertion
+  return
 }

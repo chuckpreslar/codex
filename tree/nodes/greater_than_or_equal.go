@@ -5,26 +5,26 @@ type GreaterThanOrEqualNode BinaryNode
 
 // Returns a Grouping node with an expression containing a
 // reference to an Or node of the GreaterThanOrEqual and other.
-func (gte *GreaterThanOrEqualNode) Or(other interface{}) *GroupingNode {
-  return Grouping(Or(gte, other))
+func (self *GreaterThanOrEqualNode) Or(other interface{}) *GroupingNode {
+  return Grouping(Or(self, other))
 }
 
 // Returns a Grouping node with an expression containing a
 // reference to an And node of the GreaterThanOrEqual and other.
-func (gte *GreaterThanOrEqualNode) And(other interface{}) *GroupingNode {
-  return Grouping(And(gte, other))
+func (self *GreaterThanOrEqualNode) And(other interface{}) *GroupingNode {
+  return Grouping(And(self, other))
 }
 
 // Returns an Not node with and expression containing the
 // GreaterThanOrEqual node.
-func (gte *GreaterThanOrEqualNode) Not() *NotNode {
-  return Not(gte)
+func (self *GreaterThanOrEqualNode) Not() *NotNode {
+  return Not(self)
 }
 
 // GreaterThanOrEqualNode factory method.
-func GreaterThanOrEqual(left, right interface{}) *GreaterThanOrEqualNode {
-  gte := new(GreaterThanOrEqualNode)
+func GreaterThanOrEqual(left, right interface{}) (gte *GreaterThanOrEqualNode) {
+  gte = new(GreaterThanOrEqualNode)
   gte.Left = left
   gte.Right = right
-  return gte
+  return
 }

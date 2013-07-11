@@ -9,7 +9,21 @@ type VisitorInterface interface {
   Accept(interface{}) (string, error)
   Visit(interface{}, VisitorInterface) string
 
-  // Node visitors.
+  // Unary node visitors.
+  VisitGrouping(*nodes.GroupingNode, VisitorInterface) string
+  VisitNot(*nodes.NotNode, VisitorInterface) string
+  VisitLiteral(*nodes.LiteralNode, VisitorInterface) string
+  VisitOn(*nodes.OnNode, VisitorInterface) string
+  VisitColumn(*nodes.ColumnNode, VisitorInterface) string
+  VisitStar(*nodes.StarNode, VisitorInterface) string
+  VisitUnqualifiedColumn(*nodes.UnqualifiedColumnNode, VisitorInterface) string
+  VisitLimit(*nodes.LimitNode, VisitorInterface) string
+  VisitOffset(*nodes.OffsetNode, VisitorInterface) string
+  VisitHaving(*nodes.HavingNode, VisitorInterface) string
+  VisitAscending(*nodes.AscendingNode, VisitorInterface) string
+  VisitDescending(*nodes.DescendingNode, VisitorInterface) string
+
+  // Binary node visitors.
   VisitAssignment(*nodes.AssignmentNode, VisitorInterface) string
   VisitEqual(*nodes.EqualNode, VisitorInterface) string
   VisitNotEqual(*nodes.NotEqualNode, VisitorInterface) string
@@ -23,29 +37,19 @@ type VisitorInterface interface {
   VisitAnd(*nodes.AndNode, VisitorInterface) string
   VisitRelation(*nodes.RelationNode, VisitorInterface) string
   VisitAttribute(*nodes.AttributeNode, VisitorInterface) string
-  VisitGrouping(*nodes.GroupingNode, VisitorInterface) string
-  VisitNot(*nodes.NotNode, VisitorInterface) string
-  VisitColumn(*nodes.ColumnNode, VisitorInterface) string
-  VisitStar(*nodes.StarNode, VisitorInterface) string
-  VisitLiteral(*nodes.LiteralNode, VisitorInterface) string
   VisitInnerJoin(*nodes.InnerJoinNode, VisitorInterface) string
   VisitOuterJoin(*nodes.OuterJoinNode, VisitorInterface) string
-  VisitOn(*nodes.OnNode, VisitorInterface) string
-  VisitUnqualifiedColumn(*nodes.UnqualifiedColumnNode, VisitorInterface) string
-  VisitLimit(*nodes.LimitNode, VisitorInterface) string
-  VisitOffset(*nodes.OffsetNode, VisitorInterface) string
-  VisitHaving(*nodes.HavingNode, VisitorInterface) string
-  VisitAscending(*nodes.AscendingNode, VisitorInterface) string
-  VisitDescending(*nodes.DescendingNode, VisitorInterface) string
   VisitJoinSource(*nodes.JoinSourceNode, VisitorInterface) string
+  VisitValues(*nodes.ValuesNode, VisitorInterface) string
+
+  // Nary node visitors.
   VisitSelectCore(*nodes.SelectCoreNode, VisitorInterface) string
   VisitSelectStatement(*nodes.SelectStatementNode, VisitorInterface) string
-  VisitValues(*nodes.ValuesNode, VisitorInterface) string
   VisitInsertStatement(*nodes.InsertStatementNode, VisitorInterface) string
   VisitUpdateStatement(*nodes.UpdateStatementNode, VisitorInterface) string
   VisitDeleteStatement(*nodes.DeleteStatementNode, VisitorInterface) string
 
-  // SQL Functions.
+  // Function node visitors.
   VisitCount(*nodes.CountNode, VisitorInterface) string
   VisitAverage(*nodes.AverageNode, VisitorInterface) string
   VisitSum(*nodes.SumNode, VisitorInterface) string
@@ -58,7 +62,7 @@ type VisitorInterface interface {
   VisitFloat(interface{}) string
   VisitBool(interface{}) string
 
-  // SQL Helpers.
+  // Helpers.
   QuoteTableName(interface{}) string
   QuoteColumnName(interface{}) string
 }

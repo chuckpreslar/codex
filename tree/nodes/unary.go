@@ -16,58 +16,58 @@ type ColumnNode UnaryNode            // ColumnNode is a UnaryNode struct
 type StarNode UnaryNode              // Star node is a Unary node struct
 
 // LiteralNode factory method.
-func Literal(expr interface{}) *LiteralNode {
-  literal := new(LiteralNode)
+func Literal(expr interface{}) (literal *LiteralNode) {
+  literal = new(LiteralNode)
   literal.Expr = expr
-  return literal
+  return
 }
 
 // OnNode factory method.
-func On(expr interface{}) *OnNode {
-  on := new(OnNode)
+func On(expr interface{}) (on *OnNode) {
+  on = new(OnNode)
   on.Expr = expr
-  return on
+  return
 }
 
 // LimitNode factory method.
-func Limit(expr interface{}) *LimitNode {
-  limit := new(LimitNode)
+func Limit(expr interface{}) (limit *LimitNode) {
+  limit = new(LimitNode)
   limit.Expr = expr
-  return limit
+  return
 }
 
 // OffsetNode factory method.
-func Offset(expr interface{}) *OffsetNode {
-  offset := new(OffsetNode)
+func Offset(expr interface{}) (offset *OffsetNode) {
+  offset = new(OffsetNode)
   offset.Expr = expr
-  return offset
+  return
 }
 
 // GroupNode factory method.
-func Group(expr interface{}) *GroupNode {
-  group := new(GroupNode)
+func Group(expr interface{}) (group *GroupNode) {
+  group = new(GroupNode)
   group.Expr = expr
-  return group
+  return
 }
 
 // HavingNode factory method.
-func Having(expr interface{}) *HavingNode {
-  having := new(HavingNode)
+func Having(expr interface{}) (having *HavingNode) {
+  having = new(HavingNode)
   having.Expr = expr
-  return having
+  return
 }
 
-func UnqualifiedColumn(expr interface{}) *UnqualifiedColumnNode {
-  column := new(UnqualifiedColumnNode)
+func UnqualifiedColumn(expr interface{}) (column *UnqualifiedColumnNode) {
+  column = new(UnqualifiedColumnNode)
   column.Expr = expr
-  return column
+  return
 }
 
 // ColumnNode factory method.
-func Column(expr interface{}) *ColumnNode {
-  column := new(ColumnNode)
+func Column(expr interface{}) (column *ColumnNode) {
+  column = new(ColumnNode)
   column.Expr = expr
-  return column
+  return
 }
 
 // StarNode factory method.

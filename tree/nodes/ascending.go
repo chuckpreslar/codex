@@ -5,25 +5,25 @@ type AscendingNode UnaryNode
 
 // Returns a Grouping node with an expression containing a
 // reference to an Or node of the Ascending and other.
-func (asc *AscendingNode) Or(other interface{}) *GroupingNode {
-  return Grouping(Or(asc, other))
+func (self *AscendingNode) Or(other interface{}) *GroupingNode {
+  return Grouping(Or(self, other))
 }
 
 // Returns a Grouping node with an expression containing a
 // reference to an And node of the Ascending and other.
-func (asc *AscendingNode) And(other interface{}) *GroupingNode {
-  return Grouping(And(asc, other))
+func (self *AscendingNode) And(other interface{}) *GroupingNode {
+  return Grouping(And(self, other))
 }
 
 // Returns an Ascending node with and expression containing the
 // Ascending node.
-func (asc *AscendingNode) Not() *NotNode {
-  return Not(asc)
+func (self *AscendingNode) Not() *NotNode {
+  return Not(self)
 }
 
 // AscendingNode factory method.
-func Ascending(expr interface{}) *AscendingNode {
-  asc := new(AscendingNode)
-  asc.Expr = expr
-  return asc
+func Ascending(expr interface{}) (ascending *AscendingNode) {
+  ascending = new(AscendingNode)
+  ascending.Expr = expr
+  return
 }

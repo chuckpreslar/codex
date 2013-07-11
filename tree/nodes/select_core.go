@@ -11,12 +11,12 @@ type SelectCoreNode struct {
 }
 
 // SelectCoreNode factory method.
-func SelectCore(relation *RelationNode) *SelectCoreNode {
-  core := new(SelectCoreNode)
+func SelectCore(relation *RelationNode) (core *SelectCoreNode) {
+  core = new(SelectCoreNode)
   core.Source = JoinSource(relation)
   core.Relation = relation
   core.Wheres = make([]interface{}, 0)
   core.Projections = make([]interface{}, 0)
   core.Groups = make([]interface{}, 0)
-  return core
+  return
 }
