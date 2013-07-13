@@ -100,10 +100,10 @@ sql, err := users.Delete(users("id").Eq(1)).ToSql()
 ```
 ## Documentation
 
-View godoc's or visit [godoc.org](http://godoc.org/github.com/chuckpreslar/codex).
+View godoc or visit [godoc.org](http://godoc.org/github.com/chuckpreslar/codex).
 
-    $ godoc codex
-    
+    $ godoc codex
+
 ## License
 
 > The MIT License (MIT)
