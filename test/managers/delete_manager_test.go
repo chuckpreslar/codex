@@ -16,6 +16,6 @@ func TestDeleteManager(t *testing.T) {
 
   // The following receiver methods should exist.
   _ = mgr.Delete(1)
-  _ = mgr.SetEngine(1)
+  _ = mgr.Engine(1)
   _, _ = mgr.ToSql()
 }

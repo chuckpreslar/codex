@@ -7,7 +7,7 @@ import (
 // UpdateManager manages a tree that compiles to a SQL update statement.
 type UpdateManager struct {
   Tree   *nodes.UpdateStatementNode // The AST for the SQL UPDATE statement.
-  Engine interface{}                // The SQL Engine.
+  engine interface{}                // The SQL Engine.
 }
 
 // Set appends to the trees Values slice a list of UnqualifiedColumnNodes
@@ -45,19 +45,19 @@ func (self *UpdateManager) Limit(expr interface{}) *UpdateManager {
 }
 
 // Sets the SQL Enginge.
-func (self *UpdateManager) SetEngine(engine interface{}) *UpdateManager {
+func (self *UpdateManager) Engine(engine interface{}) *UpdateManager {
   if _, ok := VISITORS[engine]; ok {
-    self.Engine = engine
+    self.engine = engine
   }
   return self
 }
 
 // Calls a visitor's Accept method based on the manager's SQL Engine.
 func (self *UpdateManager) ToSql() (string, error) {
-  if nil == self.Engine {
-    self.Engine = "to_sql"
+  if nil == self.engine {
+    self.engine = "to_sql"
   }
-  return VISITORS[self.Engine].Accept(self.Tree)
+  return VISITORS[self.engine].Accept(self.Tree)
 }
 
 // UpdateManager factory method.

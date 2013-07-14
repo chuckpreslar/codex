@@ -19,6 +19,6 @@ func TestUpdateManager(t *testing.T) {
   _ = mgr.To(1)
   _ = mgr.Where(1)
   _ = mgr.Limit(1)
-  _ = mgr.SetEngine(1)
+  _ = mgr.Engine(1)
   _, _ = mgr.ToSql()
 }
