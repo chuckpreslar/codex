@@ -8,7 +8,7 @@ import (
 type SelectManager struct {
   Tree    *nodes.SelectStatementNode // The AST for the SQL SELECT statement.
   Context *nodes.SelectCoreNode      // Reference to the Core the manager is curretly operating on.
-  Engine  interface{}                // The SQL Engine.
+  engine  interface{}                // The SQL Engine.
 }
 
 // Appends a projection to the current Context's Projections slice,
@@ -114,9 +114,9 @@ func (self *SelectManager) Having(expr interface{}) *SelectManager {
 }
 
 // Sets the SQL Enginge.
-func (self *SelectManager) SetEngine(engine interface{}) *SelectManager {
+func (self *SelectManager) Engine(engine interface{}) *SelectManager {
   if _, ok := VISITORS[engine]; ok {
-    self.Engine = engine
+    self.engine = engine
   }
   return self
 }
@@ -129,11 +129,11 @@ func (self *SelectManager) ToSql() (string, error) {
     }
   }
 
-  if nil == self.Engine {
-    self.Engine = "to_sql"
+  if nil == self.engine {
+    self.engine = "to_sql"
   }
 
-  return VISITORS[self.Engine].Accept(self.Tree)
+  return VISITORS[self.engine].Accept(self.Tree)
 }
 
 // SelectManager factory method.
