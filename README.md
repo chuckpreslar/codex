@@ -98,6 +98,11 @@ sql, err := users.Delete(users("id").Eq(1)).ToSql()
 
 // DELETE FROM "users" WHERE "users"."id" = 1
 ```
+## Documentation
+
+View godoc or visit [godoc.org](http://godoc.org/github.com/chuckpreslar/codex).
+
+    $ godoc codex
 
 ## License
 
