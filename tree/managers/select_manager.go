@@ -16,8 +16,7 @@ type SelectManager struct {
 // inserted as a LiteralNode.
 func (self *SelectManager) Project(projections ...interface{}) *SelectManager {
   for _, projection := range projections {
-    switch projection.(type) {
-    case string:
+    if _, ok := projection.(string); ok {
       projection = nodes.Literal(projection)
     }
     self.Context.Projections = append(self.Context.Projections, projection)
@@ -98,8 +97,7 @@ func (self *SelectManager) Order(expr interface{}) *SelectManager {
 // typically an attribute or column.
 func (self *SelectManager) Group(groupings ...interface{}) *SelectManager {
   for _, group := range groupings {
-    switch group.(type) {
-    case string:
+    if _, ok := group.(string); ok {
       group = nodes.Literal(group)
     }
     self.Context.Groups = append(self.Context.Groups, group)
