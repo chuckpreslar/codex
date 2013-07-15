@@ -1,6 +1,7 @@
 # v0.2.3 - 07.14.2013
 * Rename manages SetEngine method to Engine.
 * Make managers engine member private to enforce using Engine method to modify it.
+* Remove near useless type switch in favor of more recognizable type if.
 
 # v0.2.2 - 07.11.2013
 * Implement Having and Group By for Select Managers.
