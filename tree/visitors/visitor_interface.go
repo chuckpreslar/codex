@@ -41,6 +41,9 @@ type VisitorInterface interface {
   VisitOuterJoin(*nodes.OuterJoinNode, VisitorInterface) string
   VisitJoinSource(*nodes.JoinSourceNode, VisitorInterface) string
   VisitValues(*nodes.ValuesNode, VisitorInterface) string
+  VisitUnion(*nodes.UnionNode, VisitorInterface) string
+  VisitExcept(*nodes.ExceptNode, VisitorInterface) string
+  VisitIntersect(*nodes.IntersectNode, VisitorInterface) string
 
   // Nary node visitors.
   VisitSelectCore(*nodes.SelectCoreNode, VisitorInterface) string
