@@ -1,6 +1,6 @@
-# v0.3 - 07.19.2013
+# v0.3 - 07.18.2013
 * Add initial MySQL visitor.
-* Implement UNION and INERSECT.
+* Implement UNION, INERSECT, and EXCEPT for Select statments.
 
 # v0.2.3 - 07.14.2013
 * Rename manages SetEngine method to Engine.

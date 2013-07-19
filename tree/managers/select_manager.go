@@ -112,7 +112,17 @@ func (self *SelectManager) Having(expr interface{}) *SelectManager {
 }
 
 func (self *SelectManager) Union(expr *SelectManager) *SelectManager {
-  self.Tree.Union = nodes.Union(self, expr.Tree)
+  self.Tree.Combinator = nodes.Union(self, expr.Tree)
+  return self
+}
+
+func (self *SelectManager) Intersect(expr *SelectManager) *SelectManager {
+  self.Tree.Combinator = nodes.Intersect(self, expr.Tree)
+  return self
+}
+
+func (self *SelectManager) Except(expr *SelectManager) *SelectManager {
+  self.Tree.Combinator = nodes.Except(self, expr.Tree)
   return self
 }
 

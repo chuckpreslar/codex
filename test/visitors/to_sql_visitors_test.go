@@ -313,9 +313,39 @@ func TestUnion(t *testing.T) {
   one := nodes.SelectStatement(relationOne)
   two := nodes.SelectStatement(relationTwo)
   three := nodes.SelectStatement(relationThree)
-  one.Union = nodes.Union(one, two)
-  two.Union = nodes.Union(two, three)
+  one.Combinator = nodes.Union(one, two)
+  two.Combinator = nodes.Union(two, three)
   expected := `(SELECT FROM "table_one" UNION (SELECT FROM "table_two" UNION SELECT FROM "table_three"))`
+  if got, _ := sql.Accept(one); expected != got {
+    t.Errorf("TestUnion was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestIntersect(t *testing.T) {
+  relationOne := nodes.Relation("table_one")
+  relationTwo := nodes.Relation("table_two")
+  relationThree := nodes.Relation("table_three")
+  one := nodes.SelectStatement(relationOne)
+  two := nodes.SelectStatement(relationTwo)
+  three := nodes.SelectStatement(relationThree)
+  one.Combinator = nodes.Intersect(one, two)
+  two.Combinator = nodes.Intersect(two, three)
+  expected := `(SELECT FROM "table_one" INTERSECT (SELECT FROM "table_two" INTERSECT SELECT FROM "table_three"))`
+  if got, _ := sql.Accept(one); expected != got {
+    t.Errorf("TestUnion was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestExcept(t *testing.T) {
+  relationOne := nodes.Relation("table_one")
+  relationTwo := nodes.Relation("table_two")
+  relationThree := nodes.Relation("table_three")
+  one := nodes.SelectStatement(relationOne)
+  two := nodes.SelectStatement(relationTwo)
+  three := nodes.SelectStatement(relationThree)
+  one.Combinator = nodes.Except(one, two)
+  two.Combinator = nodes.Except(two, three)
+  expected := `(SELECT FROM "table_one" EXCEPT (SELECT FROM "table_two" EXCEPT SELECT FROM "table_three"))`
   if got, _ := sql.Accept(one); expected != got {
     t.Errorf("TestUnion was expected to return %s, got %s", expected, got)
   }
