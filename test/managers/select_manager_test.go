@@ -26,6 +26,7 @@ func TestSelectManager(t *testing.T) {
   _ = mgr.Order(1)
   _ = mgr.Group(1)
   _ = mgr.Having(1)
+  _ = mgr.Union(managers.Selection(relation))
   _ = mgr.Engine(1)
   _, _ = mgr.ToSql()
 }

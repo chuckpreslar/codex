@@ -111,6 +111,11 @@ func (self *SelectManager) Having(expr interface{}) *SelectManager {
   return self
 }
 
+func (self *SelectManager) Union(expr *SelectManager) *SelectManager {
+  self.Tree.Union = nodes.Union(self, expr.Tree)
+  return self
+}
+
 // Sets the SQL Enginge.
 func (self *SelectManager) Engine(engine interface{}) *SelectManager {
   if _, ok := VISITORS[engine]; ok {

@@ -4,6 +4,7 @@ package nodes
 type SelectStatementNode struct {
   Cores  []*SelectCoreNode // An array of SelectCores.
   Orders []interface{}     // An array of nodes for ordering results.
+  Union  *UnionNode        // Potential Union node.
   Limit  *LimitNode        // Potential Limit node for limiting the number of results returned.
   Offset *OffsetNode       // Potential Offset node for skipping records.
 }

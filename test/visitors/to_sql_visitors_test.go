@@ -306,6 +306,21 @@ func TestSelectStatement(t *testing.T) {
   }
 }
 
+func TestUnion(t *testing.T) {
+  relationOne := nodes.Relation("table_one")
+  relationTwo := nodes.Relation("table_two")
+  relationThree := nodes.Relation("table_three")
+  one := nodes.SelectStatement(relationOne)
+  two := nodes.SelectStatement(relationTwo)
+  three := nodes.SelectStatement(relationThree)
+  one.Union = nodes.Union(one, two)
+  two.Union = nodes.Union(two, three)
+  expected := `(SELECT FROM "table_one" UNION (SELECT FROM "table_two" UNION SELECT FROM "table_three"))`
+  if got, _ := sql.Accept(one); expected != got {
+    t.Errorf("TestUnion was expected to return %s, got %s", expected, got)
+  }
+}
+
 func TestInsertStatement(t *testing.T) {
   relation := nodes.Relation("table")
   stmt := nodes.InsertStatement(relation)
