@@ -111,18 +111,24 @@ func (self *SelectManager) Having(expr interface{}) *SelectManager {
   return self
 }
 
-func (self *SelectManager) Union(expr *SelectManager) *SelectManager {
-  self.Tree.Combinator = nodes.Union(self, expr.Tree)
+// Union sets the SelectManager's Tree's Combination member to a
+// UnionNode of itself and the parameter `manager`'s Tree.
+func (self *SelectManager) Union(manager *SelectManager) *SelectManager {
+  self.Tree.Combinator = nodes.Union(self.Tree, manager.Tree)
   return self
 }
 
-func (self *SelectManager) Intersect(expr *SelectManager) *SelectManager {
-  self.Tree.Combinator = nodes.Intersect(self, expr.Tree)
+// Intersect sets the SelectManager's Tree's Combination member to a
+// IntersectNode of itself and the parameter `manager`'s Tree.
+func (self *SelectManager) Intersect(manager *SelectManager) *SelectManager {
+  self.Tree.Combinator = nodes.Intersect(self.Tree, manager.Tree)
   return self
 }
 
-func (self *SelectManager) Except(expr *SelectManager) *SelectManager {
-  self.Tree.Combinator = nodes.Except(self, expr.Tree)
+// Except sets the SelectManager's Tree's Combination member to a
+// ExceptNode of itself and the parameter `manager`'s Tree.
+func (self *SelectManager) Except(manager *SelectManager) *SelectManager {
+  self.Tree.Combinator = nodes.Except(self.Tree, manager.Tree)
   return self
 }
 
