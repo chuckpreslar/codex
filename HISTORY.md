@@ -1,3 +1,7 @@
+# v0.3 - 07.18.2013
+* Add initial MySQL visitor.
+* Implement UNION, INERSECT, and EXCEPT for Select statments.
+
 # v0.2.3 - 07.14.2013
 * Rename manages SetEngine method to Engine.
 * Make managers engine member private to enforce using Engine method to modify it.

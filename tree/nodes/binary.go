@@ -11,6 +11,9 @@ type BetweenNode BinaryNode    // BetweenNode is a BinaryNode struct
 type InnerJoinNode BinaryNode  // InnerJoinNode is a BinaryNode struct
 type OuterJoinNode BinaryNode  // OuterJoinNode is a BinaryNode struct
 type AssignmentNode BinaryNode // AssignmentNode is a BinaryNode struct
+type UnionNode BinaryNode      // UnionNode is a BinaryNode struct
+type IntersectNode BinaryNode  // UnionNode is a BinaryNode struct
+type ExceptNode BinaryNode     // UnionNode is a BinaryNode struct
 
 // AsNode factory method.
 func As(left, right interface{}) (as *AsNode) {
@@ -49,5 +52,29 @@ func Assignment(left, right interface{}) (assignment *AssignmentNode) {
   assignment = new(AssignmentNode)
   assignment.Left = left
   assignment.Right = right
+  return
+}
+
+// UnionNode factory method.
+func Union(left, right interface{}) (union *UnionNode) {
+  union = new(UnionNode)
+  union.Left = left
+  union.Right = right
+  return
+}
+
+// IntersectNode factory method.
+func Intersect(left, right interface{}) (intersect *IntersectNode) {
+  intersect = new(IntersectNode)
+  intersect.Left = left
+  intersect.Right = right
+  return
+}
+
+// ExceptNode factory method.
+func Except(left, right interface{}) (except *ExceptNode) {
+  except = new(ExceptNode)
+  except.Left = left
+  except.Right = right
   return
 }

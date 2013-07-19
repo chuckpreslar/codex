@@ -104,6 +104,12 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
     return visitor.VisitJoinSource(o.(*nodes.JoinSourceNode), visitor)
   case *nodes.ValuesNode:
     return visitor.VisitValues(o.(*nodes.ValuesNode), visitor)
+  case *nodes.UnionNode:
+    return visitor.VisitUnion(o.(*nodes.UnionNode), visitor)
+  case *nodes.IntersectNode:
+    return visitor.VisitIntersect(o.(*nodes.IntersectNode), visitor)
+  case *nodes.ExceptNode:
+    return visitor.VisitExcept(o.(*nodes.ExceptNode), visitor)
 
   // Nary node visitors.
   case *nodes.SelectCoreNode:
@@ -304,6 +310,18 @@ func (self *ToSqlVisitor) VisitValues(o *nodes.ValuesNode, visitor VisitorInterf
   return str
 }
 
+func (self *ToSqlVisitor) VisitUnion(o *nodes.UnionNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("(%s UNION %s)", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
+}
+
+func (self *ToSqlVisitor) VisitIntersect(o *nodes.IntersectNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("(%s INTERSECT %s)", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
+}
+
+func (self *ToSqlVisitor) VisitExcept(o *nodes.ExceptNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("(%s EXCEPT %s)", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
+}
+
 // End Binary node visitors.
 
 // Begin Nary node visitors.
@@ -354,6 +372,12 @@ func (self *ToSqlVisitor) VisitSelectCore(o *nodes.SelectCoreNode, visitor Visit
 
 func (self *ToSqlVisitor) VisitSelectStatement(o *nodes.SelectStatementNode, visitor VisitorInterface) string {
   str := ""
+
+  if nil != o.Combinator {
+    combinator := o.Combinator
+    o.Combinator = nil
+    return visitor.Visit(combinator, visitor)
+  }
 
   for _, core := range o.Cores {
     str = fmt.Sprintf("%v%v", str, visitor.Visit(core, visitor))
