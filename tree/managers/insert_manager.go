@@ -23,6 +23,16 @@ func (self *InsertManager) Into(columns ...interface{}) *InsertManager {
   return self
 }
 
+// Return sets the InsertStatementNodes Return to the `column` paramenter
+// after ensureing it is a ColumnNode.
+func (self *InsertManager) Returning(column interface{}) *InsertManager {
+  if _, ok := column.(*nodes.ColumnNode); !ok {
+    column = nodes.Column(column)
+  }
+  self.Tree.Returning = column
+  return self
+}
+
 // Sets the SQL Enginge.
 func (self *InsertManager) Engine(engine interface{}) *InsertManager {
   if _, ok := VISITORS[engine]; ok {
