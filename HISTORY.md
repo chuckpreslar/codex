@@ -1,3 +1,6 @@
+# v0.3.1 - 07.25.2013
+* Add Returning method for Insert Statements (geared toward Postgres).
+
 # v0.3 - 07.18.2013
 * Add initial MySQL visitor.
 * Implement UNION, INERSECT, and EXCEPT for Select statments.

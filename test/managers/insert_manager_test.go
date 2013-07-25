@@ -17,6 +17,7 @@ func TestInsertManager(t *testing.T) {
   // The following receiver methods should exist.
   _ = mgr.Insert(1)
   _ = mgr.Into(1)
+  _ = mgr.Returning(1)
   _ = mgr.Engine(1)
   _, _ = mgr.ToSql()
 }

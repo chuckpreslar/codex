@@ -427,6 +427,11 @@ func (self *ToSqlVisitor) VisitInsertStatement(o *nodes.InsertStatementNode, vis
   }
 
   str = fmt.Sprintf("%v%v", str, visitor.Visit(o.Values, visitor))
+
+  if nil != o.Returning {
+    str = fmt.Sprintf("%v RETURNING %v", str, visitor.Visit(o.Returning, visitor))
+  }
+
   return str
 }
 
