@@ -1,5 +1,7 @@
 # v0.3.2 - 07.27.2013
 * Update to Where method for SelectMananger - if provided expression is a string, convert it to a literal node
+* Update to Order method for SelectMananger - if provided expression is a string, convert it to a literal node
+* Update to Having method for SelectMananger - if provided expression is a string, convert it to a literal node
 * Update to Where method for SelectMananger - always group expression.
 
 # v0.3.1 - 07.25.2013

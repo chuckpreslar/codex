@@ -93,6 +93,10 @@ func (self *SelectManager) On(expr interface{}) *SelectManager {
 // Appends an expression to the current Context's Orders slice,
 // typically an attribute.
 func (self *SelectManager) Order(expr interface{}) *SelectManager {
+  if _, ok := expr.(string); ok {
+    expr = nodes.Literal(expr)
+  }
+
   self.Tree.Orders = append(self.Tree.Orders, expr)
   return self
 }
@@ -104,6 +108,7 @@ func (self *SelectManager) Group(groupings ...interface{}) *SelectManager {
     if _, ok := group.(string); ok {
       group = nodes.Literal(group)
     }
+
     self.Context.Groups = append(self.Context.Groups, group)
   }
   return self
@@ -111,6 +116,10 @@ func (self *SelectManager) Group(groupings ...interface{}) *SelectManager {
 
 // Sets the Context's Having member to the given expression.
 func (self *SelectManager) Having(expr interface{}) *SelectManager {
+  if _, ok := expr.(string); ok {
+    expr = nodes.Literal(expr)
+  }
+
   self.Context.Having = nodes.Having(expr)
   return self
 }
