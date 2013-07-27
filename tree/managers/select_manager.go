@@ -27,7 +27,11 @@ func (self *SelectManager) Project(projections ...interface{}) *SelectManager {
 // Appends an expression to the current Context's Wheres slice,
 // typically a comparison, i.e. 1 = 1
 func (self *SelectManager) Where(expr interface{}) *SelectManager {
-  self.Context.Wheres = append(self.Context.Wheres, expr)
+  if _, ok := expr.(string); ok {
+    expr = nodes.Literal(expr)
+  }
+
+  self.Context.Wheres = append(self.Context.Wheres, nodes.Grouping(expr))
   return self
 }
 
