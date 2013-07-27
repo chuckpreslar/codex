@@ -12,14 +12,14 @@ type InsertManager struct {
 
 // Appends the values to the trees Values node
 func (self *InsertManager) Insert(values ...interface{}) *InsertManager {
-  self.Tree.Values.Expressions = append([]interface{}{}, values...)
+  self.Tree.Values.Expressions = append(self.Tree.Values.Expressions, values...)
   return self
 }
 
 // Appends the columns to the trees Columns slice and Values node.
 func (self *InsertManager) Into(columns ...interface{}) *InsertManager {
-  self.Tree.Values.Columns = append([]interface{}{}, columns...)
-  self.Tree.Columns = append([]interface{}{}, columns...)
+  self.Tree.Values.Columns = append(self.Tree.Values.Columns, columns...)
+  self.Tree.Columns = append(self.Tree.Columns, columns...)
   return self
 }
 
