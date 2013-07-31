@@ -396,6 +396,22 @@ func TestLiteral(t *testing.T) {
   }
 }
 
+func TestStar(t *testing.T) {
+  star := nodes.Star()
+  result, _ := sql.Accept(star)
+  if "*" != result {
+    t.Errorf("TestStar was expected to return *, got %s", result)
+  }
+}
+
+func TestBinding(t *testing.T) {
+  binding := nodes.Binding()
+  result, _ := sql.Accept(binding)
+  if "?" != result {
+    t.Errorf("TestStar was expected to return ?, got %s", result)
+  }
+}
+
 func TestUnqualifiedColumn(t *testing.T) {
   column := nodes.UnqualifiedColumn("column")
   expected := `"column"`

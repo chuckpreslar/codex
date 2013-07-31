@@ -56,6 +56,8 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
     return visitor.VisitColumn(o.(*nodes.ColumnNode), visitor)
   case *nodes.StarNode:
     return visitor.VisitStar(o.(*nodes.StarNode), visitor)
+  case *nodes.BindingNode:
+    return visitor.VisitBinding(o.(*nodes.BindingNode), visitor)
   case *nodes.UnqualifiedColumnNode:
     return visitor.VisitUnqualifiedColumn(o.(*nodes.UnqualifiedColumnNode), visitor)
   case *nodes.LimitNode:
@@ -172,7 +174,11 @@ func (self *ToSqlVisitor) VisitColumn(o *nodes.ColumnNode, visitor VisitorInterf
 }
 
 func (self *ToSqlVisitor) VisitStar(o *nodes.StarNode, visitor VisitorInterface) string {
-  return STAR
+  return "*"
+}
+
+func (self *ToSqlVisitor) VisitBinding(o *nodes.BindingNode, visitor VisitorInterface) string {
+  return "?"
 }
 
 func (self *ToSqlVisitor) VisitUnqualifiedColumn(o *nodes.UnqualifiedColumnNode, visitor VisitorInterface) string {

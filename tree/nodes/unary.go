@@ -6,6 +6,7 @@ type UnaryNode struct {
 }
 
 type LiteralNode UnaryNode           // LiteralNode is a UnaryNode struct
+type BindingNode UnaryNode           // BindingNode is a UnaryNode struct
 type OnNode UnaryNode                // OnNode is a UnaryNode struct
 type LimitNode UnaryNode             // LimitNode is a UnaryNode struct
 type OffsetNode UnaryNode            // OffsetNode is a UnaryNode struct
@@ -73,4 +74,9 @@ func Column(expr interface{}) (column *ColumnNode) {
 // StarNode factory method.
 func Star() *StarNode {
   return new(StarNode)
+}
+
+// BindingNode factory method.
+func Binding() *BindingNode {
+  return new(BindingNode)
 }
