@@ -16,6 +16,7 @@ type VisitorInterface interface {
   VisitOn(*nodes.OnNode, VisitorInterface) string
   VisitColumn(*nodes.ColumnNode, VisitorInterface) string
   VisitStar(*nodes.StarNode, VisitorInterface) string
+  VisitBinding(*nodes.BindingNode, VisitorInterface) string
   VisitUnqualifiedColumn(*nodes.UnqualifiedColumnNode, VisitorInterface) string
   VisitLimit(*nodes.LimitNode, VisitorInterface) string
   VisitOffset(*nodes.OffsetNode, VisitorInterface) string
