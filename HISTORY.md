@@ -1,5 +1,6 @@
-# v0.3.3 - 07.31.2013
+# v0.3.3 - 08.01.2013
 * Implement BindingNode for SQL parameterization.
+* Implement BindingNode for PostgreSQL parameterization.
 
 # v0.3.2 - 07.27.2013
 * Update to Where method for SelectMananger - if provided expression is a string, convert it to a literal node

@@ -46,9 +46,7 @@ func (self *UpdateManager) Limit(expr interface{}) *UpdateManager {
 
 // Sets the SQL Enginge.
 func (self *UpdateManager) Engine(engine interface{}) *UpdateManager {
-  if _, ok := VISITORS[engine]; ok {
-    self.engine = engine
-  }
+  self.engine = engine
   return self
 }
 
@@ -57,7 +55,7 @@ func (self *UpdateManager) ToSql() (string, error) {
   if nil == self.engine {
     self.engine = "to_sql"
   }
-  return VISITORS[self.engine].Accept(self.Tree)
+  return VisitorFor(self.engine).Accept(self.Tree)
 }
 
 // UpdateManager factory method.

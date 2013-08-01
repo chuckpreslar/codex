@@ -147,9 +147,7 @@ func (self *SelectManager) Except(manager *SelectManager) *SelectManager {
 
 // Sets the SQL Enginge.
 func (self *SelectManager) Engine(engine interface{}) *SelectManager {
-  if _, ok := VISITORS[engine]; ok {
-    self.engine = engine
-  }
+  self.engine = engine
   return self
 }
 
@@ -165,7 +163,7 @@ func (self *SelectManager) ToSql() (string, error) {
     self.engine = "to_sql"
   }
 
-  return VISITORS[self.engine].Accept(self.Tree)
+  return VisitorFor(self.engine).Accept(self.Tree)
 }
 
 // SelectManager factory method.
