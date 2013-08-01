@@ -8,6 +8,7 @@ import (
 
 type PostgresVisitor struct {
   *ToSqlVisitor
+  Bindings int // Number of bindings used in parameterization
 }
 
 func (self *PostgresVisitor) Accept(o interface{}) (result string, err error) {
@@ -20,6 +21,11 @@ func (self *PostgresVisitor) Accept(o interface{}) (result string, err error) {
   result = self.Visit(o, self)
 
   return
+}
+
+func (self *PostgresVisitor) VisitBinding(o *nodes.BindingNode, visitor VisitorInterface) string {
+  self.Bindings += 1
+  return fmt.Sprintf("$%d", self.Bindings)
 }
 
 func (self *PostgresVisitor) VisitLike(o *nodes.LikeNode, visitor VisitorInterface) string {

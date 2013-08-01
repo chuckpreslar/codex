@@ -18,9 +18,7 @@ func (self *DeleteManager) Delete(expr interface{}) *DeleteManager {
 
 // Sets the SQL Enginge.
 func (self *DeleteManager) Engine(engine interface{}) *DeleteManager {
-  if _, ok := VISITORS[engine]; ok {
-    self.engine = engine
-  }
+  self.engine = engine
   return self
 }
 
@@ -29,7 +27,7 @@ func (self *DeleteManager) ToSql() (string, error) {
   if nil == self.engine {
     self.engine = "to_sql"
   }
-  return VISITORS[self.engine].Accept(self.Tree)
+  return VisitorFor(self.engine).Accept(self.Tree)
 }
 
 // DeleteManager factory methods.

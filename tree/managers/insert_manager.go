@@ -35,9 +35,7 @@ func (self *InsertManager) Returning(column interface{}) *InsertManager {
 
 // Sets the SQL Enginge.
 func (self *InsertManager) Engine(engine interface{}) *InsertManager {
-  if _, ok := VISITORS[engine]; ok {
-    self.engine = engine
-  }
+  self.engine = engine
   return self
 }
 
@@ -46,7 +44,7 @@ func (self *InsertManager) ToSql() (string, error) {
   if nil == self.engine {
     self.engine = "to_sql"
   }
-  return VISITORS[self.engine].Accept(self.Tree)
+  return VisitorFor(self.engine).Accept(self.Tree)
 }
 
 func Insertion(relation *nodes.RelationNode) (insertion *InsertManager) {
