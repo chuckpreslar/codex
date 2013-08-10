@@ -6,8 +6,8 @@ import (
 
 // InsertManager manages a tree that compiles to a SQL insert statement.
 type InsertManager struct {
-  Tree   *nodes.InsertStatementNode // The AST for the SQL INSERT statement.
-  engine interface{}                // The SQL Engine.
+  Tree    *nodes.InsertStatementNode // The AST for the SQL INSERT statement.
+  adapter interface{}                // The SQL Engine.
 }
 
 // Appends the values to the trees Values node
@@ -33,18 +33,18 @@ func (self *InsertManager) Returning(column interface{}) *InsertManager {
   return self
 }
 
-// Sets the SQL Enginge.
-func (self *InsertManager) Engine(engine interface{}) *InsertManager {
-  self.engine = engine
+// Sets the SQL Adapter.
+func (self *InsertManager) SetAdapter(adapter interface{}) *InsertManager {
+  self.adapter = adapter
   return self
 }
 
-// Calls a visitor's Accept method based on the manager's SQL Engine.
+// Calls a visitor's Accept method based on the manager's SQL Adapter.
 func (self *InsertManager) ToSql() (string, error) {
-  if nil == self.engine {
-    self.engine = "to_sql"
+  if nil == self.adapter {
+    self.adapter = "to_sql"
   }
-  return VisitorFor(self.engine).Accept(self.Tree)
+  return VisitorFor(self.adapter).Accept(self.Tree)
 }
 
 func Insertion(relation *nodes.RelationNode) (insertion *InsertManager) {
