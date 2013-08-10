@@ -6,8 +6,8 @@ import (
 
 // DeleteManager manages a tree that compiles to a SQL delete statement.
 type DeleteManager struct {
-  Tree   *nodes.DeleteStatementNode // The AST for the SQL DELETE statement.
-  engine interface{}                // The SQL Engine.
+  Tree    *nodes.DeleteStatementNode // The AST for the SQL DELETE statement.
+  adapter interface{}                // The SQL Engine.
 }
 
 // Appends the expression to the Trees Wheres slice.
@@ -17,17 +17,17 @@ func (self *DeleteManager) Delete(expr interface{}) *DeleteManager {
 }
 
 // Sets the SQL Enginge.
-func (self *DeleteManager) Engine(engine interface{}) *DeleteManager {
-  self.engine = engine
+func (self *DeleteManager) SetAdapter(adapter interface{}) *DeleteManager {
+  self.adapter = adapter
   return self
 }
 
 // Calls a visitor's Accept method based on the manager's SQL Engine.
 func (self *DeleteManager) ToSql() (string, error) {
-  if nil == self.engine {
-    self.engine = "to_sql"
+  if nil == self.adapter {
+    self.adapter = "to_sql"
   }
-  return VisitorFor(self.engine).Accept(self.Tree)
+  return VisitorFor(self.adapter).Accept(self.Tree)
 }
 
 // DeleteManager factory methods.

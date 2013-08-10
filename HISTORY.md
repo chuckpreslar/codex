@@ -1,11 +1,14 @@
+# v0.3.4 - 08.10.2013
+* Replace `engine` and `Engine` on managers in favor of `adapter` and `SetAdapter` respectively.
+
 # v0.3.3 - 08.01.2013
 * Implement BindingNode for SQL parameterization.
 * Implement BindingNode for PostgreSQL parameterization.
 
 # v0.3.2 - 07.27.2013
-* Update to Where method for SelectMananger - if provided expression is a string, convert it to a literal node
-* Update to Order method for SelectMananger - if provided expression is a string, convert it to a literal node
-* Update to Having method for SelectMananger - if provided expression is a string, convert it to a literal node
+* Update to Where method for SelectMananger - if provided expression is a string, convert it to a literal node.
+* Update to Order method for SelectMananger - if provided expression is a string, convert it to a literal node.
+* Update to Having method for SelectMananger - if provided expression is a string, convert it to a literal node.
 * Update to Where method for SelectMananger - always group expression.
 
 # v0.3.1 - 07.25.2013
