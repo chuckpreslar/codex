@@ -1,4 +1,5 @@
-# v0.3.4 - 08.10.2013
+# v0.3.4 - 08.11.2013
+* Allow for columns within an INSERT statements to be SQL bindings.
 * Replace `engine` and `Engine` on managers in favor of `adapter` and `SetAdapter` respectively.
 
 # v0.3.3 - 08.01.2013
