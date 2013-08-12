@@ -1,3 +1,4 @@
+// Package nodes provides nodes to use in codex AST's.
 package nodes
 
 // SumNode is a FunctionNode struct

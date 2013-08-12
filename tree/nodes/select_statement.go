@@ -1,3 +1,4 @@
+// Package nodes provides nodes to use in codex AST's.
 package nodes
 
 // SelectStatement is the base node for SQL Select Statements.

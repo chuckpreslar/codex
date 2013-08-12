@@ -1,3 +1,4 @@
+// Package codex provides a Relational Algebra.
 package codex
 
 import (

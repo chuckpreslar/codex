@@ -1,3 +1,4 @@
+// Package nodes provides nodes to use in codex AST's.
 package nodes
 
 // LessThanOrEqualNode is a BinaryNode struct

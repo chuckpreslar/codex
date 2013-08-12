@@ -1,3 +1,4 @@
+// Package nodes provides nodes to use in codex AST's.
 package nodes
 
 // SelectCoreNode is a Nary node, normally contained in a SelectStatement node.

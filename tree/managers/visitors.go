@@ -1,11 +1,13 @@
+// Package managers provides AST managers for the codex package.
 package managers
 
 import (
   "github.com/chuckpreslar/codex/tree/visitors"
 )
 
-func VisitorFor(engine interface{}) visitors.VisitorInterface {
-  switch engine {
+// VisitorFor returns a AST visitor for the adapter argument.
+func VisitorFor(adapter interface{}) visitors.VisitorInterface {
+  switch adapter {
   case "mysql":
     return &visitors.MySqlVisitor{&visitors.ToSqlVisitor{}}
   case "postgres":

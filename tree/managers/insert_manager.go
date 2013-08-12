@@ -1,3 +1,4 @@
+// Package managers provides AST managers for the codex package.
 package managers
 
 import (
@@ -7,7 +8,7 @@ import (
 // InsertManager manages a tree that compiles to a SQL insert statement.
 type InsertManager struct {
   Tree    *nodes.InsertStatementNode // The AST for the SQL INSERT statement.
-  adapter interface{}                // The SQL Engine.
+  adapter interface{}                // The SQL adapter.
 }
 
 // Appends the values to the trees Values node
@@ -39,7 +40,7 @@ func (self *InsertManager) SetAdapter(adapter interface{}) *InsertManager {
   return self
 }
 
-// Calls a visitor's Accept method based on the manager's SQL Adapter.
+// ToSql calls a visitor's Accept method based on the manager's SQL adapter.
 func (self *InsertManager) ToSql() (string, error) {
   if nil == self.adapter {
     self.adapter = "to_sql"

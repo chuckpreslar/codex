@@ -1,3 +1,4 @@
+// Package managers provides AST managers for the codex package.
 package managers
 
 import (
@@ -50,7 +51,7 @@ func (self *UpdateManager) SetAdapter(adapter interface{}) *UpdateManager {
   return self
 }
 
-// Calls a visitor's Accept method based on the manager's SQL Adapter.
+// ToSql calls a visitor's Accept method based on the manager's SQL adapter.
 func (self *UpdateManager) ToSql() (string, error) {
   if nil == self.adapter {
     self.adapter = "to_sql"
