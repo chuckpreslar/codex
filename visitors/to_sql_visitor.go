@@ -4,8 +4,11 @@ package visitors
 import (
   "errors"
   "fmt"
-  "github.com/chuckpreslar/codex/nodes"
   "strings"
+)
+
+import (
+  "github.com/chuckpreslar/codex/nodes"
 )
 
 var DEBUG = false
@@ -71,6 +74,8 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
     return visitor.VisitAscending(o.(*nodes.AscendingNode), visitor)
   case *nodes.DescendingNode:
     return visitor.VisitDescending(o.(*nodes.DescendingNode), visitor)
+  case *nodes.EngineNode:
+    return visitor.VisitEngine(o.(*nodes.EngineNode), visitor)
 
   // Binary node visitors.
   case *nodes.AssignmentNode:
@@ -125,6 +130,10 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
     return visitor.VisitUpdateStatement(o.(*nodes.UpdateStatementNode), visitor)
   case *nodes.DeleteStatementNode:
     return visitor.VisitDeleteStatement(o.(*nodes.DeleteStatementNode), visitor)
+  case *nodes.CreateStatementNode:
+    return visitor.VisitCreateStatement(o.(*nodes.CreateStatementNode), visitor)
+  case *nodes.UnexistingColumnNode:
+    return visitor.VisitUnexistingColumn(o.(*nodes.UnexistingColumnNode), visitor)
 
   // Function node visitors.
   case *nodes.CountNode:
@@ -204,6 +213,10 @@ func (self *ToSqlVisitor) VisitAscending(o *nodes.AscendingNode, visitor Visitor
 
 func (self *ToSqlVisitor) VisitDescending(o *nodes.DescendingNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v DESC", visitor.Visit(o.Expr, visitor))
+}
+
+func (self *ToSqlVisitor) VisitEngine(o *nodes.EngineNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("%v", visitor.Visit(o.Expr, visitor))
 }
 
 // End Unary node visitors.
@@ -483,6 +496,15 @@ func (self *ToSqlVisitor) VisitDeleteStatement(o *nodes.DeleteStatementNode, vis
   }
 
   return str
+}
+
+func (self *ToSqlVisitor) VisitCreateStatement(o *nodes.CreateStatementNode, visitor VisitorInterface) string {
+  str := fmt.Sprintf("CREATE TABLE %v", visitor.Visit(o.Relation, visitor))
+  return str
+}
+
+func (self *ToSqlVisitor) VisitUnexistingColumn(o *nodes.UnexistingColumnNode, visitor VisitorInterface) string {
+  return ""
 }
 
 // End Nary node visitors.

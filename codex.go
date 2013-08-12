@@ -42,3 +42,8 @@ func Table(name string) managers.Accessor {
     return nodes.Attribute(name, relation)
   }
 }
+
+func CreateTable(name string) *managers.CreateManager {
+  relation := nodes.Relation(name)
+  return managers.Creation(relation)
+}

@@ -4,6 +4,9 @@ package visitors
 import (
   "errors"
   "fmt"
+)
+
+import (
   "github.com/chuckpreslar/codex/nodes"
 )
 
