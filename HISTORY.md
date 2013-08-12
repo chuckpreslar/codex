@@ -1,4 +1,5 @@
 # v0.3.4 - 08.12.2013
+* Add common SQL type and constraint constants for table creation and alteration.
 * Returning method on an InsertManager should only covert strings passed as arguments to Column nodes.
 * Allow for columns within an INSERT statements to be SQL bindings.
 * Replace `engine` and `Engine` on managers in favor of `adapter` and `SetAdapter` respectively.
