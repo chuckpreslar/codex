@@ -2,7 +2,7 @@
 package managers
 
 import (
-  "github.com/chuckpreslar/codex/tree/nodes"
+  "github.com/chuckpreslar/codex/nodes"
 )
 
 // SelectManager manages a tree that compiles to a SQL select statement.

@@ -4,7 +4,7 @@ package visitors
 import (
   "errors"
   "fmt"
-  "github.com/chuckpreslar/codex/tree/nodes"
+  "github.com/chuckpreslar/codex/nodes"
 )
 
 type PostgresVisitor struct {

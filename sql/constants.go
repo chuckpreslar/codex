@@ -1,5 +1,5 @@
-// Package codex provides a Relational Algebra.
-package codex
+// Package sql provides common SQL constants.
+package sql
 
 type Constraint uint8
 

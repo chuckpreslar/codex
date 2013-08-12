@@ -2,7 +2,7 @@
 package visitors
 
 import (
-  "github.com/chuckpreslar/codex/tree/nodes"
+  "github.com/chuckpreslar/codex/nodes"
 )
 
 type VisitorInterface interface {

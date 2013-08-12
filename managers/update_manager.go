@@ -2,7 +2,7 @@
 package managers
 
 import (
-  "github.com/chuckpreslar/codex/tree/nodes"
+  "github.com/chuckpreslar/codex/nodes"
 )
 
 // UpdateManager manages a tree that compiles to a SQL update statement.
