@@ -416,9 +416,8 @@ func (self *ToSqlVisitor) VisitInsertStatement(o *nodes.InsertStatementNode, vis
   if length := len(o.Columns) - 1; 0 <= length {
     str = fmt.Sprintf("%v(", str)
     for index, column := range o.Columns {
-
       switch column.(type) {
-      case *nodes.LiteralNode:
+      case *nodes.LiteralNode, *nodes.BindingNode:
         str = fmt.Sprintf("%v%v", str, visitor.Visit(column, visitor))
       default:
         str = fmt.Sprintf("%v%v", str, visitor.QuoteColumnName(column))
