@@ -1,8 +1,8 @@
 package managers
 
 import (
-  "github.com/chuckpreslar/codex/tree/managers"
-  "github.com/chuckpreslar/codex/tree/nodes"
+  "github.com/chuckpreslar/codex/managers"
+  "github.com/chuckpreslar/codex/nodes"
   "testing"
 )
 

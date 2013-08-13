@@ -15,7 +15,8 @@ type GroupNode UnaryNode             // GroupNode is a UnaryNode struct
 type HavingNode UnaryNode            // HavingNode is a UnaryNode struct
 type UnqualifiedColumnNode UnaryNode // UnqualifiedColumnNode is a UnaryNode struct
 type ColumnNode UnaryNode            // ColumnNode is a UnaryNode struct
-type StarNode UnaryNode              // Star node is a Unary node struct
+type StarNode UnaryNode              // StarNode is a Unary node struct
+type EngineNode UnaryNode            // EngineNode is a Unary node struct
 
 // LiteralNode factory method.
 func Literal(expr interface{}) (literal *LiteralNode) {
@@ -80,4 +81,10 @@ func Star() *StarNode {
 // BindingNode factory method.
 func Binding() *BindingNode {
   return new(BindingNode)
+}
+
+func Engine(expr interface{}) (engine *EngineNode) {
+  engine = new(EngineNode)
+  engine.Expr = expr
+  return
 }

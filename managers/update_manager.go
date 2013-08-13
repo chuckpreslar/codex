@@ -2,7 +2,7 @@
 package managers
 
 import (
-  "github.com/chuckpreslar/codex/tree/nodes"
+  "github.com/chuckpreslar/codex/nodes"
 )
 
 // UpdateManager manages a tree that compiles to a SQL update statement.
@@ -17,6 +17,7 @@ func (self *UpdateManager) Set(columns ...interface{}) *UpdateManager {
   for _, column := range columns {
     self.Tree.Values = append(self.Tree.Values, nodes.UnqualifiedColumn(column))
   }
+
   return self
 }
 
@@ -29,6 +30,7 @@ func (self *UpdateManager) To(values ...interface{}) *UpdateManager {
       self.Tree.Values[index] = nodes.Assignment(column, value)
     }
   }
+
   return self
 }
 
@@ -56,6 +58,7 @@ func (self *UpdateManager) ToSql() (string, error) {
   if nil == self.adapter {
     self.adapter = "to_sql"
   }
+
   return VisitorFor(self.adapter).Accept(self.Tree)
 }
 

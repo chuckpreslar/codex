@@ -2,7 +2,7 @@
 package managers
 
 import (
-  "github.com/chuckpreslar/codex/tree/nodes"
+  "github.com/chuckpreslar/codex/nodes"
 )
 
 // Accessor is a type def of a function that returns an AttributeNode

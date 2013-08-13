@@ -2,7 +2,7 @@
 package visitors
 
 import (
-  "github.com/chuckpreslar/codex/tree/nodes"
+  "github.com/chuckpreslar/codex/nodes"
 )
 
 type VisitorInterface interface {
@@ -24,6 +24,7 @@ type VisitorInterface interface {
   VisitHaving(*nodes.HavingNode, VisitorInterface) string
   VisitAscending(*nodes.AscendingNode, VisitorInterface) string
   VisitDescending(*nodes.DescendingNode, VisitorInterface) string
+  VisitEngine(*nodes.EngineNode, VisitorInterface) string
 
   // Binary node visitors.
   VisitAssignment(*nodes.AssignmentNode, VisitorInterface) string

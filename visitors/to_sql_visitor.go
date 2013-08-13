@@ -4,8 +4,11 @@ package visitors
 import (
   "errors"
   "fmt"
-  "github.com/chuckpreslar/codex/tree/nodes"
   "strings"
+)
+
+import (
+  "github.com/chuckpreslar/codex/nodes"
 )
 
 var DEBUG = false
@@ -71,6 +74,8 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
     return visitor.VisitAscending(o.(*nodes.AscendingNode), visitor)
   case *nodes.DescendingNode:
     return visitor.VisitDescending(o.(*nodes.DescendingNode), visitor)
+  case *nodes.EngineNode:
+    return visitor.VisitEngine(o.(*nodes.EngineNode), visitor)
 
   // Binary node visitors.
   case *nodes.AssignmentNode:
@@ -204,6 +209,10 @@ func (self *ToSqlVisitor) VisitAscending(o *nodes.AscendingNode, visitor Visitor
 
 func (self *ToSqlVisitor) VisitDescending(o *nodes.DescendingNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v DESC", visitor.Visit(o.Expr, visitor))
+}
+
+func (self *ToSqlVisitor) VisitEngine(o *nodes.EngineNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("%v", visitor.Visit(o.Expr, visitor))
 }
 
 // End Unary node visitors.
