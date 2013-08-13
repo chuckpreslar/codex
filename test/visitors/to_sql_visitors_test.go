@@ -1,8 +1,8 @@
 package visitors
 
 import (
-  "github.com/chuckpreslar/codex/tree/nodes"
-  "github.com/chuckpreslar/codex/tree/visitors"
+  "github.com/chuckpreslar/codex/nodes"
+  "github.com/chuckpreslar/codex/visitors"
   "testing"
 )
 

@@ -2,7 +2,7 @@
 package managers
 
 import (
-  "github.com/chuckpreslar/codex/tree/nodes"
+  "github.com/chuckpreslar/codex/nodes"
 )
 
 // DeleteManager manages a tree that compiles to a SQL delete statement.
@@ -28,6 +28,7 @@ func (self *DeleteManager) ToSql() (string, error) {
   if nil == self.adapter {
     self.adapter = "to_sql"
   }
+
   return VisitorFor(self.adapter).Accept(self.Tree)
 }
 

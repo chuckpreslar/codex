@@ -2,7 +2,7 @@
 package managers
 
 import (
-  "github.com/chuckpreslar/codex/tree/nodes"
+  "github.com/chuckpreslar/codex/nodes"
 )
 
 // SelectManager manages a tree that compiles to a SQL select statement.
@@ -20,8 +20,10 @@ func (self *SelectManager) Project(projections ...interface{}) *SelectManager {
     if _, ok := projection.(string); ok {
       projection = nodes.Literal(projection)
     }
+
     self.Context.Projections = append(self.Context.Projections, projection)
   }
+
   return self
 }
 
@@ -32,7 +34,11 @@ func (self *SelectManager) Where(expr interface{}) *SelectManager {
     expr = nodes.Literal(expr)
   }
 
-  self.Context.Wheres = append(self.Context.Wheres, nodes.Grouping(expr))
+  if _, ok := expr.(*nodes.GroupingNode); !ok {
+    expr = nodes.Grouping(expr)
+  }
+
+  self.Context.Wheres = append(self.Context.Wheres, expr)
   return self
 }
 
@@ -56,6 +62,7 @@ func (self *SelectManager) InnerJoin(table interface{}) *SelectManager {
   case *nodes.RelationNode:
     self.Context.Source.Right = append(self.Context.Source.Right, nodes.InnerJoin(table.(*nodes.RelationNode), nil))
   }
+
   return self
 }
 
@@ -67,6 +74,7 @@ func (self *SelectManager) OuterJoin(table interface{}) *SelectManager {
   case *nodes.RelationNode:
     self.Context.Source.Right = append(self.Context.Source.Right, nodes.OuterJoin(table.(*nodes.RelationNode), nil))
   }
+
   return self
 }
 

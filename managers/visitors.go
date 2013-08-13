@@ -2,7 +2,7 @@
 package managers
 
 import (
-  "github.com/chuckpreslar/codex/tree/visitors"
+  "github.com/chuckpreslar/codex/visitors"
 )
 
 // VisitorFor returns a AST visitor for the adapter argument.
