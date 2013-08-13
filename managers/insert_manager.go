@@ -30,6 +30,7 @@ func (self *InsertManager) Returning(column interface{}) *InsertManager {
   if _, ok := column.(string); ok {
     column = nodes.Column(column)
   }
+
   self.Tree.Returning = column
   return self
 }
@@ -45,6 +46,7 @@ func (self *InsertManager) ToSql() (string, error) {
   if nil == self.adapter {
     self.adapter = "to_sql"
   }
+
   return VisitorFor(self.adapter).Accept(self.Tree)
 }
 

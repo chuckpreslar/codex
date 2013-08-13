@@ -28,6 +28,7 @@ func (self *DeleteManager) ToSql() (string, error) {
   if nil == self.adapter {
     self.adapter = "to_sql"
   }
+
   return VisitorFor(self.adapter).Accept(self.Tree)
 }
 

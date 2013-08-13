@@ -54,8 +54,6 @@ type VisitorInterface interface {
   VisitInsertStatement(*nodes.InsertStatementNode, VisitorInterface) string
   VisitUpdateStatement(*nodes.UpdateStatementNode, VisitorInterface) string
   VisitDeleteStatement(*nodes.DeleteStatementNode, VisitorInterface) string
-  VisitCreateStatement(*nodes.CreateStatementNode, VisitorInterface) string
-  VisitUnexistingColumn(*nodes.UnexistingColumnNode, VisitorInterface) string
 
   // Function node visitors.
   VisitCount(*nodes.CountNode, VisitorInterface) string

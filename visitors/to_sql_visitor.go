@@ -130,10 +130,6 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
     return visitor.VisitUpdateStatement(o.(*nodes.UpdateStatementNode), visitor)
   case *nodes.DeleteStatementNode:
     return visitor.VisitDeleteStatement(o.(*nodes.DeleteStatementNode), visitor)
-  case *nodes.CreateStatementNode:
-    return visitor.VisitCreateStatement(o.(*nodes.CreateStatementNode), visitor)
-  case *nodes.UnexistingColumnNode:
-    return visitor.VisitUnexistingColumn(o.(*nodes.UnexistingColumnNode), visitor)
 
   // Function node visitors.
   case *nodes.CountNode:
@@ -496,15 +492,6 @@ func (self *ToSqlVisitor) VisitDeleteStatement(o *nodes.DeleteStatementNode, vis
   }
 
   return str
-}
-
-func (self *ToSqlVisitor) VisitCreateStatement(o *nodes.CreateStatementNode, visitor VisitorInterface) string {
-  str := fmt.Sprintf("CREATE TABLE %v", visitor.Visit(o.Relation, visitor))
-  return str
-}
-
-func (self *ToSqlVisitor) VisitUnexistingColumn(o *nodes.UnexistingColumnNode, visitor VisitorInterface) string {
-  return ""
 }
 
 // End Nary node visitors.
