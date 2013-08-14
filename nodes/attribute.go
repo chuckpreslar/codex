@@ -1,7 +1,7 @@
 // Package nodes provides nodes to use in codex AST's.
 package nodes
 
-// AttributeNode is a specific Binary node
+// AttributeNode is a specific Binary node.
 type AttributeNode struct {
   Name     interface{}   // Name of the Attribute.
   Relation *RelationNode // Relation the attribute belongs to.

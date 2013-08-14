@@ -1,22 +1,23 @@
 // Package nodes provides nodes to use in codex AST's.
 package nodes
 
-// UnaryNode struct
+// UnaryNode struct.
 type UnaryNode struct {
   Expr interface{} // Single leaf for the Unary node.
 }
 
-type LiteralNode UnaryNode           // LiteralNode is a UnaryNode struct
-type BindingNode UnaryNode           // BindingNode is a UnaryNode struct
-type OnNode UnaryNode                // OnNode is a UnaryNode struct
-type LimitNode UnaryNode             // LimitNode is a UnaryNode struct
-type OffsetNode UnaryNode            // OffsetNode is a UnaryNode struct
-type GroupNode UnaryNode             // GroupNode is a UnaryNode struct
-type HavingNode UnaryNode            // HavingNode is a UnaryNode struct
-type UnqualifiedColumnNode UnaryNode // UnqualifiedColumnNode is a UnaryNode struct
-type ColumnNode UnaryNode            // ColumnNode is a UnaryNode struct
-type StarNode UnaryNode              // StarNode is a Unary node struct
-type EngineNode UnaryNode            // EngineNode is a Unary node struct
+type LiteralNode UnaryNode           // LiteralNode is a UnaryNode struct.
+type BindingNode UnaryNode           // BindingNode is a UnaryNode struct.
+type OnNode UnaryNode                // OnNode is a UnaryNode struct.
+type LimitNode UnaryNode             // LimitNode is a UnaryNode struct.
+type OffsetNode UnaryNode            // OffsetNode is a UnaryNode struct.
+type GroupNode UnaryNode             // GroupNode is a UnaryNode struct.
+type HavingNode UnaryNode            // HavingNode is a UnaryNode struct.
+type UnqualifiedColumnNode UnaryNode // UnqualifiedColumnNode is a UnaryNode struct.
+type ColumnNode UnaryNode            // ColumnNode is a UnaryNode struct.
+type StarNode UnaryNode              // StarNode is a Unary node struct.
+type EngineNode UnaryNode            // EngineNode is a Unary node struct.
+type IndexNameNode UnaryNode         // IndexNameNode is a Unary node struct.
 
 // LiteralNode factory method.
 func Literal(expr interface{}) (literal *LiteralNode) {
@@ -83,8 +84,16 @@ func Binding() *BindingNode {
   return new(BindingNode)
 }
 
+// EngineNode factory method.
 func Engine(expr interface{}) (engine *EngineNode) {
   engine = new(EngineNode)
   engine.Expr = expr
+  return
+}
+
+// IndexNameNode factory method.
+func IndexName(expr interface{}) (index *IndexNameNode) {
+  index = new(IndexNameNode)
+  index.Expr = expr
   return
 }
