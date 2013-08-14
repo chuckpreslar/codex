@@ -1,7 +1,7 @@
 // Package nodes provides nodes to use in codex AST's.
 package nodes
 
-// AverageNode is a FunctionNode struct
+// AverageNode is a FunctionNode struct.
 type AverageNode FunctionNode
 
 // Returns and Equal node containing a reference to the

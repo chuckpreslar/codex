@@ -1,20 +1,21 @@
 // Package nodes provides nodes to use in codex AST's.
 package nodes
 
-// Binary node struct
+// Binary node struct.
 type BinaryNode struct {
   Left  interface{} // Binary nodes left leaf.
   Right interface{} // Binary nodes right leaf.
 }
 
-type AsNode BinaryNode         // AsNode is a BinaryNode struct
-type BetweenNode BinaryNode    // BetweenNode is a BinaryNode struct
-type InnerJoinNode BinaryNode  // InnerJoinNode is a BinaryNode struct
-type OuterJoinNode BinaryNode  // OuterJoinNode is a BinaryNode struct
-type AssignmentNode BinaryNode // AssignmentNode is a BinaryNode struct
-type UnionNode BinaryNode      // UnionNode is a BinaryNode struct
-type IntersectNode BinaryNode  // UnionNode is a BinaryNode struct
-type ExceptNode BinaryNode     // UnionNode is a BinaryNode struct
+type AsNode BinaryNode               // AsNode is a BinaryNode struct.
+type BetweenNode BinaryNode          // BetweenNode is a BinaryNode struct.
+type InnerJoinNode BinaryNode        // InnerJoinNode is a BinaryNode struct.
+type OuterJoinNode BinaryNode        // OuterJoinNode is a BinaryNode struct.
+type AssignmentNode BinaryNode       // AssignmentNode is a BinaryNode struct.
+type UnionNode BinaryNode            // UnionNode is a BinaryNode struct.
+type IntersectNode BinaryNode        // IntersectNode is a BinaryNode struct.
+type ExceptNode BinaryNode           // ExceptNode is a BinaryNode struct.
+type UnexistingColumnNode BinaryNode // UnexistingColumnNode is a BinaryNode struct.
 
 // AsNode factory method.
 func As(left, right interface{}) (as *AsNode) {
@@ -77,5 +78,13 @@ func Except(left, right interface{}) (except *ExceptNode) {
   except = new(ExceptNode)
   except.Left = left
   except.Right = right
+  return
+}
+
+// UnexistingColumnNode factory method.
+func UnexistingColumn(left, right interface{}) (column *UnexistingColumnNode) {
+  column = new(UnexistingColumnNode)
+  column.Left = left
+  column.Right = right
   return
 }
