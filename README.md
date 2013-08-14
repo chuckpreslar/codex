@@ -98,6 +98,61 @@ sql, err := users.Delete(users("id").Eq(1)).ToSql()
 
 // DELETE FROM "users" WHERE "users"."id" = 1
 ```
+
+## Creations
+
+The codex package currently provides a few common SQL data and constraint types as constants to use with creating and altering tables.
+
+__Constraints__
+
+* NOT_NULL
+* UNIQUE
+* PRIMARY_KEY
+* FOREIGN_KEY
+* CHECK
+* DEFAULT
+
+__Types__
+
+* STRING
+* TEXT
+* BOOLEAN
+* INTEGER
+* FLOAT
+* DECIMAL
+* DATE
+* TIME
+* DATETIME
+* TIMESTAMP
+
+```go
+// ...
+
+users := codex.CreateTable("users").
+  AddColumn("first_name", codex.STRING).
+  AddColumn("last_name", codex.STRING).
+  AddColumn("email", codex.STRING).
+  AddColumn("id", codex.INTEGER).
+  AddConstraint("first_name", codex.NOT_NULL).
+  AddConstraint("id", codex.PRIMARY_KEY).
+  AddConstraint("email", codex.UNIQUE, "users_uniq_email") // Optional last argument supplies index name.
+
+sql, err := users.ToSql()
+
+// CREATE TABLE "users" ();
+// ALTER TABLE "users" ADD "first_name" character varying(255);
+// ALTER TABLE "users" ADD "last_name" character varying(255);
+// ALTER TABLE "users" ADD "email" character varying(255);
+// ALTER TABLE "users" ADD "id" integer;
+// ALTER TABLE "users" ALTER "first_name" SET NOT NULL;
+// ALTER TABLE "users" ADD PRIMARY KEY("id");
+// ALTER TABLE "users" ADD CONSTRAINT "users_email_uniq" UNIQUE("email");
+```
+
+## Alterations
+
+Alterations work the same as Creations, only the the initializer function `AlterTable` is used in place of `CreateTable`.
+
 ## Documentation
 
 View godoc or visit [godoc.org](http://godoc.org/github.com/chuckpreslar/codex).

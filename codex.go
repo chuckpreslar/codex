@@ -32,6 +32,7 @@ const (
   TIMESTAMP = sql.TIMESTAMP
 )
 
+// ToggleDebugMode toggles debugger variable for managers package.
 func ToggleDebugMode() {
   visitors.DEBUG = !visitors.DEBUG
 }

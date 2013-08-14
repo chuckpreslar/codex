@@ -21,17 +21,11 @@ func (self *AlterManager) AddColumn(name interface{}, typ sql.Type) *AlterManage
 }
 
 func (self *AlterManager) AddConstraint(column interface{}, kind sql.Constraint, options ...interface{}) *AlterManager {
-  var expr interface{}
-
-  if 0 < len(options) {
-    expr = options[0]
-  }
-
   if _, ok := column.(string); ok {
     column = nodes.UnqualifiedColumn(column)
   }
 
-  self.Tree.Constraints = append(self.Tree.Constraints, nodes.Constraint(column, kind, expr))
+  self.Tree.Constraints = append(self.Tree.Constraints, nodes.Constraint(column, kind, options...))
   return self
 }
 

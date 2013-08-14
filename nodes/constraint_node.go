@@ -7,16 +7,16 @@ import (
 
 // ConstraintNode is a Nary node.
 type ConstraintNode struct {
-  Column interface{}
-  Kind   sql.Constraint
-  Expr   interface{}
+  Column  interface{}
+  Kind    sql.Constraint
+  Options []interface{}
 }
 
 // ConstraintNode factory method.
-func Constraint(column interface{}, kind sql.Constraint, expr interface{}) (constraint *ConstraintNode) {
+func Constraint(column interface{}, kind sql.Constraint, options ...interface{}) (constraint *ConstraintNode) {
   constraint = new(ConstraintNode)
   constraint.Column = column
   constraint.Kind = kind
-  constraint.Expr = expr
+  constraint.Options = options
   return
 }
