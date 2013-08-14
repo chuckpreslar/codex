@@ -1,3 +1,6 @@
+# v0.3.5 - 08.14.2013
+* Introduce nodes, visitors, and managers for table creation and alteration.
+
 # v0.3.4 - 08.13.2013
 * Major package update to remove unused "tree" directory as it does not represent a package.
 * Returning method on an InsertManager should only covert strings passed as arguments to Column nodes.

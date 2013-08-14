@@ -32,10 +32,9 @@ const (
   TIMESTAMP = sql.TIMESTAMP
 )
 
-// Expost DEBUG flag.
-var (
-  DEBUG = &visitors.DEBUG // Expose a pointer to the DEBUG variable from the visitors package for easy access.
-)
+func ToggleDebugMode() {
+  visitors.DEBUG = !visitors.DEBUG
+}
 
 // Table returns an Accessor from the managers package for
 // generating SQL to interact with existing tables.

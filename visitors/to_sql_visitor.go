@@ -9,6 +9,7 @@ import (
 
 import (
   "github.com/chuckpreslar/codex/nodes"
+  "github.com/chuckpreslar/codex/sql"
 )
 
 var DEBUG = false
@@ -76,6 +77,8 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
     return visitor.VisitDescending(o.(*nodes.DescendingNode), visitor)
   case *nodes.EngineNode:
     return visitor.VisitEngine(o.(*nodes.EngineNode), visitor)
+  case *nodes.IndexNameNode:
+    return visitor.VisitIndexName(o.(*nodes.IndexNameNode), visitor)
 
   // Binary node visitors.
   case *nodes.AssignmentNode:
@@ -118,8 +121,12 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
     return visitor.VisitIntersect(o.(*nodes.IntersectNode), visitor)
   case *nodes.ExceptNode:
     return visitor.VisitExcept(o.(*nodes.ExceptNode), visitor)
+  case *nodes.UnexistingColumnNode:
+    return visitor.VisitUnexistingColumn(o.(*nodes.UnexistingColumnNode), visitor)
 
   // Nary node visitors.
+  case *nodes.ConstraintNode:
+    return visitor.VisitConstraint(o.(*nodes.ConstraintNode), visitor)
   case *nodes.SelectCoreNode:
     return visitor.VisitSelectCore(o.(*nodes.SelectCoreNode), visitor)
   case *nodes.SelectStatementNode:
@@ -130,6 +137,8 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
     return visitor.VisitUpdateStatement(o.(*nodes.UpdateStatementNode), visitor)
   case *nodes.DeleteStatementNode:
     return visitor.VisitDeleteStatement(o.(*nodes.DeleteStatementNode), visitor)
+  case *nodes.AlterStatementNode:
+    return visitor.VisitAlterStatement(o.(*nodes.AlterStatementNode), visitor)
 
   // Function node visitors.
   case *nodes.CountNode:
@@ -142,6 +151,12 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
     return visitor.VisitMaximum(o.(*nodes.MaximumNode), visitor)
   case *nodes.MinimumNode:
     return visitor.VisitMinimum(o.(*nodes.MinimumNode), visitor)
+
+  // SQL constant visitors.
+  case sql.Type:
+    return visitor.VisitSqlType(o.(sql.Type), visitor)
+  case sql.Constraint:
+    return visitor.VisitSqlConstraint(o.(sql.Constraint), visitor)
 
   // Base visitors.
   case string:
@@ -213,6 +228,10 @@ func (self *ToSqlVisitor) VisitDescending(o *nodes.DescendingNode, visitor Visit
 
 func (self *ToSqlVisitor) VisitEngine(o *nodes.EngineNode, visitor VisitorInterface) string {
   return fmt.Sprintf("%v", visitor.Visit(o.Expr, visitor))
+}
+
+func (self *ToSqlVisitor) VisitIndexName(o *nodes.IndexNameNode, visitor VisitorInterface) string {
+  return fmt.Sprintf(`"%v"`, o.Expr)
 }
 
 // End Unary node visitors.
@@ -338,9 +357,40 @@ func (self *ToSqlVisitor) VisitExcept(o *nodes.ExceptNode, visitor VisitorInterf
   return fmt.Sprintf("(%s EXCEPT %s)", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
+func (self *ToSqlVisitor) VisitUnexistingColumn(o *nodes.UnexistingColumnNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("ADD %v %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
+}
+
 // End Binary node visitors.
 
 // Begin Nary node visitors.
+
+func (self *ToSqlVisitor) VisitConstraint(o *nodes.ConstraintNode, visitor VisitorInterface) string {
+  str := ""
+  switch o.Kind {
+  case sql.UNIQUE, sql.PRIMARY_KEY:
+    str = fmt.Sprintf("%vADD%v", str, SPACE)
+    if nil != o.Expr {
+      if _, ok := o.Expr.(string); ok {
+        o.Expr = nodes.IndexName(o.Expr)
+      }
+
+      str = fmt.Sprintf("%vCONSTRAINT %v%v", str, visitor.Visit(o.Expr, visitor), SPACE)
+    }
+
+    str = fmt.Sprintf("%v%v(%v)", str, visitor.Visit(o.Kind, visitor), visitor.Visit(o.Column, visitor))
+  default:
+    str = fmt.Sprintf("ALTER %v SET %v", visitor.Visit(o.Column, visitor), visitor.Visit(o.Kind, visitor))
+
+    if nil != o.Expr {
+      str = fmt.Sprintf("%v %v", str, visitor.Visit(o.Expr, visitor))
+    }
+
+    str = fmt.Sprintf("%v", str)
+  }
+
+  return str
+}
 
 func (self *ToSqlVisitor) VisitSelectCore(o *nodes.SelectCoreNode, visitor VisitorInterface) string {
   str := fmt.Sprintf("SELECT")
@@ -494,6 +544,24 @@ func (self *ToSqlVisitor) VisitDeleteStatement(o *nodes.DeleteStatementNode, vis
   return str
 }
 
+func (self *ToSqlVisitor) VisitAlterStatement(o *nodes.AlterStatementNode, visitor VisitorInterface) string {
+  str := ""
+
+  if o.Create {
+    str = fmt.Sprintf("CREATE TABLE %v ();\n", visitor.Visit(o.Relation, visitor))
+  }
+
+  for _, column := range o.Columns {
+    str = fmt.Sprintf("%vALTER TABLE %v %v;\n", str, visitor.Visit(o.Relation, visitor), visitor.Visit(column, visitor))
+  }
+
+  for _, constraint := range o.Constraints {
+    str = fmt.Sprintf("%vALTER TABLE %v %v;\n", str, visitor.Visit(o.Relation, visitor), visitor.Visit(constraint, visitor))
+  }
+
+  return str
+}
+
 // End Nary node visitors.
 
 // Begin Function node visitors.
@@ -619,6 +687,56 @@ func (self *ToSqlVisitor) VisitMinimum(o *nodes.MinimumNode, visitor VisitorInte
 
   return str
 }
+
+// Begin SQL constant visitors.
+
+func (self *ToSqlVisitor) VisitSqlType(o sql.Type, visitor VisitorInterface) string {
+  switch o {
+  case sql.STRING:
+    return "character varying(255)"
+  case sql.TEXT:
+    return "text"
+  case sql.BOOLEAN:
+    return "boolean"
+  case sql.INTEGER:
+    return "integer"
+  case sql.FLOAT:
+    return "float"
+  case sql.DECIMAL:
+    return "decimal"
+  case sql.DATE:
+    return "date"
+  case sql.TIME:
+    return "time"
+  case sql.DATETIME:
+    return "datetime"
+  case sql.TIMESTAMP:
+    return "timestamp"
+  default:
+    panic("Unkown SQL Type constant.")
+  }
+}
+
+func (self *ToSqlVisitor) VisitSqlConstraint(o sql.Constraint, visitor VisitorInterface) string {
+  switch o {
+  case sql.NOT_NULL:
+    return "NOT NULL"
+  case sql.UNIQUE:
+    return "UNIQUE"
+  case sql.PRIMARY_KEY:
+    return "PRIMARY KEY"
+  case sql.FOREIGN_KEY:
+    return "FOREIGN KEY"
+  case sql.CHECK:
+    return "CHECK"
+  case sql.DEFAULT:
+    return "DEFAULT"
+  default:
+    panic("Unkown SQL Constraint constant.")
+  }
+}
+
+// End SQL constant visitors.
 
 // Begin Base visitors.
 

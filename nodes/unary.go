@@ -17,6 +17,7 @@ type UnqualifiedColumnNode UnaryNode // UnqualifiedColumnNode is a UnaryNode str
 type ColumnNode UnaryNode            // ColumnNode is a UnaryNode struct.
 type StarNode UnaryNode              // StarNode is a Unary node struct.
 type EngineNode UnaryNode            // EngineNode is a Unary node struct.
+type IndexNameNode UnaryNode         // IndexNameNode is a Unary node struct.
 
 // LiteralNode factory method.
 func Literal(expr interface{}) (literal *LiteralNode) {
@@ -87,5 +88,12 @@ func Binding() *BindingNode {
 func Engine(expr interface{}) (engine *EngineNode) {
   engine = new(EngineNode)
   engine.Expr = expr
+  return
+}
+
+// IndexNameNode factory method.
+func IndexName(expr interface{}) (index *IndexNameNode) {
+  index = new(IndexNameNode)
+  index.Expr = expr
   return
 }

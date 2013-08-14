@@ -3,6 +3,7 @@ package visitors
 
 import (
   "github.com/chuckpreslar/codex/nodes"
+  "github.com/chuckpreslar/codex/sql"
 )
 
 type VisitorInterface interface {
@@ -25,6 +26,7 @@ type VisitorInterface interface {
   VisitAscending(*nodes.AscendingNode, VisitorInterface) string
   VisitDescending(*nodes.DescendingNode, VisitorInterface) string
   VisitEngine(*nodes.EngineNode, VisitorInterface) string
+  VisitIndexName(*nodes.IndexNameNode, VisitorInterface) string
 
   // Binary node visitors.
   VisitAssignment(*nodes.AssignmentNode, VisitorInterface) string
@@ -47,13 +49,16 @@ type VisitorInterface interface {
   VisitUnion(*nodes.UnionNode, VisitorInterface) string
   VisitExcept(*nodes.ExceptNode, VisitorInterface) string
   VisitIntersect(*nodes.IntersectNode, VisitorInterface) string
+  VisitUnexistingColumn(*nodes.UnexistingColumnNode, VisitorInterface) string
 
   // Nary node visitors.
+  VisitConstraint(*nodes.ConstraintNode, VisitorInterface) string
   VisitSelectCore(*nodes.SelectCoreNode, VisitorInterface) string
   VisitSelectStatement(*nodes.SelectStatementNode, VisitorInterface) string
   VisitInsertStatement(*nodes.InsertStatementNode, VisitorInterface) string
   VisitUpdateStatement(*nodes.UpdateStatementNode, VisitorInterface) string
   VisitDeleteStatement(*nodes.DeleteStatementNode, VisitorInterface) string
+  VisitAlterStatement(*nodes.AlterStatementNode, VisitorInterface) string
 
   // Function node visitors.
   VisitCount(*nodes.CountNode, VisitorInterface) string
@@ -61,6 +66,10 @@ type VisitorInterface interface {
   VisitSum(*nodes.SumNode, VisitorInterface) string
   VisitMaximum(*nodes.MaximumNode, VisitorInterface) string
   VisitMinimum(*nodes.MinimumNode, VisitorInterface) string
+
+  // SQL constant visitors.
+  VisitSqlType(sql.Type, VisitorInterface) string
+  VisitSqlConstraint(sql.Constraint, VisitorInterface) string
 
   // Base visitors.
   VisitString(interface{}) string

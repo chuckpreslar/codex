@@ -12,17 +12,49 @@ type AlterManager struct {
 }
 
 func (self *AlterManager) AddColumn(name interface{}, typ sql.Type) *AlterManager {
+  if _, ok := name.(string); ok {
+    name = nodes.UnqualifiedColumn(name)
+  }
+
   self.Tree.Columns = append(self.Tree.Columns, nodes.UnexistingColumn(name, typ))
   return self
 }
 
-func (self *AlterManager) AddConstraint() *AlterManager {
+func (self *AlterManager) AddConstraint(column interface{}, kind sql.Constraint, options ...interface{}) *AlterManager {
+  var expr interface{}
+
+  if 0 < len(options) {
+    expr = options[0]
+  }
+
+  if _, ok := column.(string); ok {
+    column = nodes.UnqualifiedColumn(column)
+  }
+
+  self.Tree.Constraints = append(self.Tree.Constraints, nodes.Constraint(column, kind, expr))
+  return self
+}
+
+func (self *AlterManager) SetEngine(engine interface{}) *AlterManager {
+  if _, ok := engine.(*nodes.EngineNode); !ok {
+    engine = nodes.Engine(engine)
+  }
+
+  self.Tree.Engine = engine.(*nodes.EngineNode)
   return self
 }
 
 func (self *AlterManager) SetAdapter(adapter interface{}) *AlterManager {
   self.adapter = adapter
   return self
+}
+
+func (self *AlterManager) ToSql() (string, error) {
+  if nil == self.adapter {
+    self.adapter = "to_sql"
+  }
+
+  return VisitorFor(self.adapter).Accept(self.Tree)
 }
 
 // SelectManager factory method.
