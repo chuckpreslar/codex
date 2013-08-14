@@ -1,7 +1,7 @@
 // Package nodes provides nodes to use in codex AST's.
 package nodes
 
-// AndNode is a BinaryNode struct
+// AndNode is a BinaryNode struct.
 type AndNode BinaryNode
 
 // Returns a Grouping node with an expression containing a
