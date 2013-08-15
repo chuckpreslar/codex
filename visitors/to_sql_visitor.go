@@ -790,7 +790,7 @@ func (self *ToSqlVisitor) VisitMinimum(o *nodes.MinimumNode, visitor VisitorInte
 func (self *ToSqlVisitor) VisitSqlType(o sql.Type, visitor VisitorInterface) string {
   switch o {
   case sql.STRING:
-    return "character varying(255)"
+    return "varchar(255)"
   case sql.TEXT:
     return "text"
   case sql.BOOLEAN:
