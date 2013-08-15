@@ -4,7 +4,7 @@ package nodes
 type AlterStatementNode struct {
   Relation    *RelationNode
   Columns     []*UnexistingColumnNode
-  Constraints []*ConstraintNode
+  Constraints []interface{}
   Engine      *EngineNode
   Create      bool
 }
@@ -14,7 +14,7 @@ func AlterStatement(relation *RelationNode, create bool) (statement *AlterStatem
   statement = new(AlterStatementNode)
   statement.Relation = relation
   statement.Columns = make([]*UnexistingColumnNode, 0)
-  statement.Constraints = make([]*ConstraintNode, 0)
+  statement.Constraints = make([]interface{}, 0)
   statement.Create = create
   return
 }

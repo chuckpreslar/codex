@@ -25,7 +25,26 @@ func (self *AlterManager) AddConstraint(column interface{}, kind sql.Constraint,
     column = nodes.UnqualifiedColumn(column)
   }
 
-  self.Tree.Constraints = append(self.Tree.Constraints, nodes.Constraint(column, kind, options...))
+  var node interface{}
+
+  switch kind {
+  case sql.NOT_NULL:
+    node = nodes.NotNull(column, options...)
+  case sql.UNIQUE:
+    node = nodes.Unique(column, options...)
+  case sql.PRIMARY_KEY:
+    node = nodes.PrimaryKey(column, options...)
+  case sql.FOREIGN_KEY:
+    node = nodes.ForeignKey(column, options...)
+  case sql.CHECK:
+    node = nodes.Check(column, options...)
+  case sql.DEFAULT:
+    node = nodes.Default(column, options...)
+  default:
+    node = nodes.Constraint(column, options...)
+  }
+
+  self.Tree.Constraints = append(self.Tree.Constraints, node)
   return self
 }
 

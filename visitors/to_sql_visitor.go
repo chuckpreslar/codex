@@ -127,6 +127,18 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
   // Nary node visitors.
   case *nodes.ConstraintNode:
     return visitor.VisitConstraint(o.(*nodes.ConstraintNode), visitor)
+  case *nodes.NotNullNode:
+    return visitor.VisitNotNull(o.(*nodes.NotNullNode), visitor)
+  case *nodes.UniqueNode:
+    return visitor.VisitUnique(o.(*nodes.UniqueNode), visitor)
+  case *nodes.PrimaryKeyNode:
+    return visitor.VisitPrimaryKey(o.(*nodes.PrimaryKeyNode), visitor)
+  case *nodes.ForeignKeyNode:
+    return visitor.VisitForeignKey(o.(*nodes.ForeignKeyNode), visitor)
+  case *nodes.CheckNode:
+    return visitor.VisitCheck(o.(*nodes.CheckNode), visitor)
+  case *nodes.DefaultNode:
+    return visitor.VisitDefault(o.(*nodes.DefaultNode), visitor)
   case *nodes.SelectCoreNode:
     return visitor.VisitSelectCore(o.(*nodes.SelectCoreNode), visitor)
   case *nodes.SelectStatementNode:
@@ -366,74 +378,98 @@ func (self *ToSqlVisitor) VisitUnexistingColumn(o *nodes.UnexistingColumnNode, v
 // Begin Nary node visitors.
 
 func (self *ToSqlVisitor) VisitConstraint(o *nodes.ConstraintNode, visitor VisitorInterface) string {
-  str := ""
-  switch o.Kind {
-  //FIXME: This looks a little sloppy, clean it up.
-  case sql.UNIQUE, sql.PRIMARY_KEY:
-    str = fmt.Sprintf("%vADD%v", str, SPACE)
-    // Optional index name.
-    if 0 < len(o.Options) {
-      expr := o.Options[0]
-      if _, ok := expr.(string); ok {
-        expr = nodes.IndexName(expr)
-      }
+  panic("VisitConstraint is unimplemented.")
+}
 
-      str = fmt.Sprintf("%vCONSTRAINT %v%v", str, visitor.Visit(expr, visitor), SPACE)
+func (self *ToSqlVisitor) VisitNotNull(o *nodes.NotNullNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("ALTER %v SET NOT NULL", visitor.Visit(o.Column, visitor))
+}
+
+func (self *ToSqlVisitor) VisitUnique(o *nodes.UniqueNode, visitor VisitorInterface) string {
+  str := "ADD "
+  // Optional index name.
+  if 0 < len(o.Options) {
+    expr := o.Options[0]
+    if _, ok := expr.(string); ok {
+      expr = nodes.IndexName(expr)
     }
 
-    str = fmt.Sprintf("%v%v(%v)", str, visitor.Visit(o.Kind, visitor), visitor.Visit(o.Column, visitor))
+    str = fmt.Sprintf("%vCONSTRAINT %v ", str, visitor.Visit(expr, visitor))
+  }
 
-  case sql.FOREIGN_KEY:
-    str = fmt.Sprintf("%vADD%v", str, SPACE)
-    // For FOREIGN KEY, index name is optional, REFERENCES is not.
-    //
-    // No index name ex.
-    //
-    //  CreateTable("orders").
-    //    AddColumn("user_id").
-    //    AddConstraint("user_id", FOREIGN_KEY, "users")
-    //
-    // With option index name ex.
-    //
-    //  CreateTable("orders").
-    //    AddColumn("user_id").
-    //    AddConstraint("user_id", FOREIGN_KEY, "users_fkey", "users")
-    if 1 < len(o.Options) {
-      expr := o.Options[0]
-      if _, ok := expr.(string); ok {
-        expr = nodes.IndexName(expr)
-      }
+  return fmt.Sprintf("%vUNIQUE(%v)", str, visitor.Visit(o.Column, visitor))
+}
 
-      // Remove this item from the array, avoiding any potential memory leak.
-      // https://code.google.com/p/go-wiki/wiki/SliceTricks
-      length := len(o.Options) - 1
-      copy(o.Options[0:], o.Options[1:])
-      o.Options[length] = nil
-      o.Options = o.Options[:length]
-
-      str = fmt.Sprintf("%vCONSTRAINT %v%v", str, visitor.Visit(expr, visitor), SPACE)
+func (self *ToSqlVisitor) VisitPrimaryKey(o *nodes.PrimaryKeyNode, visitor VisitorInterface) string {
+  str := "ADD "
+  // Optional index name.
+  if 0 < len(o.Options) {
+    expr := o.Options[0]
+    if _, ok := expr.(string); ok {
+      expr = nodes.IndexName(expr)
     }
 
-    str = fmt.Sprintf("%v%v(%v)", str, visitor.Visit(o.Kind, visitor), visitor.Visit(o.Column, visitor))
+    str = fmt.Sprintf("%vCONSTRAINT %v ", str, visitor.Visit(expr, visitor))
+  }
 
-    // If option is not here, user didn't do it right, but don't dereference and panic.
-    if 0 < len(o.Options) {
-      relation := o.Options[0]
-      if _, ok := relation.(string); ok {
-        relation = nodes.Relation(relation.(string))
-      }
+  return fmt.Sprintf("%vPRIMARY KEY(%v)", str, visitor.Visit(o.Column, visitor))
+}
 
-      str = fmt.Sprintf("%v%vREFERENCES %v", str, SPACE, visitor.Visit(relation, visitor))
+func (self *ToSqlVisitor) VisitForeignKey(o *nodes.ForeignKeyNode, visitor VisitorInterface) string {
+  str := "ADD "
+  // For FOREIGN KEY, index name is optional, REFERENCES is not.
+  //
+  // No index name ex.
+  //
+  //  CreateTable("orders").
+  //    AddColumn("user_id").
+  //    AddConstraint("user_id", FOREIGN_KEY, "users")
+  //
+  // With option index name ex.
+  //
+  //  CreateTable("orders").
+  //    AddColumn("user_id").
+  //    AddConstraint("user_id", FOREIGN_KEY, "users_fkey", "users")
+  if 1 < len(o.Options) {
+    expr := o.Options[0]
+    if _, ok := expr.(string); ok {
+      expr = nodes.IndexName(expr)
     }
 
-  default:
-    str = fmt.Sprintf("ALTER %v SET %v", visitor.Visit(o.Column, visitor), visitor.Visit(o.Kind, visitor))
+    // Remove this item from the array, avoiding any potential memory leak.
+    // https://code.google.com/p/go-wiki/wiki/SliceTricks
+    length := len(o.Options) - 1
+    copy(o.Options[0:], o.Options[1:])
+    o.Options[length] = nil
+    o.Options = o.Options[:length]
 
-    if 0 < len(o.Options) {
-      str = fmt.Sprintf("%v %v", str, visitor.Visit(o.Options[0], visitor))
+    str = fmt.Sprintf("%vCONSTRAINT %v%v", str, visitor.Visit(expr, visitor), SPACE)
+  }
+
+  str = fmt.Sprintf("%vFOREIGN KEY(%v)", str, visitor.Visit(o.Column, visitor))
+
+  // If option is not here, user didn't do it right, but don't dereference and panic.
+  if 0 < len(o.Options) {
+    relation := o.Options[0]
+    if _, ok := relation.(string); ok {
+      relation = nodes.Relation(relation.(string))
     }
 
-    str = fmt.Sprintf("%v", str)
+    str = fmt.Sprintf("%v%vREFERENCES %v", str, SPACE, visitor.Visit(relation, visitor))
+  }
+
+  return str
+}
+
+func (self *ToSqlVisitor) VisitCheck(o *nodes.CheckNode, visitor VisitorInterface) string {
+  panic("VisitCheck is unimplemented.")
+}
+
+func (self *ToSqlVisitor) VisitDefault(o *nodes.DefaultNode, visitor VisitorInterface) string {
+  str := fmt.Sprintf("ALTER %v SET DEFAULT", visitor.Visit(o.Column, visitor))
+
+  if 0 < len(o.Options) {
+    str = fmt.Sprintf("%v%v%v", str, SPACE, visitor.Visit(o.Options[0], visitor))
   }
 
   return str
@@ -598,22 +634,26 @@ func (self *ToSqlVisitor) VisitAlterStatement(o *nodes.AlterStatementNode, visit
     str = fmt.Sprintf("CREATE TABLE %v ();\n", visitor.Visit(o.Relation, visitor))
   }
 
-  length := len(o.Columns) - 1
+  columns := len(o.Columns) - 1
 
   for index, column := range o.Columns {
     str = fmt.Sprintf("%vALTER TABLE %v %v;", str, visitor.Visit(o.Relation, visitor), visitor.Visit(column, visitor))
 
-    if index != length {
+    if index != columns {
       str = fmt.Sprintf("%v\n", str)
     }
   }
 
-  length = len(o.Constraints) - 1
+  constraints := len(o.Constraints) - 1
+
+  if 0 < columns {
+    str = fmt.Sprintf("%v\n", str)
+  }
 
   for index, constraint := range o.Constraints {
     str = fmt.Sprintf("%vALTER TABLE %v %v;", str, visitor.Visit(o.Relation, visitor), visitor.Visit(constraint, visitor))
 
-    if index != length {
+    if index != constraints {
       str = fmt.Sprintf("%v\n", str)
     }
   }
