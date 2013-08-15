@@ -420,6 +420,46 @@ func TestUnqualifiedColumn(t *testing.T) {
   }
 }
 
+func TestVisitNotNull(t *testing.T) {
+  nnull := nodes.NotNull("column")
+  expected := `ALTER 'column' SET NOT NULL`
+  if got, _ := sql.Accept(nnull); expected != got {
+    t.Errorf("TestVisitNotNull was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestVisitUnique(t *testing.T) {
+  unique := nodes.Unique("column")
+  expected := `ADD UNIQUE('column')`
+  if got, _ := sql.Accept(unique); expected != got {
+    t.Errorf("TestVisitUnique was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestVisitPrimaryKey(t *testing.T) {
+  pkey := nodes.PrimaryKey("column")
+  expected := `ADD PRIMARY KEY('column')`
+  if got, _ := sql.Accept(pkey); expected != got {
+    t.Errorf("TestVisitPrimaryKey was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestVisitForeignKey(t *testing.T) {
+  fkey := nodes.ForeignKey("column")
+  expected := `ADD FOREIGN KEY('column')`
+  if got, _ := sql.Accept(fkey); expected != got {
+    t.Errorf("TestVisitForeignKey was expected to return %s, got %s", expected, got)
+  }
+}
+
+func TestVisitDefault(t *testing.T) {
+  def := nodes.Default("column")
+  expected := `ALTER 'column' SET DEFAULT`
+  if got, _ := sql.Accept(def); expected != got {
+    t.Errorf("TestVisitDefault was expected to return %s, got %s", expected, got)
+  }
+}
+
 func TestVisitString(t *testing.T) {
   value, expected := `test`, `'test'`
   if got, _ := sql.Accept(value); expected != got {
