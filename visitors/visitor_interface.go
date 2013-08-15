@@ -75,7 +75,6 @@ type VisitorInterface interface {
 
   // SQL constant visitors.
   VisitSqlType(sql.Type, VisitorInterface) string
-  VisitSqlConstraint(sql.Constraint, VisitorInterface) string
 
   // Base visitors.
   VisitString(interface{}) string

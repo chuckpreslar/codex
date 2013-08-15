@@ -167,8 +167,6 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
   // SQL constant visitors.
   case sql.Type:
     return visitor.VisitSqlType(o.(sql.Type), visitor)
-  case sql.Constraint:
-    return visitor.VisitSqlConstraint(o.(sql.Constraint), visitor)
 
   // Base visitors.
   case string:
@@ -813,25 +811,6 @@ func (self *ToSqlVisitor) VisitSqlType(o sql.Type, visitor VisitorInterface) str
     return "timestamp"
   default:
     panic("Unkown SQL Type constant.")
-  }
-}
-
-func (self *ToSqlVisitor) VisitSqlConstraint(o sql.Constraint, visitor VisitorInterface) string {
-  switch o {
-  case sql.NOT_NULL:
-    return "NOT NULL"
-  case sql.UNIQUE:
-    return "UNIQUE"
-  case sql.PRIMARY_KEY:
-    return "PRIMARY KEY"
-  case sql.FOREIGN_KEY:
-    return "FOREIGN KEY"
-  case sql.CHECK:
-    return "CHECK"
-  case sql.DEFAULT:
-    return "DEFAULT"
-  default:
-    panic("Unkown SQL Constraint constant.")
   }
 }
 
