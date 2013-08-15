@@ -17,7 +17,7 @@ func (self *DeleteManager) Delete(expr interface{}) *DeleteManager {
   return self
 }
 
-// Sets the SQL Enginge.
+// Sets the SQL Adapter.
 func (self *DeleteManager) SetAdapter(adapter interface{}) *DeleteManager {
   self.adapter = adapter
   return self

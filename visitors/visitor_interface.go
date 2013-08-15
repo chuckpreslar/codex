@@ -53,6 +53,12 @@ type VisitorInterface interface {
 
   // Nary node visitors.
   VisitConstraint(*nodes.ConstraintNode, VisitorInterface) string
+  VisitNotNull(*nodes.NotNullNode, VisitorInterface) string
+  VisitUnique(*nodes.UniqueNode, VisitorInterface) string
+  VisitPrimaryKey(*nodes.PrimaryKeyNode, VisitorInterface) string
+  VisitForeignKey(*nodes.ForeignKeyNode, VisitorInterface) string
+  VisitCheck(*nodes.CheckNode, VisitorInterface) string
+  VisitDefault(*nodes.DefaultNode, VisitorInterface) string
   VisitSelectCore(*nodes.SelectCoreNode, VisitorInterface) string
   VisitSelectStatement(*nodes.SelectStatementNode, VisitorInterface) string
   VisitInsertStatement(*nodes.InsertStatementNode, VisitorInterface) string
@@ -69,7 +75,6 @@ type VisitorInterface interface {
 
   // SQL constant visitors.
   VisitSqlType(sql.Type, VisitorInterface) string
-  VisitSqlConstraint(sql.Constraint, VisitorInterface) string
 
   // Base visitors.
   VisitString(interface{}) string
