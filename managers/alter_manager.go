@@ -6,11 +6,13 @@ import (
   "github.com/chuckpreslar/codex/sql"
 )
 
+// AlterManager manages a tree that compiles to SQL for create and alter statement.
 type AlterManager struct {
   Tree    *nodes.AlterStatementNode // The AST for the SQL CREATE/ALTER TABLE statements.
   adapter interface{}               // The SQL adapter.
 }
 
+// AddColumn adds a UnexistingColumn from the nodes package to the AST for creation.
 func (self *AlterManager) AddColumn(name interface{}, typ sql.Type) *AlterManager {
   if _, ok := name.(string); ok {
     name = nodes.UnqualifiedColumn(name)
@@ -20,6 +22,7 @@ func (self *AlterManager) AddColumn(name interface{}, typ sql.Type) *AlterManage
   return self
 }
 
+// AddColumn adds a ConstraintNode from the nodes package to the AST to apply to a column.
 func (self *AlterManager) AddConstraint(column interface{}, kind sql.Constraint, options ...interface{}) *AlterManager {
   if _, ok := column.(string); ok {
     column = nodes.UnqualifiedColumn(column)
@@ -48,6 +51,7 @@ func (self *AlterManager) AddConstraint(column interface{}, kind sql.Constraint,
   return self
 }
 
+// SetEngine sets the AST's Engine field, used for table creation.
 func (self *AlterManager) SetEngine(engine interface{}) *AlterManager {
   if _, ok := engine.(*nodes.EngineNode); !ok {
     engine = nodes.Engine(engine)
@@ -57,11 +61,13 @@ func (self *AlterManager) SetEngine(engine interface{}) *AlterManager {
   return self
 }
 
+// Sets the SQL Adapter.
 func (self *AlterManager) SetAdapter(adapter interface{}) *AlterManager {
   self.adapter = adapter
   return self
 }
 
+// ToSql calls a visitor's Accept method based on the manager's SQL adapter.
 func (self *AlterManager) ToSql() (string, error) {
   if nil == self.adapter {
     self.adapter = "to_sql"
