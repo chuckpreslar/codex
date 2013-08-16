@@ -1,5 +1,11 @@
+# v0.4.1 - 08.16.2013
+* Update AlterManager and AlterStatement to allow for table/column/index drops and column type modifications.
+
+# v0.4.0 - 08.15.2013
+* Tests for nodes, visitors and managers for table creation and alteration.
+
 # v0.3.5 - 08.14.2013
-* Introduce nodes, visitors, and managers for table creation and alteration.
+* Introduce nodes, visitors and managers for table creation and alteration.
 
 # v0.3.4 - 08.13.2013
 * Major package update to remove unused "tree" directory as it does not represent a package.
