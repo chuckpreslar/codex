@@ -139,11 +139,12 @@ users := codex.CreateTable("users").
 
 sql, err := users.ToSql()
 
-// CREATE TABLE "users" ();
-// ALTER TABLE "users" ADD "first_name" character varying(255);
-// ALTER TABLE "users" ADD "last_name" character varying(255);
-// ALTER TABLE "users" ADD "email" character varying(255);
-// ALTER TABLE "users" ADD "id" integer;
+// CREATE TABLE "users" (
+//  "first_name" varchar(255),
+//  "last_name" varchar(255),
+//  "email" varchar(255),
+//  "id" integer
+// );
 // ALTER TABLE "users" ALTER "first_name" SET NOT NULL;
 // ALTER TABLE "users" ADD PRIMARY KEY("id");
 // ALTER TABLE "users" ADD CONSTRAINT "users_email_uniq" UNIQUE("email");
