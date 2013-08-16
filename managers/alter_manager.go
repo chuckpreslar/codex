@@ -18,7 +18,17 @@ func (self *AlterManager) AddColumn(name interface{}, typ sql.Type) *AlterManage
     name = nodes.UnqualifiedColumn(name)
   }
 
-  self.Tree.Columns = append(self.Tree.Columns, nodes.UnexistingColumn(name, typ))
+  self.Tree.UnexistingColumns = append(self.Tree.UnexistingColumns, nodes.UnexistingColumn(name, typ))
+  return self
+}
+
+// AddColumn adds a UnexistingColumn from the nodes package to the AST for creation.
+func (self *AlterManager) ModifyColumn(name interface{}, typ sql.Type) *AlterManager {
+  if _, ok := name.(string); ok {
+    name = nodes.UnqualifiedColumn(name)
+  }
+
+  self.Tree.ModifiedColumns = append(self.Tree.ModifiedColumns, nodes.ExistingColumn(name, typ))
   return self
 }
 
@@ -48,6 +58,26 @@ func (self *AlterManager) AddConstraint(column interface{}, kind sql.Constraint,
   }
 
   self.Tree.Constraints = append(self.Tree.Constraints, node)
+  return self
+}
+
+func (self *AlterManager) RemoveColumn(column interface{}) *AlterManager {
+  if _, ok := column.(string); ok {
+    column = nodes.UnqualifiedColumn(column)
+  }
+
+  self.Tree.RemovedColumns = append(self.Tree.RemovedColumns, column)
+
+  return self
+}
+
+func (self *AlterManager) RemoveIndex(name interface{}) *AlterManager {
+  if _, ok := name.(string); ok {
+    name = nodes.IndexName(name)
+  }
+
+  self.Tree.RemovedIndicies = append(self.Tree.RemovedIndicies, name)
+
   return self
 }
 

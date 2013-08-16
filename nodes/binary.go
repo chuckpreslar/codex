@@ -16,6 +16,7 @@ type UnionNode BinaryNode            // UnionNode is a BinaryNode struct.
 type IntersectNode BinaryNode        // IntersectNode is a BinaryNode struct.
 type ExceptNode BinaryNode           // ExceptNode is a BinaryNode struct.
 type UnexistingColumnNode BinaryNode // UnexistingColumnNode is a BinaryNode struct.
+type ExistingColumnNode BinaryNode   // ExistingColumnNode is a BinaryNode struct.
 
 // AsNode factory method.
 func As(left, right interface{}) (as *AsNode) {
@@ -84,6 +85,14 @@ func Except(left, right interface{}) (except *ExceptNode) {
 // UnexistingColumnNode factory method.
 func UnexistingColumn(left, right interface{}) (column *UnexistingColumnNode) {
   column = new(UnexistingColumnNode)
+  column.Left = left
+  column.Right = right
+  return
+}
+
+// ExistingColumnNode factory method.
+func ExistingColumn(left, right interface{}) (column *ExistingColumnNode) {
+  column = new(ExistingColumnNode)
   column.Left = left
   column.Right = right
   return

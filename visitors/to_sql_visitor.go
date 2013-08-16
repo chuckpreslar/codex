@@ -123,6 +123,8 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
     return visitor.VisitExcept(o.(*nodes.ExceptNode), visitor)
   case *nodes.UnexistingColumnNode:
     return visitor.VisitUnexistingColumn(o.(*nodes.UnexistingColumnNode), visitor)
+  case *nodes.ExistingColumnNode:
+    return visitor.VisitExistingColumn(o.(*nodes.ExistingColumnNode), visitor)
 
   // Nary node visitors.
   case *nodes.ConstraintNode:
@@ -369,6 +371,10 @@ func (self *ToSqlVisitor) VisitExcept(o *nodes.ExceptNode, visitor VisitorInterf
 
 func (self *ToSqlVisitor) VisitUnexistingColumn(o *nodes.UnexistingColumnNode, visitor VisitorInterface) string {
   return fmt.Sprintf("ADD %v %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
+}
+
+func (self *ToSqlVisitor) VisitExistingColumn(o *nodes.ExistingColumnNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("ALTER COLUMN %v TYPE %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
 // End Binary node visitors.
@@ -628,30 +634,68 @@ func (self *ToSqlVisitor) VisitDeleteStatement(o *nodes.DeleteStatementNode, vis
 func (self *ToSqlVisitor) VisitAlterStatement(o *nodes.AlterStatementNode, visitor VisitorInterface) string {
   str := ""
 
+  if o.Drop {
+    str = fmt.Sprintf("DROP TABLE IF EXISTS %v;\n", visitor.Visit(o.Relation, visitor))
+  }
+
   if o.Create {
     str = fmt.Sprintf("CREATE TABLE %v ();\n", visitor.Visit(o.Relation, visitor))
   }
 
-  columns := len(o.Columns) - 1
+  columns := len(o.RemovedColumns) - 1
 
-  for index, column := range o.Columns {
-    str = fmt.Sprintf("%vALTER TABLE %v %v;", str, visitor.Visit(o.Relation, visitor), visitor.Visit(column, visitor))
+  for i, column := range o.RemovedColumns {
+    str = fmt.Sprintf("%vALTER TABLE %v DROP COLUMN %v;", visitor.Visit(o.Relation, visitor), visitor.Visit(column, visitor))
 
-    if index != columns {
+    if i != columns {
       str = fmt.Sprintf("%v\n", str)
     }
   }
 
-  constraints := len(o.Constraints) - 1
+  indicies := len(o.RemovedIndicies) - 1
 
-  if 0 < columns {
+  for i, index := range o.RemovedIndicies {
+    str = fmt.Sprintf("%vALTER TABLE %v DROP INDEX %v;", visitor.Visit(o.Relation, visitor), visitor.Visit(index, visitor))
+
+    if i != indicies {
+      str = fmt.Sprintf("%v\n", str)
+    }
+  }
+
+  columns = len(o.UnexistingColumns) - 1
+
+  for i, column := range o.UnexistingColumns {
+    str = fmt.Sprintf("%vALTER TABLE %v %v;", str, visitor.Visit(o.Relation, visitor), visitor.Visit(column, visitor))
+
+    if i != columns {
+      str = fmt.Sprintf("%v\n", str)
+    }
+  }
+
+  if 0 <= columns {
     str = fmt.Sprintf("%v\n", str)
   }
 
-  for index, constraint := range o.Constraints {
+  columns = len(o.ModifiedColumns) - 1
+
+  for i, column := range o.ModifiedColumns {
+    str = fmt.Sprintf("%vALTER TABLE %v %v;", str, visitor.Visit(o.Relation, visitor), visitor.Visit(column, visitor))
+
+    if i != columns {
+      str = fmt.Sprintf("%v\n", str)
+    }
+  }
+
+  if 0 <= columns {
+    str = fmt.Sprintf("%v\n", str)
+  }
+
+  constraints := len(o.Constraints) - 1
+
+  for i, constraint := range o.Constraints {
     str = fmt.Sprintf("%vALTER TABLE %v %v;", str, visitor.Visit(o.Relation, visitor), visitor.Visit(constraint, visitor))
 
-    if index != constraints {
+    if i != constraints {
       str = fmt.Sprintf("%v\n", str)
     }
   }

@@ -50,6 +50,7 @@ type VisitorInterface interface {
   VisitExcept(*nodes.ExceptNode, VisitorInterface) string
   VisitIntersect(*nodes.IntersectNode, VisitorInterface) string
   VisitUnexistingColumn(*nodes.UnexistingColumnNode, VisitorInterface) string
+  VisitExistingColumn(*nodes.ExistingColumnNode, VisitorInterface) string
 
   // Nary node visitors.
   VisitConstraint(*nodes.ConstraintNode, VisitorInterface) string
