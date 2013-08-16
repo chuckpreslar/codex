@@ -6,6 +6,10 @@ import (
   "fmt"
 )
 
+import (
+  "github.com/chuckpreslar/codex/nodes"
+)
+
 type MySqlVisitor struct {
   *ToSqlVisitor
 }
@@ -21,6 +25,30 @@ func (self *MySqlVisitor) Accept(o interface{}) (result string, err error) {
 
   return
 }
+
+// Begin Unary node visitors.
+
+func (self *MySqlVisitor) VisitIndexName(o *nodes.IndexNameNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("`%v`", o.Expr)
+}
+
+// End Unary node visitors.
+
+// Begin Nary node visitors.
+
+func (self *MySqlVisitor) VisitNotNull(o *nodes.NotNullNode, visitor VisitorInterface) string {
+  var typ interface{}
+
+  if 0 >= len(o.Options) {
+    panic("Missing column type definition for MySql NOT NULL constraint.")
+  } else {
+    typ = o.Options[0]
+  }
+
+  return fmt.Sprintf("MODIFY %v %v NOT NULL", visitor.Visit(o.Column, visitor), visitor.Visit(typ, visitor))
+}
+
+// End Nary node visitors.
 
 // Begin Helpers.
 

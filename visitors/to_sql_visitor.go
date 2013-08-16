@@ -370,7 +370,7 @@ func (self *ToSqlVisitor) VisitExcept(o *nodes.ExceptNode, visitor VisitorInterf
 }
 
 func (self *ToSqlVisitor) VisitUnexistingColumn(o *nodes.UnexistingColumnNode, visitor VisitorInterface) string {
-  return fmt.Sprintf("ADD %v %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
+  return fmt.Sprintf("%v %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
 }
 
 func (self *ToSqlVisitor) VisitExistingColumn(o *nodes.ExistingColumnNode, visitor VisitorInterface) string {
@@ -420,6 +420,10 @@ func (self *ToSqlVisitor) VisitPrimaryKey(o *nodes.PrimaryKeyNode, visitor Visit
 }
 
 func (self *ToSqlVisitor) VisitForeignKey(o *nodes.ForeignKeyNode, visitor VisitorInterface) string {
+  if 0 >= len(o.Options) {
+    panic("Missing column REFERENCE name for FOREIGN KEY constraint.")
+  }
+
   str := "ADD "
   // For FOREIGN KEY, index name is optional, REFERENCES is not.
   //
@@ -639,7 +643,24 @@ func (self *ToSqlVisitor) VisitAlterStatement(o *nodes.AlterStatementNode, visit
   }
 
   if o.Create {
-    str = fmt.Sprintf("CREATE TABLE %v ();\n", visitor.Visit(o.Relation, visitor))
+    str = fmt.Sprintf("CREATE TABLE %v (", visitor.Visit(o.Relation, visitor))
+
+    if columns := len(o.UnexistingColumns) - 1; 0 <= columns {
+      str = fmt.Sprintf("%v\n", str)
+
+      for i, column := range o.UnexistingColumns {
+        str = fmt.Sprintf("%v\t%v", str, visitor.Visit(column, visitor))
+
+        if i != columns {
+          str = fmt.Sprintf("%v,", str)
+        }
+
+        str = fmt.Sprintf("%v\n", str)
+      }
+    } else {
+      // FIXME: Include default column if none provided.
+    }
+    str = fmt.Sprintf("%v);\n", str)
   }
 
   columns := len(o.RemovedColumns) - 1
@@ -658,16 +679,6 @@ func (self *ToSqlVisitor) VisitAlterStatement(o *nodes.AlterStatementNode, visit
     str = fmt.Sprintf("%vALTER TABLE %v DROP INDEX %v;", visitor.Visit(o.Relation, visitor), visitor.Visit(index, visitor))
 
     if i != indicies {
-      str = fmt.Sprintf("%v\n", str)
-    }
-  }
-
-  columns = len(o.UnexistingColumns) - 1
-
-  for i, column := range o.UnexistingColumns {
-    str = fmt.Sprintf("%vALTER TABLE %v %v;", str, visitor.Visit(o.Relation, visitor), visitor.Visit(column, visitor))
-
-    if i != columns {
       str = fmt.Sprintf("%v\n", str)
     }
   }

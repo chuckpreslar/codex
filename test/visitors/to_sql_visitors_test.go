@@ -445,8 +445,9 @@ func TestVisitPrimaryKey(t *testing.T) {
 }
 
 func TestVisitForeignKey(t *testing.T) {
-  fkey := nodes.ForeignKey("column")
-  expected := `ADD FOREIGN KEY('column')`
+  fkey := nodes.ForeignKey(nodes.UnqualifiedColumn("column"))
+  fkey.Options = append(fkey.Options, nodes.Relation("table"))
+  expected := `ADD FOREIGN KEY("column") REFERENCES "table"`
   if got, _ := sql.Accept(fkey); expected != got {
     t.Errorf("TestVisitForeignKey was expected to return %s, got %s", expected, got)
   }
