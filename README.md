@@ -1,6 +1,6 @@
 # codex
 
-Codex is **NOT** an ORM, but a relation algebra inspired by [Arel](http://www.github.com/rails/arel). Project is still early in development but stable.
+Codex is **NOT** an ORM, but a relation algebra inspired by [Arel](http://www.github.com/rails/arel) for generating SQL. Project is still early in development but stable.
 
 [![Build Status](https://drone.io/github.com/chuckpreslar/codex/status.png)](https://drone.io/github.com/chuckpreslar/codex/latest)
 
