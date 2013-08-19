@@ -636,10 +636,31 @@ func (self *ToSqlVisitor) VisitDeleteStatement(o *nodes.DeleteStatementNode, vis
 }
 
 func (self *ToSqlVisitor) VisitAlterStatement(o *nodes.AlterStatementNode, visitor VisitorInterface) string {
+  // FIXME: This is so sloppy... clean it up.
   str := ""
 
   if o.Drop {
     str = fmt.Sprintf("DROP TABLE IF EXISTS %v;\n", visitor.Visit(o.Relation, visitor))
+  }
+
+  columns := len(o.RemovedColumns) - 1
+
+  for i, column := range o.RemovedColumns {
+    str = fmt.Sprintf("%vALTER TABLE %v DROP COLUMN %v;", visitor.Visit(o.Relation, visitor), visitor.Visit(column, visitor))
+
+    if i != columns {
+      str = fmt.Sprintf("%v\n", str)
+    }
+  }
+
+  indicies := len(o.RemovedIndicies) - 1
+
+  for i, index := range o.RemovedIndicies {
+    str = fmt.Sprintf("%vALTER TABLE %v DROP INDEX %v;", visitor.Visit(o.Relation, visitor), visitor.Visit(index, visitor))
+
+    if i != indicies {
+      str = fmt.Sprintf("%v\n", str)
+    }
   }
 
   if o.Create {
@@ -661,25 +682,18 @@ func (self *ToSqlVisitor) VisitAlterStatement(o *nodes.AlterStatementNode, visit
       // FIXME: Include default column if none provided.
     }
     str = fmt.Sprintf("%v);\n", str)
-  }
-
-  columns := len(o.RemovedColumns) - 1
-
-  for i, column := range o.RemovedColumns {
-    str = fmt.Sprintf("%vALTER TABLE %v DROP COLUMN %v;", visitor.Visit(o.Relation, visitor), visitor.Visit(column, visitor))
-
-    if i != columns {
+  } else {
+    // ALTER TABLE ADD COLUMN
+    if columns := len(o.UnexistingColumns) - 1; 0 <= columns {
       str = fmt.Sprintf("%v\n", str)
-    }
-  }
 
-  indicies := len(o.RemovedIndicies) - 1
+      for i, column := range o.UnexistingColumns {
+        str = fmt.Sprintf("%vALTER TABLE %v ADD %v", str, visitor.Visit(o.Relation, visitor), visitor.Visit(column, visitor))
 
-  for i, index := range o.RemovedIndicies {
-    str = fmt.Sprintf("%vALTER TABLE %v DROP INDEX %v;", visitor.Visit(o.Relation, visitor), visitor.Visit(index, visitor))
-
-    if i != indicies {
-      str = fmt.Sprintf("%v\n", str)
+        if i != columns {
+          str = fmt.Sprintf("%v\n", str)
+        }
+      }
     }
   }
 
@@ -711,7 +725,7 @@ func (self *ToSqlVisitor) VisitAlterStatement(o *nodes.AlterStatementNode, visit
     }
   }
 
-  return str
+  return strings.Trim(str, "\n")
 }
 
 // End Nary node visitors.
