@@ -34,6 +34,14 @@ func (self *MySqlVisitor) VisitIndexName(o *nodes.IndexNameNode, visitor Visitor
 
 // End Unary node visitors.
 
+// Being Binary node visitors.
+
+func (self *MySqlVisitor) VisitExistingColumn(o *nodes.ExistingColumnNode, visitor VisitorInterface) string {
+  return fmt.Sprintf("MODIFY COLUMN %v %v", visitor.Visit(o.Left, visitor), visitor.Visit(o.Right, visitor))
+}
+
+// End Binary node visitors.
+
 // Begin Nary node visitors.
 
 func (self *MySqlVisitor) VisitNotNull(o *nodes.NotNullNode, visitor VisitorInterface) string {
