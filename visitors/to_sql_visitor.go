@@ -153,6 +153,8 @@ func (self *ToSqlVisitor) Visit(o interface{}, visitor VisitorInterface) string 
     return visitor.VisitDeleteStatement(o.(*nodes.DeleteStatementNode), visitor)
   case *nodes.AlterStatementNode:
     return visitor.VisitAlterStatement(o.(*nodes.AlterStatementNode), visitor)
+  case *nodes.CreateStatementNode:
+    return visitor.VisitCreateStatement(o.(*nodes.CreateStatementNode), visitor)
 
   // Function node visitors.
   case *nodes.CountNode:
@@ -636,12 +638,7 @@ func (self *ToSqlVisitor) VisitDeleteStatement(o *nodes.DeleteStatementNode, vis
 }
 
 func (self *ToSqlVisitor) VisitAlterStatement(o *nodes.AlterStatementNode, visitor VisitorInterface) string {
-  // FIXME: This is so sloppy... clean it up.
   str := ""
-
-  if o.Drop {
-    str = fmt.Sprintf("DROP TABLE IF EXISTS %v;\n", visitor.Visit(o.Relation, visitor))
-  }
 
   columns := len(o.RemovedColumns) - 1
 
@@ -663,37 +660,13 @@ func (self *ToSqlVisitor) VisitAlterStatement(o *nodes.AlterStatementNode, visit
     }
   }
 
-  if o.Create {
-    str = fmt.Sprintf("CREATE TABLE %v (", visitor.Visit(o.Relation, visitor))
+  columns = len(o.UnexistingColumns) - 1
 
-    if columns := len(o.UnexistingColumns) - 1; 0 <= columns {
+  for i, column := range o.UnexistingColumns {
+    str = fmt.Sprintf("%vALTER TABLE %v ADD %v", str, visitor.Visit(o.Relation, visitor), visitor.Visit(column, visitor))
+
+    if i != columns {
       str = fmt.Sprintf("%v\n", str)
-
-      for i, column := range o.UnexistingColumns {
-        str = fmt.Sprintf("%v\t%v", str, visitor.Visit(column, visitor))
-
-        if i != columns {
-          str = fmt.Sprintf("%v,", str)
-        }
-
-        str = fmt.Sprintf("%v\n", str)
-      }
-    } else {
-      // FIXME: Include default column if none provided.
-    }
-    str = fmt.Sprintf("%v);\n", str)
-  } else {
-    // ALTER TABLE ADD COLUMN
-    if columns := len(o.UnexistingColumns) - 1; 0 <= columns {
-      str = fmt.Sprintf("%v\n", str)
-
-      for i, column := range o.UnexistingColumns {
-        str = fmt.Sprintf("%vALTER TABLE %v ADD %v", str, visitor.Visit(o.Relation, visitor), visitor.Visit(column, visitor))
-
-        if i != columns {
-          str = fmt.Sprintf("%v\n", str)
-        }
-      }
     }
   }
 
@@ -714,6 +687,40 @@ func (self *ToSqlVisitor) VisitAlterStatement(o *nodes.AlterStatementNode, visit
   if 0 <= columns {
     str = fmt.Sprintf("%v\n", str)
   }
+
+  constraints := len(o.Constraints) - 1
+
+  for i, constraint := range o.Constraints {
+    str = fmt.Sprintf("%vALTER TABLE %v %v;", str, visitor.Visit(o.Relation, visitor), visitor.Visit(constraint, visitor))
+
+    if i != constraints {
+      str = fmt.Sprintf("%v\n", str)
+    }
+  }
+
+  return strings.Trim(str, "\n")
+}
+
+func (self *ToSqlVisitor) VisitCreateStatement(o *nodes.CreateStatementNode, visitor VisitorInterface) string {
+  str := fmt.Sprintf("CREATE TABLE %v (", visitor.Visit(o.Relation, visitor))
+
+  if columns := len(o.UnexistingColumns) - 1; 0 <= columns {
+    str = fmt.Sprintf("%v\n", str)
+
+    for i, column := range o.UnexistingColumns {
+      str = fmt.Sprintf("%v\t%v", str, visitor.Visit(column, visitor))
+
+      if i != columns {
+        str = fmt.Sprintf("%v,", str)
+      }
+
+      str = fmt.Sprintf("%v\n", str)
+    }
+  } else {
+    // FIXME: Include default column if none provided.
+  }
+
+  str = fmt.Sprintf("%v);\n", str)
 
   constraints := len(o.Constraints) - 1
 

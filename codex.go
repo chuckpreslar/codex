@@ -52,14 +52,14 @@ func Table(name string) managers.Accessor {
 
 // CreateTable returns an AlterManager from the managers package
 // for generating SQL to create new tables.
-func CreateTable(name string) *managers.AlterManager {
+func CreateTable(name string) *managers.CreateManager {
   relation := nodes.Relation(name)
-  return managers.Alteration(relation, true)
+  return managers.Creation(relation)
 }
 
 // CreateTable returns an AlterManager from the managers package
 // for generating SQL to alter existing tables.
 func AlterTable(name string) *managers.AlterManager {
   relation := nodes.Relation(name)
-  return managers.Alteration(relation, false)
+  return managers.Alteration(relation)
 }

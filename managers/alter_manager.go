@@ -81,16 +81,6 @@ func (self *AlterManager) RemoveIndex(name interface{}) *AlterManager {
   return self
 }
 
-// SetEngine sets the AST's Engine field, used for table creation.
-func (self *AlterManager) SetEngine(engine interface{}) *AlterManager {
-  if _, ok := engine.(*nodes.EngineNode); !ok {
-    engine = nodes.Engine(engine)
-  }
-
-  self.Tree.Engine = engine.(*nodes.EngineNode)
-  return self
-}
-
 // Sets the SQL Adapter.
 func (self *AlterManager) SetAdapter(adapter interface{}) *AlterManager {
   self.adapter = adapter
@@ -107,8 +97,8 @@ func (self *AlterManager) ToSql() (string, error) {
 }
 
 // SelectManager factory method.
-func Alteration(relation *nodes.RelationNode, create bool) (statement *AlterManager) {
+func Alteration(relation *nodes.RelationNode) (statement *AlterManager) {
   statement = new(AlterManager)
-  statement.Tree = nodes.AlterStatement(relation, create)
+  statement.Tree = nodes.AlterStatement(relation)
   return
 }

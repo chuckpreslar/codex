@@ -66,6 +66,7 @@ type VisitorInterface interface {
   VisitUpdateStatement(*nodes.UpdateStatementNode, VisitorInterface) string
   VisitDeleteStatement(*nodes.DeleteStatementNode, VisitorInterface) string
   VisitAlterStatement(*nodes.AlterStatementNode, VisitorInterface) string
+  VisitCreateStatement(*nodes.CreateStatementNode, VisitorInterface) string
 
   // Function node visitors.
   VisitCount(*nodes.CountNode, VisitorInterface) string
