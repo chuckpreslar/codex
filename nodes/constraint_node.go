@@ -3,7 +3,7 @@ package nodes
 
 // ConstraintNode is a specific Binary node.
 type ConstraintNode struct {
-  Column  interface{}   // Column the ConstraintNode affects.
+  Columns []interface{} // Column the ConstraintNode affects.
   Options []interface{} // Options to apply to the ConstraintNode.
 }
 
@@ -15,57 +15,57 @@ type CheckNode ConstraintNode      // CheckNode is a ConstraintNode struct.
 type DefaultNode ConstraintNode    // DefaultNode is a ConstraintNode struct.
 
 // ConstraintNode factory method.
-func Constraint(column interface{}, options ...interface{}) (constraint *ConstraintNode) {
+func Constraint(columns []interface{}, options ...interface{}) (constraint *ConstraintNode) {
   constraint = new(ConstraintNode)
-  constraint.Column = column
+  constraint.Columns = columns
   constraint.Options = options
   return
 }
 
 // NotNullNode factory method.
-func NotNull(column interface{}, options ...interface{}) (nnull *NotNullNode) {
+func NotNull(columns []interface{}, options ...interface{}) (nnull *NotNullNode) {
   nnull = new(NotNullNode)
-  nnull.Column = column
+  nnull.Columns = columns
   nnull.Options = options
   return
 }
 
 // UniqueNode factory method.
-func Unique(column interface{}, options ...interface{}) (unique *UniqueNode) {
+func Unique(columns []interface{}, options ...interface{}) (unique *UniqueNode) {
   unique = new(UniqueNode)
-  unique.Column = column
+  unique.Columns = columns
   unique.Options = options
   return
 }
 
 // PrimaryKeyNode factory method.
-func PrimaryKey(column interface{}, options ...interface{}) (pkey *PrimaryKeyNode) {
+func PrimaryKey(columns []interface{}, options ...interface{}) (pkey *PrimaryKeyNode) {
   pkey = new(PrimaryKeyNode)
-  pkey.Column = column
+  pkey.Columns = columns
   pkey.Options = options
   return
 }
 
 // ForeignKeyNode factory method.
-func ForeignKey(column interface{}, options ...interface{}) (fkey *ForeignKeyNode) {
+func ForeignKey(columns []interface{}, options ...interface{}) (fkey *ForeignKeyNode) {
   fkey = new(ForeignKeyNode)
-  fkey.Column = column
+  fkey.Columns = columns
   fkey.Options = options
   return
 }
 
 // CheckNode factory method.
-func Check(column interface{}, options ...interface{}) (check *CheckNode) {
+func Check(columns []interface{}, options ...interface{}) (check *CheckNode) {
   check = new(CheckNode)
-  check.Column = column
+  check.Columns = columns
   check.Options = options
   return
 }
 
 // DefaultNode factory method.
-func Default(column interface{}, options ...interface{}) (def *DefaultNode) {
+func Default(columns []interface{}, options ...interface{}) (def *DefaultNode) {
   def = new(DefaultNode)
-  def.Column = column
+  def.Columns = columns
   def.Options = options
   return
 }

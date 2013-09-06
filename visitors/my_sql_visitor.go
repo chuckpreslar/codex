@@ -53,7 +53,7 @@ func (self *MySqlVisitor) VisitNotNull(o *nodes.NotNullNode, visitor VisitorInte
     typ = o.Options[0]
   }
 
-  return fmt.Sprintf("MODIFY %v %v NOT NULL", visitor.Visit(o.Column, visitor), visitor.Visit(typ, visitor))
+  return fmt.Sprintf("MODIFY %v %v NOT NULL", visitor.Visit(o.Columns, visitor), visitor.Visit(typ, visitor))
 }
 
 // End Nary node visitors.

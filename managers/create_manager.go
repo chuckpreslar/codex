@@ -22,28 +22,30 @@ func (self *CreateManager) AddColumn(name interface{}, typ sql.Type) *CreateMana
 }
 
 // AddColumn adds a ConstraintNode from the nodes package to the AST to apply to a column.
-func (self *CreateManager) AddConstraint(column interface{}, kind sql.Constraint, options ...interface{}) *CreateManager {
-  if _, ok := column.(string); ok {
-    column = nodes.UnqualifiedColumn(column)
+func (self *CreateManager) AddConstraint(columns []interface{}, kind sql.Constraint, options ...interface{}) *CreateManager {
+  for _, column := range columns {
+    if _, ok := column.(string); ok {
+      column = nodes.UnqualifiedColumn(column)
+    }
   }
 
   var node interface{}
 
   switch kind {
   case sql.NOT_NULL:
-    node = nodes.NotNull(column, options...)
+    node = nodes.NotNull(columns, options...)
   case sql.UNIQUE:
-    node = nodes.Unique(column, options...)
+    node = nodes.Unique(columns, options...)
   case sql.PRIMARY_KEY:
-    node = nodes.PrimaryKey(column, options...)
+    node = nodes.PrimaryKey(columns, options...)
   case sql.FOREIGN_KEY:
-    node = nodes.ForeignKey(column, options...)
+    node = nodes.ForeignKey(columns, options...)
   case sql.CHECK:
-    node = nodes.Check(column, options...)
+    node = nodes.Check(columns, options...)
   case sql.DEFAULT:
-    node = nodes.Default(column, options...)
+    node = nodes.Default(columns, options...)
   default:
-    node = nodes.Constraint(column, options...)
+    node = nodes.Constraint(columns, options...)
   }
 
   self.Tree.Constraints = append(self.Tree.Constraints, node)

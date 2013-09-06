@@ -421,7 +421,7 @@ func TestUnqualifiedColumn(t *testing.T) {
 }
 
 func TestVisitNotNull(t *testing.T) {
-  nnull := nodes.NotNull("column")
+  nnull := nodes.NotNull([]interface{}{"column"})
   expected := `ALTER 'column' SET NOT NULL`
   if got, _ := sql.Accept(nnull); expected != got {
     t.Errorf("TestVisitNotNull was expected to return %s, got %s", expected, got)
@@ -429,7 +429,7 @@ func TestVisitNotNull(t *testing.T) {
 }
 
 func TestVisitUnique(t *testing.T) {
-  unique := nodes.Unique("column")
+  unique := nodes.Unique([]interface{}{"column"})
   expected := `ADD UNIQUE('column')`
   if got, _ := sql.Accept(unique); expected != got {
     t.Errorf("TestVisitUnique was expected to return %s, got %s", expected, got)
@@ -437,7 +437,7 @@ func TestVisitUnique(t *testing.T) {
 }
 
 func TestVisitPrimaryKey(t *testing.T) {
-  pkey := nodes.PrimaryKey("column")
+  pkey := nodes.PrimaryKey([]interface{}{"column"})
   expected := `ADD PRIMARY KEY('column')`
   if got, _ := sql.Accept(pkey); expected != got {
     t.Errorf("TestVisitPrimaryKey was expected to return %s, got %s", expected, got)
@@ -445,7 +445,7 @@ func TestVisitPrimaryKey(t *testing.T) {
 }
 
 func TestVisitForeignKey(t *testing.T) {
-  fkey := nodes.ForeignKey(nodes.UnqualifiedColumn("column"))
+  fkey := nodes.ForeignKey([]interface{}{nodes.UnqualifiedColumn("column")})
   fkey.Options = append(fkey.Options, nodes.Relation("table"))
   expected := `ADD FOREIGN KEY("column") REFERENCES "table"`
   if got, _ := sql.Accept(fkey); expected != got {
@@ -454,7 +454,7 @@ func TestVisitForeignKey(t *testing.T) {
 }
 
 func TestVisitDefault(t *testing.T) {
-  def := nodes.Default("column")
+  def := nodes.Default([]interface{}{"column"})
   expected := `ALTER 'column' SET DEFAULT`
   if got, _ := sql.Accept(def); expected != got {
     t.Errorf("TestVisitDefault was expected to return %s, got %s", expected, got)

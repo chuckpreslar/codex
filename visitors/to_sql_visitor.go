@@ -388,7 +388,7 @@ func (self *ToSqlVisitor) VisitConstraint(o *nodes.ConstraintNode, visitor Visit
 }
 
 func (self *ToSqlVisitor) VisitNotNull(o *nodes.NotNullNode, visitor VisitorInterface) string {
-  return fmt.Sprintf("ALTER %v SET NOT NULL", visitor.Visit(o.Column, visitor))
+  return fmt.Sprintf("ALTER %v SET NOT NULL", visitor.FormatConstraintColumns(o.Columns, visitor))
 }
 
 func (self *ToSqlVisitor) VisitUnique(o *nodes.UniqueNode, visitor VisitorInterface) string {
@@ -403,7 +403,7 @@ func (self *ToSqlVisitor) VisitUnique(o *nodes.UniqueNode, visitor VisitorInterf
     str = fmt.Sprintf("%vCONSTRAINT %v ", str, visitor.Visit(expr, visitor))
   }
 
-  return fmt.Sprintf("%vUNIQUE(%v)", str, visitor.Visit(o.Column, visitor))
+  return fmt.Sprintf("%vUNIQUE(%v)", str, visitor.FormatConstraintColumns(o.Columns, visitor))
 }
 
 func (self *ToSqlVisitor) VisitPrimaryKey(o *nodes.PrimaryKeyNode, visitor VisitorInterface) string {
@@ -418,7 +418,7 @@ func (self *ToSqlVisitor) VisitPrimaryKey(o *nodes.PrimaryKeyNode, visitor Visit
     str = fmt.Sprintf("%vCONSTRAINT %v ", str, visitor.Visit(expr, visitor))
   }
 
-  return fmt.Sprintf("%vPRIMARY KEY(%v)", str, visitor.Visit(o.Column, visitor))
+  return fmt.Sprintf("%vPRIMARY KEY(%v)", str, visitor.FormatConstraintColumns(o.Columns, visitor))
 }
 
 func (self *ToSqlVisitor) VisitForeignKey(o *nodes.ForeignKeyNode, visitor VisitorInterface) string {
@@ -456,7 +456,7 @@ func (self *ToSqlVisitor) VisitForeignKey(o *nodes.ForeignKeyNode, visitor Visit
     str = fmt.Sprintf("%vCONSTRAINT %v%v", str, visitor.Visit(expr, visitor), SPACE)
   }
 
-  str = fmt.Sprintf("%vFOREIGN KEY(%v)", str, visitor.Visit(o.Column, visitor))
+  str = fmt.Sprintf("%vFOREIGN KEY(%v)", str, visitor.FormatConstraintColumns(o.Columns, visitor))
 
   // If option is not here, user didn't do it right, but don't dereference and panic.
   if 0 < len(o.Options) {
@@ -476,7 +476,7 @@ func (self *ToSqlVisitor) VisitCheck(o *nodes.CheckNode, visitor VisitorInterfac
 }
 
 func (self *ToSqlVisitor) VisitDefault(o *nodes.DefaultNode, visitor VisitorInterface) string {
-  str := fmt.Sprintf("ALTER %v SET DEFAULT", visitor.Visit(o.Column, visitor))
+  str := fmt.Sprintf("ALTER %v SET DEFAULT", visitor.FormatConstraintColumns(o.Columns, visitor))
 
   if 0 < len(o.Options) {
     str = fmt.Sprintf("%v%v%v", str, SPACE, visitor.Visit(o.Options[0], visitor))
@@ -920,6 +920,29 @@ func (self *ToSqlVisitor) QuoteTableName(o interface{}) string {
 
 func (self *ToSqlVisitor) QuoteColumnName(o interface{}) string {
   return fmt.Sprintf(`"%v"`, o)
+}
+
+// FIXME: Not sure if I like this as a solution to indexing
+// on multiple columns.
+func (self *ToSqlVisitor) FormatConstraintColumns(columns []interface{}, visitor VisitorInterface) string {
+  str := ""
+  if 1 == len(columns) {
+    return self.Visit(columns[0], visitor)
+  } else if length := len(columns) - 1; 0 <= length {
+    str = fmt.Sprintf("%v(", str)
+
+    for index, column := range columns {
+      str = fmt.Sprintf("%v%v", str, self.Visit(column, visitor))
+
+      if index != length {
+        str = fmt.Sprintf("%v%v", str, COMMA)
+      }
+
+      str = fmt.Sprintf("%v)", str)
+    }
+  }
+
+  return str
 }
 
 // End Helpers.

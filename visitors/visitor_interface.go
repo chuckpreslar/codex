@@ -87,4 +87,5 @@ type VisitorInterface interface {
   // Helpers.
   QuoteTableName(interface{}) string
   QuoteColumnName(interface{}) string
+  FormatConstraintColumns([]interface{}, VisitorInterface) string
 }

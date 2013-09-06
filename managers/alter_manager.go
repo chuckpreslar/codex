@@ -23,7 +23,7 @@ func (self *AlterManager) AddColumn(name interface{}, typ sql.Type) *AlterManage
 }
 
 // AddColumn adds a UnexistingColumn from the nodes package to the AST for creation.
-func (self *AlterManager) ModifyColumn(name interface{}, typ sql.Type) *AlterManager {
+func (self *AlterManager) AlterColumn(name interface{}, typ sql.Type) *AlterManager {
   if _, ok := name.(string); ok {
     name = nodes.UnqualifiedColumn(name)
   }
@@ -33,28 +33,30 @@ func (self *AlterManager) ModifyColumn(name interface{}, typ sql.Type) *AlterMan
 }
 
 // AddColumn adds a ConstraintNode from the nodes package to the AST to apply to a column.
-func (self *AlterManager) AddConstraint(column interface{}, kind sql.Constraint, options ...interface{}) *AlterManager {
-  if _, ok := column.(string); ok {
-    column = nodes.UnqualifiedColumn(column)
+func (self *AlterManager) AddConstraint(columns []interface{}, kind sql.Constraint, options ...interface{}) *AlterManager {
+  for _, column := range columns {
+    if _, ok := column.(string); ok {
+      column = nodes.UnqualifiedColumn(column)
+    }
   }
 
   var node interface{}
 
   switch kind {
   case sql.NOT_NULL:
-    node = nodes.NotNull(column, options...)
+    node = nodes.NotNull(columns, options...)
   case sql.UNIQUE:
-    node = nodes.Unique(column, options...)
+    node = nodes.Unique(columns, options...)
   case sql.PRIMARY_KEY:
-    node = nodes.PrimaryKey(column, options...)
+    node = nodes.PrimaryKey(columns, options...)
   case sql.FOREIGN_KEY:
-    node = nodes.ForeignKey(column, options...)
+    node = nodes.ForeignKey(columns, options...)
   case sql.CHECK:
-    node = nodes.Check(column, options...)
+    node = nodes.Check(columns, options...)
   case sql.DEFAULT:
-    node = nodes.Default(column, options...)
+    node = nodes.Default(columns, options...)
   default:
-    node = nodes.Constraint(column, options...)
+    node = nodes.Constraint(columns, options...)
   }
 
   self.Tree.Constraints = append(self.Tree.Constraints, node)
