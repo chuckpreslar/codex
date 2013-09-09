@@ -926,19 +926,13 @@ func (self *ToSqlVisitor) QuoteColumnName(o interface{}) string {
 // on multiple columns.
 func (self *ToSqlVisitor) FormatConstraintColumns(columns []interface{}, visitor VisitorInterface) string {
   str := ""
-  if 1 == len(columns) {
-    return self.Visit(columns[0], visitor)
-  } else if length := len(columns) - 1; 0 <= length {
-    str = fmt.Sprintf("%v(", str)
-
+  if length := len(columns) - 1; 0 <= length {
     for index, column := range columns {
       str = fmt.Sprintf("%v%v", str, self.Visit(column, visitor))
 
       if index != length {
         str = fmt.Sprintf("%v%v", str, COMMA)
       }
-
-      str = fmt.Sprintf("%v)", str)
     }
   }
 

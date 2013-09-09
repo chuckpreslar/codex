@@ -23,9 +23,9 @@ func (self *CreateManager) AddColumn(name interface{}, typ sql.Type) *CreateMana
 
 // AddColumn adds a ConstraintNode from the nodes package to the AST to apply to a column.
 func (self *CreateManager) AddConstraint(columns []interface{}, kind sql.Constraint, options ...interface{}) *CreateManager {
-  for _, column := range columns {
+  for index, column := range columns {
     if _, ok := column.(string); ok {
-      column = nodes.UnqualifiedColumn(column)
+      columns[index] = nodes.UnqualifiedColumn(column)
     }
   }
 
