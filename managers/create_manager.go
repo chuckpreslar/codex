@@ -32,17 +32,17 @@ func (self *CreateManager) AddConstraint(columns []interface{}, kind sql.Constra
   var node interface{}
 
   switch kind {
-  case sql.NOT_NULL:
+  case sql.NotNull:
     node = nodes.NotNull(columns, options...)
-  case sql.UNIQUE:
+  case sql.Unique:
     node = nodes.Unique(columns, options...)
-  case sql.PRIMARY_KEY:
+  case sql.PrimaryKey:
     node = nodes.PrimaryKey(columns, options...)
-  case sql.FOREIGN_KEY:
+  case sql.ForeignKey:
     node = nodes.ForeignKey(columns, options...)
-  case sql.CHECK:
+  case sql.Check:
     node = nodes.Check(columns, options...)
-  case sql.DEFAULT:
+  case sql.Default:
     node = nodes.Default(columns, options...)
   default:
     node = nodes.Constraint(columns, options...)

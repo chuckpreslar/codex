@@ -865,25 +865,25 @@ func (self *ToSqlVisitor) VisitMinimum(o *nodes.MinimumNode, visitor VisitorInte
 
 func (self *ToSqlVisitor) VisitSqlType(o sql.Type, visitor VisitorInterface) string {
   switch o {
-  case sql.STRING:
+  case sql.String:
     return "varchar(255)"
-  case sql.TEXT:
+  case sql.Text:
     return "text"
-  case sql.BOOLEAN:
+  case sql.Boolean:
     return "boolean"
-  case sql.INTEGER:
+  case sql.Integer:
     return "integer"
-  case sql.FLOAT:
+  case sql.Float:
     return "float"
-  case sql.DECIMAL:
+  case sql.Decimal:
     return "decimal"
-  case sql.DATE:
+  case sql.Date:
     return "date"
-  case sql.TIME:
+  case sql.Time:
     return "time"
-  case sql.DATETIME:
+  case sql.Datetime:
     return "datetime"
-  case sql.TIMESTAMP:
+  case sql.Timestamp:
     return "timestamp"
   default:
     panic("Unkown SQL Type constant.")

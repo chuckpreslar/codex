@@ -4,27 +4,27 @@ package sql
 type Constraint uint8
 
 // SQL Constraint constants.
-const(
-  NOT_NULL Constraint = iota
-  UNIQUE
-  PRIMARY_KEY
-  FOREIGN_KEY
-  CHECK
-  DEFAULT
+const (
+  NotNull Constraint = iota
+  Unique
+  PrimaryKey
+  ForeignKey
+  Check
+  Default
 )
 
 type Type uint8
 
 // SQL Type constants.
 const (
-  STRING Type = iota
-  TEXT
-  BOOLEAN
-  INTEGER
-  FLOAT
-  DECIMAL
-  DATE
-  TIME
-  DATETIME
-  TIMESTAMP
+  String Type = iota
+  Text
+  Boolean
+  Integer
+  Float
+  Decimal
+  Date
+  Time
+  Datetime
+  Timestamp
 )

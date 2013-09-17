@@ -10,26 +10,26 @@ import (
 
 // Expose sql packages Constraint types.
 const (
-  NOT_NULL    = sql.NOT_NULL
-  UNIQUE      = sql.UNIQUE
-  PRIMARY_KEY = sql.PRIMARY_KEY
-  FOREIGN_KEY = sql.FOREIGN_KEY
-  CHECK       = sql.CHECK
-  DEFAULT     = sql.DEFAULT
+  NotNull    = sql.NotNull
+  Unique     = sql.Unique
+  PrimaryKey = sql.PrimaryKey
+  ForeignKey = sql.ForeignKey
+  Check      = sql.Check
+  Default    = sql.Default
 )
 
 // Expose sql packages Type types.
 const (
-  STRING    = sql.STRING
-  TEXT      = sql.TEXT
-  BOOLEAN   = sql.BOOLEAN
-  INTEGER   = sql.INTEGER
-  FLOAT     = sql.FLOAT
-  DECIMAL   = sql.DECIMAL
-  DATE      = sql.DATE
-  TIME      = sql.TIME
-  DATETIME  = sql.DATETIME
-  TIMESTAMP = sql.TIMESTAMP
+  String    = sql.String
+  Text      = sql.Text
+  Boolean   = sql.Boolean
+  Integer   = sql.Integer
+  Float     = sql.Float
+  Decimal   = sql.Decimal
+  Date      = sql.Date
+  Time      = sql.Time
+  Datetime  = sql.Datetime
+  Timestamp = sql.Timestamp
 )
 
 // ToggleDebugMode toggles debugger variable for managers package.

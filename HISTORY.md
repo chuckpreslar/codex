@@ -1,3 +1,8 @@
+# v0.4.5 - 09.17.2013
+* Names of constants provided by the SQL package are now UpperCamelCase to match those found in Go's standard library.
+* Allow for constraints on multiple columns.
+* Split SQL table creation and alteration into two managers.
+
 # v0.4.1 - 08.16.2013
 * Update AlterManager and AlterStatement to allow for table/column/index drops and column type modifications.
 
