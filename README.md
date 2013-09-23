@@ -101,29 +101,7 @@ sql, err := users.Delete(users("id").Eq(1)).ToSql()
 
 ## Creations
 
-The codex package currently provides a few common SQL data and constraint types as constants to use with creating and altering tables.
-
-__Constraints__
-
-* NOT_NULL
-* UNIQUE
-* PRIMARY_KEY
-* FOREIGN_KEY
-* CHECK
-* DEFAULT
-
-__Types__
-
-* STRING
-* TEXT
-* BOOLEAN
-* INTEGER
-* FLOAT
-* DECIMAL
-* DATE
-* TIME
-* DATETIME
-* TIMESTAMP
+The codex package currently provides a few common SQL data and constraint types as constants to use with creating and altering tables.  These constants can be found within codex's `sql` package.
 
 ```go
 // ...
