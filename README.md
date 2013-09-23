@@ -107,13 +107,13 @@ The codex package currently provides a few common SQL data and constraint types 
 // ...
 
 users := codex.CreateTable("users").
-  AddColumn("first_name", codex.STRING).
-  AddColumn("last_name", codex.STRING).
-  AddColumn("email", codex.STRING).
-  AddColumn("id", codex.INTEGER).
-  AddConstraint("first_name", codex.NOT_NULL).
-  AddConstraint("id", codex.PRIMARY_KEY).
-  AddConstraint("email", codex.UNIQUE, "users_uniq_email") // Optional last argument supplies index name.
+  AddColumn("first_name", codex.String).
+  AddColumn("last_name", codex.String).
+  AddColumn("email", codex.String).
+  AddColumn("id", codex.Integer).
+  AddConstraint("first_name", codex.NotNull).
+  AddConstraint("id", codex.PrimaryKey).
+  AddConstraint("email", codex.Unique, "users_uniq_email") // Optional last argument supplies index name.
 
 sql, err := users.ToSql()
 
