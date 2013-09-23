@@ -127,7 +127,8 @@ sql, err := users.ToSql()
 // ALTER TABLE "users" ADD PRIMARY KEY("id");
 // ALTER TABLE "users" ADD CONSTRAINT "users_email_uniq" UNIQUE("email");
 ```
-__Note__: The `AddConstraint` receiver method when passed a constraint of `codex.FOREIGN_KEY`, treats its options argument as a SQL `REFERENCE` followed by the optional name of the index.  Though optional to codex, a `FOREIGN KEY` constraint should always be given a minimum of a reference.
+
+__Note__: The `AddConstraint` receiver method when passed a constraint of `codex.ForeignKey`, treats its options argument as a SQL `REFERENCE` followed by the optional name of the index.
 
 
 ## Alterations
