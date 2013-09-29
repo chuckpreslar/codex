@@ -52,6 +52,36 @@ func (self *CreateManager) AddConstraint(columns []interface{}, kind sql.Constra
   return self
 }
 
+func (self *CreateManager) AddUniqueConstraint(columns []interface{},
+  name ...interface{}) *CreateManager {
+
+  return self.AddConstraint(columns, sql.Unique, name...)
+}
+
+func (self *CreateManager) AddForiegnKeyConstraint(columns []interface{},
+  reference interface{}, name ...interface{}) *CreateManager {
+
+  return self.AddConstraint(columns, sql.ForeignKey, append([]interface{}{
+    reference,
+  }, name...)...)
+}
+
+func (self *CreateManager) AddDefaultContraint(columns []interface{},
+  value interface{}) *CreateManager {
+
+  return self.AddConstraint(columns, sql.Default, value)
+}
+
+func (self *CreateManager) AddNotNullConstraint(columns []interface{}) *CreateManager {
+  return self.AddConstraint(columns, sql.NotNull)
+}
+
+func (self *CreateManager) AddPrimaryKeyConstraint(columns []interface{},
+  name ...interface{}) *CreateManager {
+
+  return self.AddConstraint(columns, sql.PrimaryKey, name...)
+}
+
 // SetEngine sets the AST's Engine field, used for table creation.
 func (self *CreateManager) SetEngine(engine interface{}) *CreateManager {
   if _, ok := engine.(*nodes.EngineNode); !ok {
