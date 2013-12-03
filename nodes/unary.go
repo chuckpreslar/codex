@@ -97,3 +97,35 @@ func IndexName(expr interface{}) (index *IndexNameNode) {
 	index.Expr = expr
 	return
 }
+
+func (u *UnqualifiedColumnNode) Eq(other interface{}) *EqualNode {
+	return Equal(u, other)
+}
+
+func (u *UnqualifiedColumnNode) Neq(other interface{}) *NotEqualNode {
+	return NotEqual(u, other)
+}
+
+func (u *UnqualifiedColumnNode) Gt(other interface{}) *GreaterThanNode {
+	return GreaterThan(u, other)
+}
+
+func (u *UnqualifiedColumnNode) Gte(other interface{}) *GreaterThanOrEqualNode {
+	return GreaterThanOrEqual(u, other)
+}
+
+func (u *UnqualifiedColumnNode) Lt(other interface{}) *LessThanNode {
+	return LessThan(u, other)
+}
+
+func (u *UnqualifiedColumnNode) Lte(other interface{}) *LessThanOrEqualNode {
+	return LessThanOrEqual(u, other)
+}
+
+func (u *UnqualifiedColumnNode) Like(other interface{}) *LikeNode {
+	return Like(u, other)
+}
+
+func (u *UnqualifiedColumnNode) Unlike(other interface{}) *UnlikeNode {
+	return Unlike(u, other)
+}
