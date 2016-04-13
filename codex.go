@@ -1,7 +1,7 @@
 package codex
 
 import (
-	"github.com/chuckpreslar/codex/lib/table"
+	"github.com/chuckpreslar/codex/lib"
 )
 
 // TableFor ...
