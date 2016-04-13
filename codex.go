@@ -6,5 +6,5 @@ import (
 
 // TableFor ...
 func TableFor(name string) table.Table {
-	return table.New(name)
+	return table.InitializeTable(name)
 }

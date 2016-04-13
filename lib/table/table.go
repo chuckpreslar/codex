@@ -74,8 +74,8 @@ func (t Table) Name() string {
 	return t.Relation().Name
 }
 
-// New ...
-func New(name string) Table {
+// InitializeTable ...
+func InitializeTable(name string) Table {
 	var table = make(Table)
 
 	table[_relation] = nodes.InitializeAttribute("", nodes.InitializeRelation(name))
